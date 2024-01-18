@@ -1,0 +1,4 @@
+1. Créer les différentes enitées (OK)
+2. Définir les différentes relations entre les entités (OK)
+3. Faire les fixtures (EN COURS)
+4. Controlleurs 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AttaqueRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AttaqueRepository::class)]
@@ -33,6 +35,17 @@ class Attaque
 
     #[ORM\Column]
     private ?bool $cs = null;
+
+    #[ORM\ManyToOne(inversedBy: 'attaques')]
+    private ?Type $type = null;
+
+    #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'attaques')]
+    private Collection $pokemons;
+
+    public function __construct()
+    {
+        $this->pokemons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +132,45 @@ class Attaque
     public function setCs(bool $cs): static
     {
         $this->cs = $cs;
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(?Type $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pokemon>
+     */
+    public function getPokemons(): Collection
+    {
+        return $this->pokemons;
+    }
+
+    public function addPokemon(Pokemon $pokemon): static
+    {
+        if (!$this->pokemons->contains($pokemon)) {
+            $this->pokemons->add($pokemon);
+            $pokemon->addAttaque($this);
+        }
+
+        return $this;
+    }
+
+    public function removePokemon(Pokemon $pokemon): static
+    {
+        if ($this->pokemons->removeElement($pokemon)) {
+            $pokemon->removeAttaque($this);
+        }
 
         return $this;
     }

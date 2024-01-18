@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DresseurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DresseurRepository::class)]
@@ -27,6 +29,17 @@ class Dresseur
 
     #[ORM\Column(length: 120, nullable: true)]
     private ?string $message = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
+    #[ORM\ManyToMany(targetEntity: Pokemon::class, inversedBy: 'dresseurs')]
+    private Collection $pokemons;
+
+    public function __construct()
+    {
+        $this->pokemons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -89,6 +102,42 @@ class Dresseur
     public function setMessage(?string $message): static
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pokemon>
+     */
+    public function getPokemons(): Collection
+    {
+        return $this->pokemons;
+    }
+
+    public function addPokemon(Pokemon $pokemon): static
+    {
+        if (!$this->pokemons->contains($pokemon)) {
+            $this->pokemons->add($pokemon);
+        }
+
+        return $this;
+    }
+
+    public function removePokemon(Pokemon $pokemon): static
+    {
+        $this->pokemons->removeElement($pokemon);
 
         return $this;
     }
