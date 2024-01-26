@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enums\Status;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -14,11 +15,11 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idutilisateur = null;
-
     #[ORM\Column(length: 25)]
     private ?string $nomUtilisateur = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -27,29 +28,28 @@ class User
     private ?\DateTimeInterface $dateInscription = null;
 
     #[ORM\Column]
-    private ?int $status = null;
+    private ?Status $status = null;
 
     #[ORM\Column]
     private ?bool $mailEnvoye = null;
+
+    public function __construct(string $nomUtilisateur, string $password, string $email)
+    {
+        $this->nomUtilisateur = $nomUtilisateur;
+        $this->password = $password;
+        $this->email = $email;
+        // Formatage de la date et l'heure d'inscription actuelle pour MySQL (AAAA-MM-JJ HH:MM:SS)
+        $this->dateInscription = new \DateTimeImmutable();
+        $this->status = Status::ACTIF;
+        $this->mailEnvoye = false;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdutilisateur(): ?int
-    {
-        return $this->idutilisateur;
-    }
-
-    public function setIdutilisateur(int $idutilisateur): static
-    {
-        $this->idutilisateur = $idutilisateur;
-
-        return $this;
-    }
-
-    public function getNomUtilisateur(): ?string
+    public function getNomUtilisateur(): ?int
     {
         return $this->nomUtilisateur;
     }
@@ -57,6 +57,18 @@ class User
     public function setNomUtilisateur(string $nomUtilisateur): static
     {
         $this->nomUtilisateur = $nomUtilisateur;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
 
         return $this;
     }
@@ -85,12 +97,12 @@ class User
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): ?Status
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): static
+    public function setStatus(Status $status): static
     {
         $this->status = $status;
 

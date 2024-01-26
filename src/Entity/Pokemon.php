@@ -15,17 +15,17 @@ class Pokemon
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idPokemon = null;
-
-    #[ORM\Column(length: 4)]
+    #[ORM\Column(length: 4, unique: true)]
     private ?string $numero = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 30, unique: true)]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
     private ?string $image = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $miniImage = null;
 
     #[ORM\ManyToMany(targetEntity: Dresseur::class, mappedBy: 'pokemons')]
     private Collection $dresseurs;
@@ -45,28 +45,20 @@ class Pokemon
     #[ORM\ManyToMany(targetEntity: Attaque::class, inversedBy: 'pokemons')]
     private Collection $attaques;
 
-    public function __construct()
+    public function __construct(string $numero, string $nom, string $image, string $miniImage)
     {
+        $this->numero = $numero;
+        $this->nom = $nom;
+        $this->image = $image;
+        $this->miniImage = $miniImage;
         $this->dresseurs = new ArrayCollection();
-        $this->type = new ArrayCollection();
+        $this->types = new ArrayCollection();
         $this->attaques = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdPokemon(): ?int
-    {
-        return $this->idPokemon;
-    }
-
-    public function setIdPokemon(int $idPokemon): static
-    {
-        $this->idPokemon = $idPokemon;
-
-        return $this;
     }
 
     public function getNumero(): ?string
@@ -101,6 +93,18 @@ class Pokemon
     public function setImage(string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getMiniImage(): ?string
+    {
+        return $this->miniImage;
+    }
+
+    public function setMiniImage(string $miniImage): static
+    {
+        $this->miniImage = $miniImage;
 
         return $this;
     }

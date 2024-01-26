@@ -11,12 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Type
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
-    private ?int $idType = null;
+    #[ORM\Column (length: 10)]
+    private ?string $id = null;
 
     #[ORM\Column(length: 25)]
     private ?string $libelle = null;
@@ -27,27 +23,17 @@ class Type
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: attaque::class)]
     private Collection $attaques;
 
-    public function __construct()
+    public function __construct(string $id, string $libelle)
     {
+        $this->id = $id;
+        $this->libelle = $libelle;
         $this->pokemons = new ArrayCollection();
         $this->attaques = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
-    }
-
-    public function getIdType(): ?int
-    {
-        return $this->idType;
-    }
-
-    public function setIdType(int $idType): static
-    {
-        $this->idType = $idType;
-
-        return $this;
     }
 
     public function getLibelle(): ?string

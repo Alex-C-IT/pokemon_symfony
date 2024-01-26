@@ -14,9 +14,6 @@ class Stats
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $isStats = null;
-
-    #[ORM\Column]
     private ?int $pv = null;
 
     #[ORM\Column]
@@ -31,21 +28,18 @@ class Stats
     #[ORM\Column]
     private ?int $special = null;
 
+    public function __construct(int $pv, int $attaque, int $defense, int $vitesse, int $special)
+    {
+        $this->pv = $pv;
+        $this->attaque = $attaque;
+        $this->defense = $defense;
+        $this->vitesse = $vitesse;
+        $this->special = $special;
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIsStats(): ?int
-    {
-        return $this->isStats;
-    }
-
-    public function setIsStats(int $isStats): static
-    {
-        $this->isStats = $isStats;
-
-        return $this;
     }
 
     public function getPv(): ?int

@@ -3,25 +3,19 @@
 namespace App\Entity;
 
 use App\Repository\AttaqueRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AttaqueRepository::class)]
 class Attaque
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
-    private ?int $idAttaque = null;
+    #[ORM\Column(length: 10)]
+    private ?string $id = null;
 
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -36,32 +30,25 @@ class Attaque
     #[ORM\Column]
     private ?bool $cs = null;
 
-    #[ORM\ManyToOne(inversedBy: 'attaques')]
+    // N'est pas unique. Un type peut être utilisé par plusieurs attaques
+    #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'attaques')]
     private ?Type $type = null;
 
-    #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'attaques')]
-    private Collection $pokemons;
-
-    public function __construct()
+    public function __construct(string $id, string $nom, string $description, int $puissance, int $precisionn, int $pp, bool $cs, Type $type)
     {
-        $this->pokemons = new ArrayCollection();
+        $this->id = $id;
+        $this->nom = $nom;
+        $this->description = $description;
+        $this->puissance = $puissance;
+        $this->precisionn = $precisionn;
+        $this->pp = $pp;
+        $this->cs = $cs;
+        $this->type = $type;
     }
-
-    public function getId(): ?int
+    
+    public function getId(): ?string
     {
         return $this->id;
-    }
-
-    public function getIdAttaque(): ?int
-    {
-        return $this->idAttaque;
-    }
-
-    public function setIdAttaque(int $idAttaque): static
-    {
-        $this->idAttaque = $idAttaque;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -144,33 +131,6 @@ class Attaque
     public function setType(?Type $type): static
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Pokemon>
-     */
-    public function getPokemons(): Collection
-    {
-        return $this->pokemons;
-    }
-
-    public function addPokemon(Pokemon $pokemon): static
-    {
-        if (!$this->pokemons->contains($pokemon)) {
-            $this->pokemons->add($pokemon);
-            $pokemon->addAttaque($this);
-        }
-
-        return $this;
-    }
-
-    public function removePokemon(Pokemon $pokemon): static
-    {
-        if ($this->pokemons->removeElement($pokemon)) {
-            $pokemon->removeAttaque($this);
-        }
 
         return $this;
     }
