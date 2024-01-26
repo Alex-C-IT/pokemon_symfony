@@ -17,6 +17,9 @@ class Type
     #[ORM\Column(length: 25)]
     private ?string $libelle = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $image = null;
+
     #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'type')]
     private Collection $pokemons;
 
@@ -44,6 +47,18 @@ class Type
     public function setLibelle(string $libelle): static
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
