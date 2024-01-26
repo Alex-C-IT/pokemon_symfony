@@ -16,11 +16,10 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             TypeFixtures::class,
+            AttaqueFixtures::class,
             GenerationFixtures::class,
-            // AttaqueFixtures::class,
             ConsommableFixtures::class,
             StatsFixtures::class,
-            //DresseurFixtures::class
         ];
     }
 
