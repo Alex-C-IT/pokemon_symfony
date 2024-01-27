@@ -1,20 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TypeController!{% endblock %}
+{% block title %}Gestion des types - Pokémon Symfony{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/Users/Alexandre/Desktop/pokemon_symfony/src/Controller/TypeController.php'|file_link(0) }}">src/Controller/TypeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/Users/Alexandre/Desktop/pokemon_symfony/templates/type/index.html.twig'|file_link(0) }}">templates/type/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="container mt-4">
+        <h1>Gestion des types</h1>
+        {# Affichage d'un message flash #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-dismissible alert-success mt-4">
+                <p class="mb-0"><b>Succès ! </b>{{ message }}</p>
+            </div>
+        {% endfor %}
+        {# Ajout d'un bouton "Ajouter"#}
+        <a href="{{ path('app_admin_types_new') }}" class="btn btn-success">Ajouter un type</a>
+        {# Si aucun type n'a été trouvé #}
+        {% if types is empty %}
+            <p>Aucun type n'a été trouvé.</p>
+        {% else %}
+            <table class="table table-hover mt-4">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Image</th>
+                        <th>Libellé</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for type in types %}
+                        <tr>
+                            <td>{{ type.id }}</td>
+                            <td><img src="{{ asset('images/types/' ~ type.image) }}" alt="{{ type.libelle }}" class="img-fluid"></td>
+                            <td>{{ type.libelle }}</td>
+                            <td>
+                                <a href="" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer ce type ?')">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(types) }}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -31,16 +31,16 @@ class Pokemon
     private Collection $dresseurs;
 
     #[ORM\ManyToOne(inversedBy: 'pokemon')]
-    private ?generation $generation = null;
+    private ?Generation $generation = null;
 
     #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'pokemons')]
     private Collection $types;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?stats $stats = null;
+    private ?Stats $stats = null;
 
     #[ORM\ManyToOne(inversedBy: 'pokemon')]
-    private ?consommable $consommables = null;
+    private ?Consommable $consommables = null;
 
     #[ORM\ManyToMany(targetEntity: Attaque::class, inversedBy: 'pokemons')]
     private Collection $attaques;

@@ -23,10 +23,10 @@ class Type
     #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'type')]
     private Collection $pokemons;
 
-    #[ORM\OneToMany(mappedBy: 'type', targetEntity: attaque::class)]
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: Attaque::class)]
     private Collection $attaques;
 
-    public function __construct(string $id, string $libelle)
+    public function __construct(string $id = null, string $libelle = null)
     {
         $this->id = $id;
         $this->libelle = $libelle;
@@ -39,6 +39,13 @@ class Type
         return $this->id;
     }
 
+    public function setId(string $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+    
     public function getLibelle(): ?string
     {
         return $this->libelle;
