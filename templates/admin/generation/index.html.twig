@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des générations - Pokémon Symfony{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Gestion des générations</h1>
+        {# Affichage d'un message flash #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-dismissible alert-success mt-4">
+                <p class="mb-0"><b>Succès ! </b>{{ message }}</p>
+            </div>
+        {% endfor %}
+        {# Ajout d'un bouton "Ajouter"#}
+        <a href="{{ path('app_admin_generations_new') }}" class="btn btn-success">Ajouter une génération</a>
+        {# Si aucun type n'a été trouvé #}
+        {% if generations is empty %}
+            <p>Aucune génération n'a été trouvée.</p>
+        {% else %}
+            <table class="table table-hover mt-4">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Numéro</th>
+                        <th>Année</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for generation in generations %}
+                        <tr>
+                            <td>{{ generation.id }}</td>
+                            <td>{{ generation.numero }}</td>
+                            <td>{{ generation.annee }}</td>
+                            <td>
+                                <a href="{{ path('app_admin_generations_edit', {'id': generation.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="{{ path('app_admin_generations_delete', {'id': generation.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette génération ?')">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(generations) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -21,6 +21,26 @@ class GenerationRepository extends ServiceEntityRepository
         parent::__construct($registry, Generation::class);
     }
 
+    public function add(Generation $generation): void
+    {
+        $this->_em->persist($generation);
+        $this->_em->flush();
+    }
+
+    public function update(Generation $generation): void
+    {
+        $this->_em->persist($generation);
+        $this->_em->flush();
+    }
+
+    public function remove(Generation $generation): void
+    {
+        $this->_em->remove($generation);
+        $this->_em->flush();
+    }
+
+
+
 //    /**
 //     * @return Generation[] Returns an array of Generation objects
 //     */

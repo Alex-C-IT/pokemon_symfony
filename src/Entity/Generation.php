@@ -23,7 +23,7 @@ class Generation
     #[ORM\OneToMany(mappedBy: 'generation', targetEntity: Pokemon::class)]
     private Collection $pokemons;
 
-    public function __construct(string $id, string $numero, string $annee)
+    public function __construct(string $id = null, string $numero = null, string $annee = null)
     {
         $this->id = $id;
         $this->numero = $numero;
@@ -34,6 +34,13 @@ class Generation
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function setId(string $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getNumero(): ?string
