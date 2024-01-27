@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des attaques - Pokémon Symfony{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Gestion des attaques</h1>
+        {# Affichage d'un message flash #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-dismissible alert-success mt-4">
+                <p class="mb-0"><b>Succès ! </b>{{ message }}</p>
+            </div>
+        {% endfor %}
+        {# Ajout d'un bouton "Ajouter"#}
+        <a href="{{ path('app_admin_attaques_new') }}" class="btn btn-success">Ajouter une attaque</a>
+        {# Si aucun type n'a été trouvé #}
+        {% if attaques is empty %}
+            <p>Aucune attaque n'a été trouvée.</p>
+        {% else %}
+            <table class="table table-hover mt-4">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Type</th>
+                        <th style="width: 45%;">Description</th>
+                        <th>Puissance</th>
+                        <th>Précision</th>
+                        <th>PP</th>
+                        <th>CS</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attaque in attaques %}
+                        <tr>
+                            <td>{{ attaque.id }}</td>
+                            <td>{{ attaque.nom }}</td>
+                            {# Image du type #}
+                            <td><img src="{{ asset('images/types/' ~ attaque.type.libelle ~ '.png') }}" alt="{{ attaque.type.libelle }}" title="{{ attaque.type.libelle }}"></td>
+                            <td>{{ attaque.description }}</td>
+                            <td>{{ attaque.puissance }}</td>
+                            <td>{{ attaque.prec }}</td>
+                            <td>{{ attaque.pp }}</td>
+                            {# Si CS = 0 alors afficher "Non" sinon afficher "Oui" #}
+                            {% if attaque.cs == 0 %}
+                                <td>Non</td>
+                            {% else %}
+                                <td>Oui</td>
+                            {% endif %}
+                            <td>
+                                <a href="" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette génération ?')">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(attaques) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

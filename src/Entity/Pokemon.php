@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PokemonRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PokemonRepository::class)]
@@ -30,7 +29,7 @@ class Pokemon
     #[ORM\ManyToMany(targetEntity: Dresseur::class, mappedBy: 'pokemons')]
     private Collection $dresseurs;
 
-    #[ORM\ManyToOne(inversedBy: 'pokemon')]
+    #[ORM\ManyToOne(inversedBy: 'pokemons')]
     private ?Generation $generation = null;
 
     #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'pokemons')]
@@ -44,6 +43,7 @@ class Pokemon
     private ?Consommable $consommable = null;
 
     #[ORM\ManyToMany(targetEntity: Attaque::class, inversedBy: 'pokemons')]
+    #[ORM\JoinTable(name: 'pokemon_attaque')]
     private Collection $attaques;
 
     public function __construct(string $numero, string $nom, string $image, string $miniImage)

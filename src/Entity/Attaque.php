@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AttaqueRepository;
+use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AttaqueRepository::class)]
@@ -22,7 +23,7 @@ class Attaque
     private ?int $puissance = null;
 
     #[ORM\Column]
-    private ?int $precisionn = null;
+    private ?int $prec = null;
 
     #[ORM\Column]
     private ?int $pp = null;
@@ -34,21 +35,33 @@ class Attaque
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'attaques')]
     private ?Type $type = null;
 
-    public function __construct(string $id, string $nom, string $description, int $puissance, int $precisionn, int $pp, bool $cs, Type $type)
+    #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'attaques')]
+    private Collection $pokemons;
+
+    public function __construct(string $id = null, string $nom = null, string $description = null, int $puissance = null, int $prec = null, int $pp = null, bool $cs = null, ?Type $type = null)
     {
         $this->id = $id;
         $this->nom = $nom;
         $this->description = $description;
         $this->puissance = $puissance;
-        $this->precisionn = $precisionn;
+        $this->prec = $prec;
         $this->pp = $pp;
         $this->cs = $cs;
-        $this->type = $type;
+        if($type != null)
+            $this->type = $type;
+        $this->pokemons = new ArrayCollection();
     }
     
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function setId(string $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getNom(): ?string
@@ -87,14 +100,14 @@ class Attaque
         return $this;
     }
 
-    public function getPrecisionn(): ?int
+    public function getPrec(): ?int
     {
-        return $this->precisionn;
+        return $this->prec;
     }
 
-    public function setPrecisionn(int $precisionn): static
+    public function setPrec(int $prec): static
     {
-        $this->precisionn = $precisionn;
+        $this->prec = $prec;
 
         return $this;
     }
@@ -131,6 +144,33 @@ class Attaque
     public function setType(?Type $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pokemon>
+     */
+    public function getPokemons(): Collection
+    {
+        return $this->pokemons;
+    }
+
+    public function addPokemon(Pokemon $pokemon): static
+    {
+        if (!$this->pokemons->contains($pokemon)) {
+            $this->pokemons->add($pokemon);
+            $pokemon->addAttaque($this);
+        }
+
+        return $this;
+    }
+
+    public function removePokemon(Pokemon $pokemon): static
+    {
+        if ($this->pokemons->removeElement($pokemon)) {
+            $pokemons->removePokemon($this);
+        }
 
         return $this;
     }
