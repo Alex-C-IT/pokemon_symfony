@@ -21,6 +21,23 @@ class PokemonRepository extends ServiceEntityRepository
         parent::__construct($registry, Pokemon::class);
     }
 
+    public function add(Pokemon $pokemon): void
+    {
+        $this->_em->persist($pokemon);
+        $this->_em->flush();
+    }
+
+    public function update(Pokemon $pokemon): void
+    {
+        $this->_em->persist($pokemon);
+        $this->_em->flush();
+    }
+
+    public function remove(Pokemon $pokemon): void
+    {
+        $this->_em->remove($pokemon);
+        $this->_em->flush();
+    }
 //    /**
 //     * @return Pokemon[] Returns an array of Pokemon objects
 //     */

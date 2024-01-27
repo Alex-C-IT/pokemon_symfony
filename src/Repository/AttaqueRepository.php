@@ -21,6 +21,25 @@ class AttaqueRepository extends ServiceEntityRepository
         parent::__construct($registry, Attaque::class);
     }
 
+    public function add(Attaque $attaque): void
+    {
+        $this->_em->persist($attaque);
+        $this->_em->flush();
+    }
+
+    public function update(Attaque $attaque): void
+    {
+        $this->_em->persist($attaque);
+        $this->_em->flush();
+    }
+
+    public function remove(Attaque $attaque): void
+    {
+        $this->_em->remove($attaque);
+        $this->_em->flush();
+    }
+    
+
 //    /**
 //     * @return Attaque[] Returns an array of Attaque objects
 //     */

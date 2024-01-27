@@ -20,7 +20,7 @@ class Type
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'type')]
+    #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'types')]
     private Collection $pokemons;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Attaque::class)]

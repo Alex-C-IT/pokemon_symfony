@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{Response, Request};
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\TypeRepository;
+use App\Repository\{TypeRepository, PokemonRepository, AttaqueRepository};
 use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Type;
 use App\Form\TypeType;
@@ -35,6 +35,14 @@ class TypeController extends AbstractController
         ]);
     }
 
+    /**
+     * Cette méthode permet d'ajouter un nouveau type et de l'enregistrer en base de données.
+     * Elle retourne également le formulaire de création d'un type dans le template types/new.html.twig
+     *
+     * @param Request $request
+     * @param TypeRepository $repository
+     * @return Response
+     */
     #[Route('/admin/types/new', name: 'app_admin_types_new')]
     public function nouveau(Request $request, TypeRepository $repository): Response
     {
@@ -135,6 +143,132 @@ class TypeController extends AbstractController
         // Supprime les 2 premiers éléments du tableau (. et ..)
         unset($images[0], $images[1]);
         return $images;
+    }
+
+    /**
+     * Cette méthode permet de modifier un type et de l'enregistrer en base de données.
+     * Elle retourne également le formulaire de modification d'un type dans le template types/edit.html.twig
+     * @param Request $request
+     * @param TypeRepository $repository
+     * @return Response
+     */
+    #[Route('/admin/types/edit/{id}', name: 'app_admin_types_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, TypeRepository $repository) : Response
+    {
+        $type = $repository->findOneBy(['id' => $request->get('id')]);
+        $form = $this->createForm(TypeType::class, $type);
+        $form = $form->handleRequest($request);
+
+        // Vérifie si le formulaire a été soumis et si les données sont valides
+        if($form->isSubmitted() && $form->isValid()) {
+
+            // Récupère le libellé transmis dans le formulaire
+            $libelle = $form->get('libelle')->getData();
+
+            // Vérifie si le libellé ne dépasse pas 25 caractères.
+            if(strlen($libelle) > 25){
+                $this->addFlash('error', 'Le libellé ne doit pas dépasser 25 caractères.');
+                return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+            }
+            $type->setLibelle($libelle);            
+            
+            // Récupère l'image transmise dans le formulaire
+            $imageFile = $form->get('image')->getData();
+            
+            // Vérifie si le nom de l'image n'existe pas dans public/images/types
+            if($imageFile) {
+                
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                
+                // Vérifie si le nom de l'image + l'extension (.png) ne dépasse pas 50 caractères.
+                if(strlen($originalFilename) > 45){
+                    $this->addFlash('error', 'Le nom de l\'image ne doit pas dépasser 45 caractères.');
+                    return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+                }
+
+                // vérifie si le nom de l'image existe déjà
+                if(in_array($originalFilename, $this->recupereNomsImagesTypes())){
+                    $this->addFlash('error', 'Ce nom d\'image existe déjà. Veuillez en choisir un autre.');
+                    return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+                }
+
+                // Vérifie si l'image est bien au format .png.
+                if($imageFile->guessExtension() != 'png'){
+                    $this->addFlash('error', 'Le format de l\'image doit être .png.');
+                    return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+                }
+
+                // Vérifie si l'image ne dépasse pas 50Ko.
+                if($imageFile->getSize() > 50000){
+                    $this->addFlash('error', 'L\'image ne doit pas dépasser 50Ko.');
+                    return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+                }
+                // Nécessaire pour éviter les problèmes d'encodage
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                $newFilename = $safeFilename.'.'.$imageFile->guessExtension();
+                // Déplace l'image dans le répertoire public/images/types
+                $imageFile->move(
+                    $this->getParameter('types_images_directory'),
+                    $newFilename
+                );
+                // Supprime l'ancienne image
+                unlink($this->getParameter('types_images_directory') . '/' . $type->getImage());
+                // Met à jour la propriété image avec le nom de l'image
+                $type->setImage($newFilename);
+            }
+
+            // Sauvegarde le type en base de données et redirige vers la liste des types
+            $repository->update($type);
+            $this->addFlash('success', 'Le type #' . $type->getId() . ' a été modifié avec succès !');
+            return $this->redirectToRoute('app_admin_types_index');
+        }
+        else
+        {
+            return $this->render('admin/type/edit.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }
+    }
+
+    /**
+     * Cette méthode permet de supprimer un type
+     * @param Request $request
+     * @param TypeRepository $repository
+     * @return Response
+     */
+    #[Route('/admin/types/delete/{id}', name: 'app_admin_types_delete', methods: ['GET', 'POST'])]
+    public function delete(Request $request, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, AttaqueRepository $attaqueRepository) : Response
+    {
+        $type = $typeRepository->findOneBy(['id' => $request->get('id')]);
+        // Récupère tous les pokémons associés au type et les insère dans types
+        foreach($type->getPokemons() as $pokemon){
+            // Si le pokémon possède un type secondaire alors on le supprime sinon on met à 'TYPE0'
+            if($pokemon->getTypes()->count() > 1){
+                $pokemon->removeType($type);
+            }
+            else{
+                $pokemon->addType($typeRepository->findOneBy(['id' => 'TYPE0']));
+                // Mettre à jour le type du pokémon dans la table pokemon
+                $pokemonRepository->update($pokemon);
+            }
+        }
+
+        // Change le type des attaques liése au type par 'TYPE0'
+        $type0 = $typeRepository->findOneBy(['id' => 'TYPE0']);
+        foreach($type->getAttaques() as $attaque){
+            $attaque->setType($type0);
+            // Mettre à jour le type de l'attaque dans la table attaque
+            $attaqueRepository->update($attaque);
+        }
+
+        
+        // Supprime l'image du type
+        unlink($this->getParameter('types_images_directory') . '/' . $type->getImage());
+
+        // Supprime le type en base de données et redirige vers la liste des types
+        $typeRepository->remove($type);
+        $this->addFlash('success', 'Le type #' . $type->getId() . ' a été supprimé avec succès !');
+        return $this->redirectToRoute('app_admin_types_index');
     }
 
 

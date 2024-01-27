@@ -34,6 +34,7 @@ class Pokemon
     private ?Generation $generation = null;
 
     #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'pokemons')]
+    #[ORM\JoinTable(name: 'pokemon_type')]
     private Collection $types;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]

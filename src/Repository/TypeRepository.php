@@ -6,6 +6,7 @@ use App\Entity\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 /**
  * @extends ServiceEntityRepository<Type>
  *
@@ -27,6 +28,17 @@ class TypeRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+    public function update(Type $type): void
+    {
+        $this->_em->persist($type);
+        $this->_em->flush();
+    }
+
+    public function remove(Type $type): void
+    {
+        $this->_em->remove($type);
+        $this->_em->flush();
+    }
 //    /**
 //     * @return Type[] Returns an array of Type objects
 //     */

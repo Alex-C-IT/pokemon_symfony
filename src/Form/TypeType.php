@@ -41,7 +41,7 @@ class TypeType extends AbstractType
             ->add('libelle', TextType::class, [
                 'attr' => [
                     'class' => 'form-control',
-                    'minlength' => '5',
+                    'minlength' => '3',
                     'maxlength' => '25'
                 ],
                 'label' => 'Libellé',
@@ -54,8 +54,8 @@ class TypeType extends AbstractType
                         'message' => 'Veuillez saisir un libellé.'
                     ]),
                     new Length([
-                        'min' => 5,
-                        'max' => 10,
+                        'min' => 3,
+                        'max' => 25,
                         'minMessage' => 'Le libellé doit contenir au moins {{ limit }} caractères.',
                         'maxMessage' => 'Le libellé doit contenir au maximum {{ limit }} caractères.'
                     ])
