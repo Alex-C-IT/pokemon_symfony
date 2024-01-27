@@ -71,4 +71,22 @@ class AttaqueController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    #[Route('/admin/attaques/{id}/delete', name: 'app_admin_attaques_delete')]
+    public function delete(Request $request, AttaqueRepository $attaqueRepository, PokemonRepository $pokemonRepository): Response
+    {
+        $attaque = $attaqueRepository->find($request->get('id'));
+
+        // On supprime l'attaque de tous les pokémons qui la possèdent
+        foreach ($attaque->getPokemons() as $pokemon) {
+            $pokemon->removeAttaque($attaque);
+            $pokemonRepository->update($pokemon);
+        }
+
+        $attaqueRepository->remove($attaque);
+
+        $this->addFlash('success', 'L\'attaque #' . $attaque->getId() . ' a bien été supprimée.');
+
+        return $this->redirectToRoute('app_admin_attaques_index');
+    }
 }
