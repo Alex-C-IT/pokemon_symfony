@@ -17,10 +17,10 @@ class Consommable
     #[ORM\Column(length: 50)]
     private ?string $libelle = null;
 
-    #[ORM\OneToMany(mappedBy: 'consommables', targetEntity: Pokemon::class)]
-    private Collection $pokemon;
+    #[ORM\OneToMany(mappedBy: 'consommable', targetEntity: Pokemon::class)]
+    private Collection $pokemons;
 
-    public function __construct(string $id, string $libelle)
+    public function __construct(string $id = null, string $libelle = null)
     {
         $this->id = $id;
         $this->libelle = $libelle;
@@ -30,6 +30,13 @@ class Consommable
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function setId(string $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getLibelle(): ?string
@@ -47,15 +54,15 @@ class Consommable
     /**
      * @return Collection<int, Pokemon>
      */
-    public function getPokemon(): Collection
+    public function getPokemons(): Collection
     {
-        return $this->pokemon;
+        return $this->pokemons;
     }
 
     public function addPokemon(Pokemon $pokemon): static
     {
-        if (!$this->pokemon->contains($pokemon)) {
-            $this->pokemon->add($pokemon);
+        if (!$this->pokemons->contains($pokemon)) {
+            $this->pokemons->add($pokemon);
             $pokemon->setConsommables($this);
         }
 
@@ -64,7 +71,7 @@ class Consommable
 
     public function removePokemon(Pokemon $pokemon): static
     {
-        if ($this->pokemon->removeElement($pokemon)) {
+        if ($this->pokemons->removeElement($pokemon)) {
             // set the owning side to null (unless already changed)
             if ($pokemon->getConsommables() === $this) {
                 $pokemon->setConsommables(null);

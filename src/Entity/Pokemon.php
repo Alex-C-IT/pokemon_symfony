@@ -40,8 +40,8 @@ class Pokemon
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Stats $stats = null;
 
-    #[ORM\ManyToOne(inversedBy: 'pokemon')]
-    private ?Consommable $consommables = null;
+    #[ORM\ManyToOne(inversedBy: 'pokemons')]
+    private ?Consommable $consommable = null;
 
     #[ORM\ManyToMany(targetEntity: Attaque::class, inversedBy: 'pokemons')]
     private Collection $attaques;
@@ -185,14 +185,14 @@ class Pokemon
         return $this;
     }
 
-    public function getConsommables(): ?consommable
+    public function getConsommable(): ?consommable
     {
-        return $this->consommables;
+        return $this->consommable;
     }
 
-    public function setConsommables(?consommable $consommables): static
+    public function setConsommable(?consommable $consommable): static
     {
-        $this->consommables = $consommables;
+        $this->consommable = $consommable;
 
         return $this;
     }

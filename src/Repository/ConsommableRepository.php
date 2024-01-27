@@ -21,6 +21,24 @@ class ConsommableRepository extends ServiceEntityRepository
         parent::__construct($registry, Consommable::class);
     }
 
+    public function add(Consommable $consommable): void
+    {
+        $this->_em->persist($consommable);
+        $this->_em->flush();
+    }   
+
+    public function update(Consommable $consommable): void
+    {
+        $this->_em->persist($consommable);
+        $this->_em->flush();
+    }
+
+    public function remove(Consommable $consommable): void
+    {
+        $this->_em->remove($consommable);
+        $this->_em->flush();
+    }
+
 //    /**
 //     * @return Consommable[] Returns an array of Consommable objects
 //     */
