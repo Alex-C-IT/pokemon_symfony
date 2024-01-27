@@ -152,7 +152,7 @@ class TypeController extends AbstractController
      * @param TypeRepository $repository
      * @return Response
      */
-    #[Route('/admin/types/edit/{id}', name: 'app_admin_types_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/types/{id}/edit', name: 'app_admin_types_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, TypeRepository $repository) : Response
     {
         $type = $repository->findOneBy(['id' => $request->get('id')]);
@@ -236,7 +236,7 @@ class TypeController extends AbstractController
      * @param TypeRepository $repository
      * @return Response
      */
-    #[Route('/admin/types/delete/{id}', name: 'app_admin_types_delete', methods: ['GET', 'POST'])]
+    #[Route('/admin/types/{id}/delete', name: 'app_admin_types_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, AttaqueRepository $attaqueRepository) : Response
     {
         $type = $typeRepository->findOneBy(['id' => $request->get('id')]);

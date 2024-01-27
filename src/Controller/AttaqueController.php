@@ -5,10 +5,10 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\AttaqueRepository;
+use App\Repository\{AttaqueRepository, PokemonRepository};
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\Attaque;
+use App\Entity\{Attaque, Pokemon};
 use App\Form\AttaqueType;
 
 class AttaqueController extends AbstractController
@@ -46,6 +46,28 @@ class AttaqueController extends AbstractController
         }
 
         return $this->render('admin/attaque/new.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/admin/attaques/{id}/edit', name: 'app_admin_attaques_edit')]
+    public function edit(Request $request, AttaqueRepository $repository): Response
+    {
+        $attaque = $repository->find($request->get('id'));
+        $form = $this->createForm(AttaqueType::class, $attaque);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $attaque = $form->getData();
+
+            $repository->update($attaque);
+
+            $this->addFlash('success', 'L\'attaque #' . $attaque->getId() . ' a bien été modifiée.');
+
+            return $this->redirectToRoute('app_admin_attaques_index');
+        }
+
+        return $this->render('admin/attaque/edit.html.twig', [
             'form' => $form->createView()
         ]);
     }
