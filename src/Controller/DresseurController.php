@@ -35,7 +35,6 @@ class DresseurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($form->getData());
             $dresseur = $form->getData();
             $repository->add($dresseur);
 

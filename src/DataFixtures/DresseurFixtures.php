@@ -15,7 +15,6 @@ class DresseurFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             UserFixtures::class,
-            PokemonFixtures::class
         ];
     }
 
@@ -25,7 +24,7 @@ class DresseurFixtures extends Fixture implements DependentFixtureInterface
         // Sacha - 170cm - Homme = 0 - Je veux devenir le meilleur dresseur !
         $dresseur = new Dresseur('Sacha', 170, false, 'Je veux devenir le meilleur dresseur !');
         $dresseur->setUser($this->getReference('user_1'));
-        $dresseur->addPokemon($this->getReference('pokemon_Pikachu'))->addPokemon($this->getReference('pokemon_Dracaufeu'))->addPokemon($this->getReference('pokemon_Lugia'));
+        //$dresseur->addPokemon($this->getReference('pokemon_Pikachu'))->addPokemon($this->getReference('pokemon_Dracaufeu'))->addPokemon($this->getReference('pokemon_Lugia'));
         $this->addReference(self::DRESSEUR_REFERENCE . '_' . $dresseur->getNom(), $dresseur);
         $manager->persist($dresseur);
 
@@ -39,7 +38,7 @@ class DresseurFixtures extends Fixture implements DependentFixtureInterface
         // Flora - 160cm - Femme = 1 - Je suis la championne !
         $dresseur = new Dresseur('Flora', 160, true, 'Je suis la championne !');
         $dresseur->setUser($this->getReference('user_3'));
-        $dresseur->addPokemon($this->getReference('pokemon_Florizarre'))->addPokemon($this->getReference('pokemon_Tortank'))->addPokemon($this->getReference('pokemon_Dracaufeu'))->addPokemon($this->getReference('pokemon_Ho-Oh'));
+        //$dresseur->addPokemon($this->getReference('pokemon_Florizarre'))->addPokemon($this->getReference('pokemon_Tortank'))->addPokemon($this->getReference('pokemon_Dracaufeu'))->addPokemon($this->getReference('pokemon_Ho-Oh'));
         $this->addReference(self::DRESSEUR_REFERENCE . '_' . $dresseur->getNom(), $dresseur);
         $manager->persist($dresseur);
 

@@ -28,11 +28,10 @@ class Dresseur
     #[ORM\Column(length: 120, nullable: true)]
     private ?string $message = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'dresseurs')]
     private ?User $user = null;
 
-    #[ORM\ManyToMany(targetEntity: Pokemon::class, inversedBy: 'dresseurs')]
-    #[ORM\JoinTable(name: 'dresseur_pokemon')]
+    #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'dresseurs')]
     private Collection $pokemons;
 
     public function __construct(string $nom = null, int $taille = null, bool $sexe = null, ?string $message = null)

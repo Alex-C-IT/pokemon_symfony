@@ -26,7 +26,7 @@ class Pokemon
     #[ORM\Column(length: 50)]
     private ?string $miniImage = null;
 
-    #[ORM\ManyToMany(targetEntity: Dresseur::class, mappedBy: 'pokemons')]
+    #[ORM\ManyToMany(targetEntity: Dresseur::class, inversedBy: 'pokemons')]
     private Collection $dresseurs;
 
     #[ORM\ManyToOne(inversedBy: 'pokemons')]

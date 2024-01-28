@@ -35,7 +35,7 @@ class User
     #[ORM\Column]
     private ?bool $mailEnvoye = null;
 
-    #[ORM\OneToMany(mappedBy: 'dresseurs', targetEntity: Dresseur::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Dresseur::class)]
     private Collection $dresseurs;
 
     public function __construct(string $nomUtilisateur, string $password, string $email)
