@@ -71,4 +71,72 @@ class PokemonController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    #[Route('/admin/pokemons/{id}/edit', name: 'app_admin_pokemons_edit')]
+    public function edit(Request $request, PokemonRepository $repository): Response
+    {
+        $pokemon = $repository->find($request->get('id'));
+        $form = $this->createForm(PokemonType::class, $pokemon);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $pokemon = $form->getData();
+            // Supprime l'ancienne image et l'ancienne miniature
+            $oldImage = $this->getParameter('images_pokemons_directory').'/'.$pokemon->getImage();
+            $oldMiniImage = $this->getParameter('images_mini_pokemons_directory').'/'.$pokemon->getMiniImage();
+            if(file_exists($oldImage) && file_exists($oldMiniImage)) {
+                unlink($oldImage);
+                unlink($oldMiniImage);
+            }
+            // Sauvgarde l'image et la miniImage dans le dossier public/images/pokemons et public/images/pokemons/miniatures
+            $imageFile = $form->get('image')->getData();
+            $miniImageFile = $form->get('miniImage')->getData();
+            if($imageFile && $miniImageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $originalMiniFilename = pathinfo($miniImageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // Format du nom de l'image : numero_nom.png (exemple : 0001_bulbizarre.png) - Supprime les espaces et les caractères spéciaux
+                $newFilename = $pokemon->getNumero().'_'.preg_replace('/[^A-Za-z0-9\-]/', '', $pokemon->getNom()).'.'.$imageFile->guessExtension();
+                // Format du nom de l'image miniature : numero_nom_mini.png (exemple : 0001_bulbizarre_mini.png) - Supprime les espaces et les caractères spéciaux
+                $newMiniFilename = $pokemon->getNumero().'_'.preg_replace('/[^A-Za-z0-9\-]/', '', $pokemon->getNom()).'_mini.'.$miniImageFile->guessExtension();
+                $imageFile->move(
+                    $this->getParameter('images_pokemons_directory'),
+                    $newFilename
+                );
+                $miniImageFile->move(
+                    $this->getParameter('images_mini_pokemons_directory'),
+                    $newMiniFilename
+                );
+                $pokemon->setImage($newFilename);
+                $pokemon->setMiniImage($newMiniFilename);
+            }
+
+            $repository->update($pokemon);
+            $this->addFlash('success', 'Le pokemon #'.$pokemon->getId().' a bien été modifié.');
+
+            return $this->redirectToRoute('app_admin_pokemons_index');
+        }
+
+        return $this->render('admin/pokemon/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/admin/pokemons/{id}/delete', name: 'app_admin_pokemons_delete')]
+    public function delete(Request $request, PokemonRepository $repository): Response
+    {
+        $pokemon = $repository->find($request->get('id'));
+        $oldNumero = $pokemon->getNumero();
+        $oldNom = $pokemon->getNom();
+        $oldImage = $this->getParameter('images_pokemons_directory').'/'.$pokemon->getImage();
+        $oldMiniImage = $this->getParameter('images_mini_pokemons_directory').'/'.$pokemon->getMiniImage();
+        if(file_exists($oldImage) && file_exists($oldMiniImage)) {
+            unlink($oldImage);
+            unlink($oldMiniImage);
+        }
+        $repository->remove($pokemon);
+        $this->addFlash('success', 'Le pokemon #' . $oldNumero . ' (' . $oldNom . ') a bien été supprimé.');
+
+        return $this->redirectToRoute('app_admin_pokemons_index');
+    }
 }

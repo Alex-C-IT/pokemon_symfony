@@ -64,8 +64,8 @@
                             </td>
                             <td>{{ pokemon.consommable.libelle }}</td>
                             <td>
-                                <a href="{#{{ path('app_admin_pokemons_edit', {'id': pokemon.id}) }}#}" class="btn btn-primary btn-sm">Modifier</a>
-                                <a href="{#{{ path('app_admin_pokemons_delete', {'id': pokemon.id}) }}#}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce pokémon ?')">Supprimer</a>
+                                <a href="{{ path('app_admin_pokemons_edit', {'id': pokemon.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="{{ path('app_admin_pokemons_delete', {'id': pokemon.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce pokémon ?')">Supprimer</a>
                             </td>
                         </tr>
                     {% endfor %}
