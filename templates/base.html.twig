@@ -20,11 +20,13 @@
     <body>
         {% block header %}
             {# Si on est dans la partie admin/ alors charger la navbar admin qui se trouve dans admin/partiels sous le nom '_adminnavbar.html.twig'  #}
-            {% if app.request.attributes.get('_route') starts with 'app_admin_' %}
-                {% include 'admin/partials/_adminnavbar.html.twig' %}
-            {% else %}
-                {% include 'public/partials/_navbar.html.twig' %}
-            {% endif %}
+            <nav>
+                {% if app.request.attributes.get('_route') starts with 'app_admin_' %}
+                    {% include 'admin/partials/_adminnavbar.html.twig' %}
+                {% else %}
+                    {% include 'public/partials/_navbar.html.twig' %}
+                {% endif %}
+            </nav>
         {% endblock %}
         {% block body %}{% endblock %}
     </body>

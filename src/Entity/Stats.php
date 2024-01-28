@@ -28,7 +28,7 @@ class Stats
     #[ORM\Column]
     private ?int $special = null;
 
-    public function __construct(int $pv, int $attaque, int $defense, int $vitesse, int $special)
+    public function __construct(int $pv = null, int $attaque = null, int $defense = null, int $vitesse = null, int $special = null)
     {
         $this->pv = $pv;
         $this->attaque = $attaque;

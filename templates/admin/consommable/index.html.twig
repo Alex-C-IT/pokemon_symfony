@@ -3,7 +3,7 @@
 {% block title %}Gestion des consommables - Pokémon Symfony{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
+    <div class="container" style="margin-top: 100px;">
         <h1>Gestion des consommables</h1>
         {# Affichage d'un message flash #}
         {% for message in app.flashes('success') %}
@@ -17,8 +17,8 @@
         {% if consommables is empty %}
             <p>Aucun consommable n'a été trouvée.</p>
         {% else %}
-            <table class="table table-hover mt-4">
-                <thead>
+            <table class="table table-hover mt-4 align-middle" >
+                <thead class="table-light text-center">
                     <tr>
                         <th>#</th>
                         <th style="width: 45%;">Libellé</th>

@@ -3,7 +3,7 @@
 {% block title %}Gestion des types - Pokémon Symfony{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
+    <div class="container" style="margin-top: 100px;">
         <h1>Gestion des types</h1>
         {# Affichage d'un message flash #}
         {% for message in app.flashes('success') %}
@@ -17,8 +17,8 @@
         {% if types is empty %}
             <p>Aucun type n'a été trouvé.</p>
         {% else %}
-            <table class="table table-hover mt-4">
-                <thead>
+            <table class="table table-hover mt-4 align-middle" >
+                <thead class="table-light text-center">
                     <tr>
                         <th>#</th>
                         <th>Image</th>
@@ -26,7 +26,7 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-center">
                     {% for type in types %}
                         <tr>
                             <td>{{ type.id }}</td>

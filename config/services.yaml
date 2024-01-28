@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     types_images_directory: '%kernel.project_dir%/public/images/types'
+    images_pokemons_directory: '%kernel.project_dir%/public/images/pokemons'
+    images_mini_pokemons_directory: '%kernel.project_dir%/public/images/pokemons/miniatures'
 
 services:
     # default configuration for services in *this* file

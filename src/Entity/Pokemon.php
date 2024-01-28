@@ -46,7 +46,7 @@ class Pokemon
     #[ORM\JoinTable(name: 'pokemon_attaque')]
     private Collection $attaques;
 
-    public function __construct(string $numero, string $nom, string $image, string $miniImage)
+    public function __construct(string $numero = null, string $nom = null, string $image = null, string $miniImage = null)
     {
         $this->numero = $numero;
         $this->nom = $nom;
