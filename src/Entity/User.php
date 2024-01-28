@@ -6,6 +6,8 @@ use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enums\Status;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -33,6 +35,9 @@ class User
     #[ORM\Column]
     private ?bool $mailEnvoye = null;
 
+    #[ORM\OneToMany(mappedBy: 'dresseurs', targetEntity: Dresseur::class)]
+    private Collection $dresseurs;
+
     public function __construct(string $nomUtilisateur, string $password, string $email)
     {
         $this->nomUtilisateur = $nomUtilisateur;
@@ -42,6 +47,7 @@ class User
         $this->dateInscription = new \DateTimeImmutable();
         $this->status = Status::ACTIF;
         $this->mailEnvoye = false;
+        $this->dresseurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,7 +55,7 @@ class User
         return $this->id;
     }
 
-    public function getNomUtilisateur(): ?int
+    public function getNomUtilisateur(): ?string
     {
         return $this->nomUtilisateur;
     }

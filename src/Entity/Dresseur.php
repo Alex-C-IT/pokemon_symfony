@@ -11,8 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Dresseur
 {
     #[ORM\Id]
-    #[ORM\Column(length: 15)]
-    private ?string $id = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     // Le nom du dresseur est unique
     #[ORM\Column(length: 25, unique: true)]
@@ -31,11 +32,11 @@ class Dresseur
     private ?User $user = null;
 
     #[ORM\ManyToMany(targetEntity: Pokemon::class, inversedBy: 'dresseurs')]
+    #[ORM\JoinTable(name: 'dresseur_pokemon')]
     private Collection $pokemons;
 
-    public function __construct(string $id, string $nom, int $taille, bool $sexe, ?string $message)
+    public function __construct(string $nom = null, int $taille = null, bool $sexe = null, ?string $message = null)
     {
-        $this->id = $id;
         $this->nom = $nom;
         $this->taille = $taille;
         $this->sexe = $sexe;
@@ -43,9 +44,16 @@ class Dresseur
         $this->pokemons = new ArrayCollection();
     }
 
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getNom(): ?string

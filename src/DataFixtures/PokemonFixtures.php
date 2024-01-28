@@ -32,7 +32,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         
         // Pokémon de la première génération : 
         // Bulbizarre
-        $pokemon = new Pokemon('0001', 'Bulbizarre', '001_Bulbizarre.png', '001_Bulbizarre_mini.png');
+        $pokemon = new Pokemon('0001', 'Bulbizarre', '0001_Bulbizarre.png', '0001_Bulbizarre_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Plante'))->addType($this->getReference('type_Poison'));
         $pokemon->setStats($this->getReference('stats_1'));
@@ -42,7 +42,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Herbizarre
-        $pokemon = new Pokemon('0002', 'Herbizarre', '002_Herbizarre.png', '002_Herbizarre_mini.png');
+        $pokemon = new Pokemon('0002', 'Herbizarre', '0002_Herbizarre.png', '0002_Herbizarre_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Plante'))->addType($this->getReference('type_Poison'));
         $pokemon->setStats($this->getReference('stats_2'));
@@ -52,7 +52,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Florizarre
-        $pokemon = new Pokemon('0003', 'Florizarre', '003_Florizarre.png', '003_Florizarre_mini.png');
+        $pokemon = new Pokemon('0003', 'Florizarre', '0003_Florizarre.png', '0003_Florizarre_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Plante'))->addType($this->getReference('type_Poison'));
         $pokemon->setStats($this->getReference('stats_3'));
@@ -62,7 +62,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Salamèche
-        $pokemon = new Pokemon('0004', 'Salamèche', '004_Salameche.png', '004_Salameche_mini.png');
+        $pokemon = new Pokemon('0004', 'Salamèche', '0004_Salameche.png', '0004_Salameche_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Feu'));
         $pokemon->setStats($this->getReference('stats_4'));
@@ -72,7 +72,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Reptincel
-        $pokemon = new Pokemon('0005', 'Reptincel', '005_Reptincel.png', '005_Reptincel_mini.png');
+        $pokemon = new Pokemon('0005', 'Reptincel', '0005_Reptincel.png', '0005_Reptincel_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Feu'));
         $pokemon->setStats($this->getReference('stats_5'));
@@ -82,7 +82,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Dracaufeu
-        $pokemon = new Pokemon('0006', 'Dracaufeu', '006_Dracaufeu.png', '006_Dracaufeu_mini.png');
+        $pokemon = new Pokemon('0006', 'Dracaufeu', '0006_Dracaufeu.png', '0006_Dracaufeu_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Feu'))->addType($this->getReference('type_Vol'));
         $pokemon->setStats($this->getReference('stats_6'));
@@ -92,7 +92,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Carapuce
-        $pokemon = new Pokemon('0007', 'Carapuce', '007_Carapuce.png', '007_Carapuce_mini.png');
+        $pokemon = new Pokemon('0007', 'Carapuce', '0007_Carapuce.png', '0007_Carapuce_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Eau'));
         $pokemon->setStats($this->getReference('stats_7'));
@@ -102,7 +102,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Carabaffe
-        $pokemon = new Pokemon('0008', 'Carabaffe', '008_Carabaffe.png', '008_Carabaffe_mini.png');
+        $pokemon = new Pokemon('0008', 'Carabaffe', '0008_Carabaffe.png', '0008_Carabaffe_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Eau'));
         $pokemon->setStats($this->getReference('stats_8'));
@@ -112,7 +112,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Tortank
-        $pokemon = new Pokemon('0009', 'Tortank', '009_Tortank.png', '009_Tortank_mini.png');
+        $pokemon = new Pokemon('0009', 'Tortank', '0009_Tortank.png', '0009_Tortank_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Eau'));
         $pokemon->setStats($this->getReference('stats_9'));
@@ -122,7 +122,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Pikachu
-        $pokemon = new Pokemon('0025', 'Pikachu', '025_Pikachu.png', '025_Pikachu_mini.png');
+        $pokemon = new Pokemon('0025', 'Pikachu', '0025_Pikachu.png', '0025_Pikachu_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Foudre'));
         $pokemon->setStats($this->getReference('stats_10'));
@@ -132,7 +132,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Raichu
-        $pokemon = new Pokemon('0026', 'Raichu', '026_Raichu.png', '026_Raichu_mini.png');
+        $pokemon = new Pokemon('0026', 'Raichu', '0026_Raichu.png', '0026_Raichu_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));
         $pokemon->addType($this->getReference('type_Foudre'));
         $pokemon->setStats($this->getReference('stats_11'));
@@ -143,7 +143,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
 
         // Pokémon de la deuxième génération :
         // Lugia
-        $pokemon = new Pokemon('0249', 'Lugia', '249_Lugia.png', '249_Lugia_mini.png');
+        $pokemon = new Pokemon('0249', 'Lugia', '0249_Lugia.png', '0249_Lugia_mini.png');
         $pokemon->setGeneration($this->getReference('generation_2'));
         $pokemon->addType($this->getReference('type_Psy'))->addType($this->getReference('type_Vol'));
         $pokemon->setStats($this->getReference('stats_12'));
@@ -153,7 +153,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($pokemon);
 
         // Ho-Oh
-        $pokemon = new Pokemon('0250', 'Ho-Oh', '250_Ho-Oh.png', '250_Ho-Oh_mini.png');
+        $pokemon = new Pokemon('0250', 'Ho-Oh', '0250_Ho-Oh.png', '0250_Ho-Oh_mini.png');
         $pokemon->setGeneration($this->getReference('generation_2'));
         $pokemon->addType($this->getReference('type_Feu'))->addType($this->getReference('type_Vol'));
         $pokemon->setStats($this->getReference('stats_13'));
