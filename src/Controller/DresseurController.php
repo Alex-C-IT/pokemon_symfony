@@ -36,6 +36,7 @@ class DresseurController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dresseur = $form->getData();
+            //dd($dresseur);
             $repository->add($dresseur);
 
             $this->addFlash('success', 'Le dresseur a bien été ajouté !');

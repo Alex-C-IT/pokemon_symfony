@@ -121,6 +121,7 @@ class DresseurType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                 ],
+                'by_reference' => false
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

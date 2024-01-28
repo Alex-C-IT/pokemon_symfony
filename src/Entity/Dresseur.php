@@ -127,6 +127,7 @@ class Dresseur
     {
         if (!$this->pokemons->contains($pokemon)) {
             $this->pokemons->add($pokemon);
+            $pokemon->addDresseur($this);
         }
 
         return $this;
