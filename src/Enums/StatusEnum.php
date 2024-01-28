@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Status: int
+enum StatusEnum: int
 {
     case BANNI = 0;
     case ACTIF = 1;

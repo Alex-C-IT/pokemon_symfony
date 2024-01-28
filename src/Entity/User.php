@@ -3,50 +3,64 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Enums\Status;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\{Collection, ArrayCollection};
+use App\Entity\Dresseur;
+use App\Enums\StatusEnum as Status;
+use App\EventListener\UserListener;
 
+#[UniqueEntity('email')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+#[ORM\EntityListeners(['App\EntityListener\UserListener'])]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 25)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 2, max: 25)]
     private ?string $nomUtilisateur = null;
 
-    #[ORM\Column(length: 255)]
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank()]
     private ?string $password = null;
+    
+    private ?string $plainPassword = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 150, unique: true)]
+    #[Assert\NotBlank()]
+    #[Assert\Email()]
+    #[Assert\Length(min: 2, max: 150)]
     private ?string $email = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateInscription = null;
+    #[ORM\Column]
+    #[Assert\NotNull()]
+    private array $roles = [];
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    #[Assert\NotNull()]
+    private ?\DateTimeImmutable $dateInscription = null;
 
     #[ORM\Column]
     private ?Status $status = null;
 
-    #[ORM\Column]
-    private ?bool $mailEnvoye = null;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Dresseur::class)]
     private Collection $dresseurs;
 
-    public function __construct(string $nomUtilisateur, string $password, string $email)
+    public function __construct()
     {
-        $this->nomUtilisateur = $nomUtilisateur;
-        $this->password = $password;
-        $this->email = $email;
-        // Formatage de la date et l'heure d'inscription actuelle pour MySQL (AAAA-MM-JJ HH:MM:SS)
-        $this->dateInscription = new \DateTimeImmutable();
-        $this->status = Status::ACTIF;
-        $this->mailEnvoye = false;
+        $this->dateInscription = new \DateTimeImmutable();   
+        $this->status = Status::ACTIF;     
         $this->dresseurs = new ArrayCollection();
     }
 
@@ -67,7 +81,10 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -75,6 +92,26 @@ class User
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of plainPassword
+     */ 
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * Set the value of plainPassword
+     *
+     * @return  self
+     */ 
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
@@ -91,16 +128,54 @@ class User
         return $this;
     }
 
-    public function getDateInscription(): ?\DateTimeInterface
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getDateInscription(): ?\DateTimeImmutable
     {
         return $this->dateInscription;
     }
 
-    public function setDateInscription(\DateTimeInterface $dateInscription): static
+    public function setDateInscription(\DateTimeImmutable $dateInscription): static
     {
         $this->dateInscription = $dateInscription;
 
         return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     public function getStatus(): ?Status
@@ -115,15 +190,34 @@ class User
         return $this;
     }
 
-    public function isMailEnvoye(): ?bool
+    public function getDresseurs(): Collection
     {
-        return $this->mailEnvoye;
+        return $this->dresseurs;
     }
 
-    public function setMailEnvoye(bool $mailEnvoye): static
+    public function setDresseurs(Collection $dresseurs): static
     {
-        $this->mailEnvoye = $mailEnvoye;
+        return $this->dresseurs = $dresseurs;
+    }
+
+    public function addDresseur(Dresseur $dresseur): static
+    {
+        if(!$this->dresseurs->contains($dresseur)) {
+            $this->dresseurs->add($dresseur);
+            $dresseur->setUser($this);
+        }
 
         return $this;
     }
+
+    public function removeDresseur(Dresseur $dresseur): static
+    {
+        if($this->dresseurs->contains($dresseur)) {
+            $this->dresseurs->removeElement($dresseur);
+            $dresseur->setUser(null);
+        }
+
+        return $this;
+    }
+
 }
