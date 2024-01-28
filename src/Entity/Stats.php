@@ -36,7 +36,7 @@ class Stats
         $this->vitesse = $vitesse;
         $this->special = $special;
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

@@ -33,7 +33,7 @@ class ConsommableFixtures extends Fixture
             $manager->persist($consommable);
             $this->addReference(self::CONSOMMABLE_REFERENCE . '_' . $key + 1, $consommable);
         }
-        
+
         $manager->flush();
     }
 }

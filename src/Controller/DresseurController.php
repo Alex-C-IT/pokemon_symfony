@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\{DresseurRepository, PokemonRepository};
+use App\Repository\{DresseurRepository};
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\{Dresseur, Pokemon};
@@ -24,6 +24,28 @@ class DresseurController extends AbstractController
 
         return $this->render('admin/dresseur/index.html.twig', [
             'dresseurs' => $dresseurs
+        ]);
+    }
+
+    #[Route('/admin/dresseurs/new', name: 'app_admin_dresseurs_new')]
+    public function new(Request $request, DresseurRepository $repository): Response
+    {
+        $dresseur = new Dresseur();
+        $form = $this->createForm(DresseurType::class, $dresseur);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            dd($form->getData());
+            $dresseur = $form->getData();
+            $repository->add($dresseur);
+
+            $this->addFlash('success', 'Le dresseur a bien été ajouté !');
+
+            return $this->redirectToRoute('app_admin_dresseurs_index');
+        }
+
+        return $this->render('admin/dresseur/new.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }

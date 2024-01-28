@@ -11,7 +11,6 @@ use Symfony\Component\Form\Extension\Core\Type\{TextType, IntegerType, SubmitTyp
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Type;
 
-
 class AttaqueType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -26,7 +25,7 @@ class AttaqueType extends AbstractType
         *  Le champ PP, de type integer, est obligatoire. Il doit être compris entre 0 et 50.
         *  Le champ CS, de type checkbox, est obligatoire.
         */
-        $builder 
+        $builder
             ->add('id', TextType::class, [
                 'attr' => [
                     'class' => 'form-control',
@@ -176,7 +175,7 @@ class AttaqueType extends AbstractType
                 ],
                 'label' => 'Valider'
             ])
-            ;
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -31,7 +31,7 @@ class AttaqueFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($attaque);
         $this->addReference(self::ATTAQUE_REFERENCE . '_' . '2', $attaque);
 
-        // 2 attaques de type Feu 
+        // 2 attaques de type Feu
         // Attaque 3 - Lance-Flammes : Nom : Lance-Flammes, Description : Un jet de feu brûlant est projeté sur la cible., Puissance : 90, Précision : 100, PP : 15, CS : false, Type : Feu
         $attaque = new Attaque('ATQ03', 'Lance-Flammes', 'Un jet de feu brûlant est projeté sur la cible.', 90, 100, 15, false, $this->getReference(TypeFixtures::TYPE_REFERENCE . '_' . 'Feu'));
         $manager->persist($attaque);
@@ -85,12 +85,12 @@ class AttaqueFixtures extends Fixture implements DependentFixtureInterface
         $attaque = new Attaque('ATQ12', 'Psyko', 'Une puissante attaque psychique qui peut aussi baisser la Défense Spéciale de la cible.', 90, 100, 10, false, $this->getReference(TypeFixtures::TYPE_REFERENCE . '_' . 'Psy'));
         $manager->persist($attaque);
         $this->addReference(self::ATTAQUE_REFERENCE . '_' . '12', $attaque);
-        
+
         // Attaque 13 - Surf : Nom : Surf, Description : Une vague déferlante s’abat sur tout ce qui entoure l’utilisateur. Peut aussi être utilisée pour traverser l’eau., Puissance : 90, Précision : 100, PP : 15, CS : true, Type : Eau
         $attaque = new Attaque('ATQ13', 'Surf', 'Une vague déferlante s\'abat sur tout ce qui entoure l\'utilisateur. Peut aussi être utilisée pour traverser l\'eau.', 90, 100, 15, true, $this->getReference(TypeFixtures::TYPE_REFERENCE . '_' . 'Eau'));
         $manager->persist($attaque);
         $this->addReference(self::ATTAQUE_REFERENCE . '_' . '13', $attaque);
-        
+
         $manager->flush();
     }
 }

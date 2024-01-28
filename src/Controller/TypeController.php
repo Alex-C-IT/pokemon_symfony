@@ -56,13 +56,13 @@ class TypeController extends AbstractController
             $id = $form->get('id')->getData();
 
             // Vérifie si l'id ne dépasse pas 10 caractères.
-            if(strlen($id) > 10){
+            if(strlen($id) > 10) {
                 $this->addFlash('error', 'L\'id ne doit pas dépasser 10 caractères.');
                 return $this->redirectToRoute('app_admin_types_new');
             }
 
             // Vérifie si l'id existe déjà
-            if($repository->find($id)){
+            if($repository->find($id)) {
                 $this->addFlash('error', 'Cet id existe déjà. Veuillez en choisir un autre.');
                 return $this->redirectToRoute('app_admin_types_new');
             }
@@ -72,42 +72,42 @@ class TypeController extends AbstractController
 
             // Récupère le libellé transmis dans le formulaire
             $libelle = $form->get('libelle')->getData();
-            
+
             // Vérifie si le libellé ne dépasse pas 25 caractères.
-            if(strlen($libelle) > 25){
+            if(strlen($libelle) > 25) {
                 $this->addFlash('error', 'Le libellé ne doit pas dépasser 25 caractères.');
                 return $this->redirectToRoute('app_admin_types_new');
             }
-            $type->setLibelle($libelle);            
-            
+            $type->setLibelle($libelle);
+
             // Récupère l'image transmise dans le formulaire
             $imageFile = $form->get('image')->getData();
-            
+
             // Vérifie si le nom de l'image n'existe pas dans public/images/types
             if($imageFile) {
-                
+
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                
+
                 // Vérifie si le nom de l'image + l'extension (.png) ne dépasse pas 50 caractères.
-                if(strlen($originalFilename) > 45){
+                if(strlen($originalFilename) > 45) {
                     $this->addFlash('error', 'Le nom de l\'image ne doit pas dépasser 45 caractères.');
                     return $this->redirectToRoute('app_admin_types_new');
                 }
 
                 // vérifie si le nom de l'image existe déjà
-                if(in_array($originalFilename, $this->recupereNomsImagesTypes())){
+                if(in_array($originalFilename, $this->recupereNomsImagesTypes())) {
                     $this->addFlash('error', 'Ce nom d\'image existe déjà. Veuillez en choisir un autre.');
                     return $this->redirectToRoute('app_admin_types_new');
                 }
 
                 // Vérifie si l'image est bien au format .png.
-                if($imageFile->guessExtension() != 'png'){
+                if($imageFile->guessExtension() != 'png') {
                     $this->addFlash('error', 'Le format de l\'image doit être .png.');
                     return $this->redirectToRoute('app_admin_types_new');
                 }
 
                 // Vérifie si l'image ne dépasse pas 50Ko.
-                if($imageFile->getSize() > 50000){
+                if($imageFile->getSize() > 50000) {
                     $this->addFlash('error', 'L\'image ne doit pas dépasser 50Ko.');
                     return $this->redirectToRoute('app_admin_types_new');
                 }
@@ -127,17 +127,18 @@ class TypeController extends AbstractController
             $repository->add($type);
             $this->addFlash('success', 'Le type a été ajouté.');
             return $this->redirectToRoute('app_admin_types_index');
-        }
-        else
-        {
-            return $this->render('admin/type/new.html.twig', [
+        } else {
+            return $this->render(
+                'admin/type/new.html.twig',
+                [
                     'form' => $form->createView()
                 ]
             );
         }
     }
 
-    private function recupereNomsImagesTypes() {
+    private function recupereNomsImagesTypes()
+    {
         // Récupère le nom des images dans le répertoire public/images/types
         $images = scandir($this->getParameter('types_images_directory'));
         // Supprime les 2 premiers éléments du tableau (. et ..)
@@ -153,7 +154,7 @@ class TypeController extends AbstractController
      * @return Response
      */
     #[Route('/admin/types/{id}/edit', name: 'app_admin_types_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, TypeRepository $repository) : Response
+    public function edit(Request $request, TypeRepository $repository): Response
     {
         $type = $repository->findOneBy(['id' => $request->get('id')]);
         $form = $this->createForm(TypeType::class, $type);
@@ -166,40 +167,40 @@ class TypeController extends AbstractController
             $libelle = $form->get('libelle')->getData();
 
             // Vérifie si le libellé ne dépasse pas 25 caractères.
-            if(strlen($libelle) > 25){
+            if(strlen($libelle) > 25) {
                 $this->addFlash('error', 'Le libellé ne doit pas dépasser 25 caractères.');
                 return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
             }
-            $type->setLibelle($libelle);            
-            
+            $type->setLibelle($libelle);
+
             // Récupère l'image transmise dans le formulaire
             $imageFile = $form->get('image')->getData();
-            
+
             // Vérifie si le nom de l'image n'existe pas dans public/images/types
             if($imageFile) {
-                
+
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                
+
                 // Vérifie si le nom de l'image + l'extension (.png) ne dépasse pas 50 caractères.
-                if(strlen($originalFilename) > 45){
+                if(strlen($originalFilename) > 45) {
                     $this->addFlash('error', 'Le nom de l\'image ne doit pas dépasser 45 caractères.');
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
 
                 // vérifie si le nom de l'image existe déjà
-                if(in_array($originalFilename, $this->recupereNomsImagesTypes())){
+                if(in_array($originalFilename, $this->recupereNomsImagesTypes())) {
                     $this->addFlash('error', 'Ce nom d\'image existe déjà. Veuillez en choisir un autre.');
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
 
                 // Vérifie si l'image est bien au format .png.
-                if($imageFile->guessExtension() != 'png'){
+                if($imageFile->guessExtension() != 'png') {
                     $this->addFlash('error', 'Le format de l\'image doit être .png.');
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
 
                 // Vérifie si l'image ne dépasse pas 50Ko.
-                if($imageFile->getSize() > 50000){
+                if($imageFile->getSize() > 50000) {
                     $this->addFlash('error', 'L\'image ne doit pas dépasser 50Ko.');
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
@@ -221,9 +222,7 @@ class TypeController extends AbstractController
             $repository->update($type);
             $this->addFlash('success', 'Le type #' . $type->getId() . ' a été modifié avec succès !');
             return $this->redirectToRoute('app_admin_types_index');
-        }
-        else
-        {
+        } else {
             return $this->render('admin/type/edit.html.twig', [
                 'form' => $form->createView()
             ]);
@@ -237,16 +236,15 @@ class TypeController extends AbstractController
      * @return Response
      */
     #[Route('/admin/types/{id}/delete', name: 'app_admin_types_delete', methods: ['GET', 'POST'])]
-    public function delete(Request $request, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, AttaqueRepository $attaqueRepository) : Response
+    public function delete(Request $request, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, AttaqueRepository $attaqueRepository): Response
     {
         $type = $typeRepository->findOneBy(['id' => $request->get('id')]);
         // Récupère tous les pokémons associés au type et les insère dans types
-        foreach($type->getPokemons() as $pokemon){
+        foreach($type->getPokemons() as $pokemon) {
             // Si le pokémon possède un type secondaire alors on le supprime sinon on met à 'TYPE0'
-            if($pokemon->getTypes()->count() > 1){
+            if($pokemon->getTypes()->count() > 1) {
                 $pokemon->removeType($type);
-            }
-            else{
+            } else {
                 $pokemon->addType($typeRepository->findOneBy(['id' => 'TYPE0']));
                 // Mettre à jour le type du pokémon dans la table pokemon
                 $pokemonRepository->update($pokemon);
@@ -255,13 +253,13 @@ class TypeController extends AbstractController
 
         // Change le type des attaques liése au type par 'TYPE0'
         $type0 = $typeRepository->findOneBy(['id' => 'TYPE0']);
-        foreach($type->getAttaques() as $attaque){
+        foreach($type->getAttaques() as $attaque) {
             $attaque->setType($type0);
             // Mettre à jour le type de l'attaque dans la table attaque
             $attaqueRepository->update($attaque);
         }
 
-        
+
         // Supprime l'image du type
         unlink($this->getParameter('types_images_directory') . '/' . $type->getImage());
 

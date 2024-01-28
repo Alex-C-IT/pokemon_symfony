@@ -18,9 +18,9 @@ class PokemonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /* Le formulaire est créé à partir de l'entité Attaque
-        * Le champ 'numero' est un champ de type TextType. Il doit obligatoirement faire 4 caractères. Il est unique. Il est requis. 
+        * Le champ 'numero' est un champ de type TextType. Il doit obligatoirement faire 4 caractères. Il est unique. Il est requis.
         * Le champ 'nom' est un champ de type TextType. Il doit faire entre 3 et 50 caractères. Il est requis. Il est unique.
-        * Le champ 'image' est un champ de type FileType. Le fichier ne doit pas dépasser la taille de 150Ko. Il doit être au format .png. Il est requis. 
+        * Le champ 'image' est un champ de type FileType. Le fichier ne doit pas dépasser la taille de 150Ko. Il doit être au format .png. Il est requis.
         * Le champ 'miniImage' est un champ de type FileType. Le fichier ne doit pas dépasser la taille de 50Ko. Il doit être au format .png. Il est requis.
         * Le champ 'generation' est un champ de type EntityType. Il est requis. Il est lié à l'entité Generation. Il est affiché à partir de la propriété 'id'. Il est trié par ordre croissant sur la propriété 'numero'.
         * Le champ 'types' est un champ ChoiceType. Il est lié à l'entité Type. Il est requis. Il est affiché à partir de la propriété 'nom'. Il est trié par ordre croissant sur la propriété 'nom'. Il est multiple (max = 4). Il est étendu.
@@ -209,7 +209,7 @@ class PokemonType extends AbstractType
                     'class' => 'btn btn-primary mt-3'
                 ]
                 ])
-            ;
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

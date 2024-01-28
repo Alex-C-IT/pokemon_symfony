@@ -12,7 +12,7 @@
             </div>
         {% endfor %}
         {# Ajout d'un bouton "Ajouter"#}
-        <a href="{# {{ path('app_admin_dresseurs_new') }} #}" class="btn btn-success">Ajouter un dresseur</a>
+        <a href="{{ path('app_admin_dresseurs_new') }}" class="btn btn-success">Ajouter un dresseur</a>
         {# Si aucun type n'a été trouvé #}
         {% if dresseurs is empty %}
             <p>Aucun dresseur n'a été trouvée.</p>

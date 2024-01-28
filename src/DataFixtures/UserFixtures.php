@@ -10,7 +10,7 @@ use App\Enums\Status;
 class UserFixtures extends Fixture
 {
     public const USER_REFERENCE = 'user';
-    
+
     public function load(ObjectManager $manager): void
     {
         // Un utilisateur d'un idUtilisateur, d'un nomUtilisateur, d'un password et d'un email
@@ -30,7 +30,7 @@ class UserFixtures extends Fixture
         $user->setStatus(Status::BANNI);
         $this->addReference(self::USER_REFERENCE . '_' . '3', $user);
         $manager->persist($user);
-        
+
         $manager->flush();
     }
 }

@@ -7,7 +7,6 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Pokemon;
 
-
 class PokemonFixtures extends Fixture implements DependentFixtureInterface
 {
     public const POKEMON_REFERENCE = 'pokemon'; //pokemon_nom
@@ -29,8 +28,8 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         // Les images de pokémons se trouvent dans public/images/pokemons et les images miniatures dans public/images/miniatures
         // Les images de pokémons sont nommées de la façon suivante : numero_nom.png
         // Les images miniatures de pokémons sont nommées de la façon suivante : numero_nom_mini.png
-        
-        // Pokémon de la première génération : 
+
+        // Pokémon de la première génération :
         // Bulbizarre
         $pokemon = new Pokemon('0001', 'Bulbizarre', '0001_Bulbizarre.png', '0001_Bulbizarre_mini.png');
         $pokemon->setGeneration($this->getReference('generation_1'));

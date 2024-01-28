@@ -47,11 +47,12 @@ class Attaque
         $this->prec = $prec;
         $this->pp = $pp;
         $this->cs = $cs;
-        if($type != null)
+        if($type != null) {
             $this->type = $type;
+        }
         $this->pokemons = new ArrayCollection();
     }
-    
+
     public function getId(): ?string
     {
         return $this->id;

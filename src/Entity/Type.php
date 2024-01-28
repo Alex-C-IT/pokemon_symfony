@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Type
 {
     #[ORM\Id]
-    #[ORM\Column (length: 10)]
+    #[ORM\Column(length: 10)]
     private ?string $id = null;
 
     #[ORM\Column(length: 25)]
@@ -45,7 +45,7 @@ class Type
 
         return $this;
     }
-    
+
     public function getLibelle(): ?string
     {
         return $this->libelle;

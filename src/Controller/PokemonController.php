@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\{Pokemon, Type, Generation};
 use App\Form\PokemonType;
 
-
 class PokemonController extends AbstractController
 {
     #[Route('/admin/pokemons', name: 'app_admin_pokemons_index')]
