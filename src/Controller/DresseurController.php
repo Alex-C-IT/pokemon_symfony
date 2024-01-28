@@ -48,4 +48,37 @@ class DresseurController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    #[Route('/admin/dresseurs/{id}/edit', name: 'app_admin_dresseurs_edit')]
+    public function edit(Request $request, DresseurRepository $repository): Response
+    {
+        $dresseur = $repository->find($request->get('id'));
+        $form = $this->createForm(DresseurType::class, $dresseur);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dresseur = $form->getData();
+            $repository->update($dresseur);
+
+            $this->addFlash('success', 'Le dresseur #' . $dresseur->getId() . ' (' . $dresseur->getNom() . ') a bien été modifié !');
+
+            return $this->redirectToRoute('app_admin_dresseurs_index');
+        }
+
+        return $this->render('admin/dresseur/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/admin/dresseurs/{id}/delete', name: 'app_admin_dresseurs_delete')]
+    public function delete(Request $request, DresseurRepository $repository): Response
+    {
+        $dresseur = $repository->find($request->get('id'));
+        $oldId = $dresseur->getId();
+        $repository->remove($dresseur);
+
+        $this->addFlash('success', 'Le dresseur #' . $oldId . ' (' . $dresseur->getNom() . ') a bien été supprimé !');
+
+        return $this->redirectToRoute('app_admin_dresseurs_index');
+    }
 }

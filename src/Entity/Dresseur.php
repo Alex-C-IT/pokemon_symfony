@@ -135,8 +135,10 @@ class Dresseur
 
     public function removePokemon(Pokemon $pokemon): static
     {
-        $this->pokemons->removeElement($pokemon);
-
+        if($this->pokemons->removeElement($pokemon)) {
+            $pokemon->removeDresseur($this);
+        }
+        
         return $this;
     }
 }

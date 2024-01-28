@@ -55,8 +55,8 @@
                             </td>
                             <td><b>{{ dresseur.user.nomUtilisateur }}</b></td>
                             <td>
-                                <a href="{#{{ path('app_admin_dresseurs_edit', {'id': attaque.id}) }}#}" class="btn btn-primary btn-sm">Modifier</a>
-                                <a href="{#{{ path('app_admin_dresseurs_delete', {'id': attaque.id}) }}#}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce dresseur ?')">Supprimer</a>
+                                <a href="{{ path('app_admin_dresseurs_edit', {'id': dresseur.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="{{ path('app_admin_dresseurs_delete', {'id': dresseur.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce dresseur ?')">Supprimer</a>
                             </td>
                         </tr>
                     {% endfor %}
