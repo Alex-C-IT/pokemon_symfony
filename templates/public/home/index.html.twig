@@ -8,10 +8,16 @@
             <h1 class="display-4">Bienvenue sur Pokémon Symfony</h1>
             <p class="lead">Ce site est un site de gestion de pokémons. Vous pourrez voir toutes informations sur les pokémons existants, les attaques, les objets etc.</p>
             <hr class="my-4">
-            <p>Vous pouvez gérer vos pokémons en vous connectant.</p>
-            <a class="btn btn-primary btn-lgz" href="#" role="button">Se connecter</a>
-            <p>Vous n'avez pas de compte ?</p>
-            <a class="btn btn-primary btn-lgz" href="#" role="button">S'inscrire</a>
+            {% if app.user %}
+                <h3>Bonjour <b>{{ app.user.nomUtilisateur }}</b></h3>
+            {% endif %}
+            {% if not app.user %}
+                <p>Vous pouvez gérer vos pokémons en vous connectant.</p>
+                <a class="btn btn-primary btn-lgz" href="{{ path('app_home_login') }}" role="button">Se connecter</a>
+                <p>Vous n'avez pas de compte ?</p>
+                <a class="btn btn-primary btn-lgz" href="{{ path('app_home_register') }}" role="button">S'inscrire</a>
+            {% endif %}
+
         </div>
     </div>
 {% endblock %}

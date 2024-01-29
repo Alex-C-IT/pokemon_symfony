@@ -17,7 +17,8 @@ class UserFixtures extends Fixture
         $user->setNomUtilisateur("admin");
         $user->setPlainPassword("admin");
         $user->setEmail("admin@pokemonsymfony.fr");
-        $user->setStatus(Status::ADMINISTRATEUR);
+        $user->setStatus(Status::ACTIF);
+        $user->setIsSubscribedNewsletter(true);
         $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
         $this->addReference(self::USER_REFERENCE . '_' . '1', $user);
         $manager->persist($user);
@@ -26,7 +27,8 @@ class UserFixtures extends Fixture
         $user->setNomUtilisateur("user");
         $user->setPlainPassword("user");
         $user->setEmail("user@pokemonsymfony.fr");
-        $user->setRoles(['ROLE_USER']);
+        $user->addRole("ROLE_USER");
+        $user->setIsSubscribedNewsletter(false);
         $this->addReference(self::USER_REFERENCE . '_' . '2', $user);
         $manager->persist($user);
 
@@ -35,7 +37,8 @@ class UserFixtures extends Fixture
         $user->setPlainPassword("user2");
         $user->setEmail("user2@pokemonsymfony.fr");
         $user->setStatus(Status::BANNI);
-        $user->setRoles(['ROLE_USER']);
+        $user->setIsSubscribedNewsletter(false);
+        $user->addRole("ROLE_USER");
         $this->addReference(self::USER_REFERENCE . '_' . '3', $user);
         $manager->persist($user);
 

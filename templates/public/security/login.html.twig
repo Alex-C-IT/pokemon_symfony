@@ -5,6 +5,11 @@
 {% block body %}
     <div class="container" style="margin-top: 100px;">
         <h1 class="mt-4">Connexion</h1>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                <p class="mb-0"><b>Succès ! </b>{{ message }}</p>
+            </div>
+        {% endfor %}
         {% if error %}
         <div class="alert alert-danger mt-2 mb-2">
             <p class="mb-0"><b>Attention ! </b>{{ error.messageKey|trans(error.messageData, 'security') }}</p>

@@ -23,7 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[ORM\Column(type: 'string', length: 25, unique: true)]
     #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max: 25)]
     private ?string $nomUtilisateur = null;
@@ -33,15 +33,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank()]
-    private ?string $password = null;
+    private ?string $password = 'password';
     
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: 'string', length: 150, unique: true)]
     #[Assert\NotBlank()]
     #[Assert\Email()]
-    #[Assert\Length(min: 2, max: 150)]
-    private ?string $email = null;
+    #[Assert\Length(min: 10, max: 150)]
+    private ?string $email;
 
     #[ORM\Column]
     #[Assert\NotNull()]
@@ -57,10 +57,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Dresseur::class)]
     private Collection $dresseurs;
 
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $isSubscribedNewsletter = null;
+
     public function __construct()
     {
         $this->dateInscription = new \DateTimeImmutable();   
-        $this->status = Status::ACTIF;     
+        $this->status = Status::EN_ATTENTE_DE_VALIDATION;     
         $this->dresseurs = new ArrayCollection();
     }
 
@@ -157,6 +160,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function addRole(string $role): static
+    {
+        if(!in_array($role, $this->roles)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
     public function getDateInscription(): ?\DateTimeImmutable
     {
         return $this->dateInscription;
@@ -219,5 +231,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+ 
+    public function getIsSubscribedNewsletter(): ?bool
+    {
+        return $this->isSubscribedNewsletter;
+    }
 
+    public function setIsSubscribedNewsletter($isSubscribedNewsletter): static
+    {
+        $this->isSubscribedNewsletter = $isSubscribedNewsletter;
+
+        return $this;
+    }
 }
