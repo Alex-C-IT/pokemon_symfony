@@ -40,7 +40,7 @@ class SecurityController extends AbstractController implements UserCheckerInterf
 
     public function checkPreAuth(UserInterface $user): void
     {
-        // On vérifie si l'utilisateur est bien une instance de User
+        // Contrôle si l'utilisateur est bien une instance de User
         if (!$user instanceof User) {
             $this->addFlash(
                 "danger", 
@@ -48,8 +48,12 @@ class SecurityController extends AbstractController implements UserCheckerInterf
             );
             throw new \Exception("Une erreur interne est survenue. Veuillez vous reconnecter.");
         }
+        // Contrôle si le compte est activé
+        if($user !== null && $user->getStatus() === Status::BANNI) {
+            throw new CustomUserMessageAccountStatusException('Votre compte a été banni. Veuillez contacter l\'administrateur.');
+        }
 
-        // On vérifie si le compte est activé
+        // Contrôle si le compte est activé
         if($user !== null && $user->getStatus() === Status::EN_ATTENTE_DE_VALIDATION) {
             $token = $this->tokenValidationRepository->findOneBy([
                 'userId' => $user->getId()
