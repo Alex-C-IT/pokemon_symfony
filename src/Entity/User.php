@@ -67,6 +67,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->dresseurs = new ArrayCollection();
     }
 
+    public function inscritDepuis(): string
+    {
+        $now = new \DateTimeImmutable();
+        $diff = $now->diff($this->dateInscription);
+        $str = '';
+
+        if($diff->y > 0) {
+            $str .= $diff->y . ' an';
+            if($diff->y > 1) {
+                $str .= 's';
+            }
+        }
+
+        if($diff->m > 0) {
+            $str .= ' ' . $diff->m . ' mois';
+        }
+
+        if($diff->d > 0) {
+            $str .= ' ' . $diff->d . ' jour';
+            if($diff->d > 1) {
+                $str .= 's';
+            }
+        }
+
+        return $str;
+    }
+
+    public function dateInscriptionFormatee(): string
+    {
+        // "Inscrit depuis le jj/mm/aaaa (inscritDepuis())"
+        return 'Inscrit depuis le ' . $this->dateInscription->format('d/m/Y') . ' (' . $this->inscritDepuis() . ')';
+    }
+
+    public function dateHeureInscription(): string
+    {
+        return $this->dateInscription->format('d/m/Y H:i');
+    }
+
     public function getId(): ?int
     {
         return $this->id;

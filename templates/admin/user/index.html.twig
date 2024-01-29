@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs - Pokémon Symfony{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 100px;">
+        <h1>Gestion des utilisateurs</h1>
+        {# Affichage d'un message flash #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-dismissible alert-success mt-4">
+                <p class="mb-0"><b>Succès ! </b>{{ message }}</p>
+            </div>
+        {% endfor %}
+        {# Ajout d'un bouton "Ajouter"#}
+        <a href="" class="btn btn-success">Ajouter un utilisateur</a>
+        {# Si aucun type n'a été trouvé #}
+        {% if users is empty %}
+            <p>Aucune utilisateur n'a été trouvé.</p>
+        {% else %}
+            <table class="table table-hover mt-4 align-middle" >
+                <thead class="table-light text-center">
+                    <tr>
+                        <th>#</th>
+                        <th>Status</th>
+                        <th>Nom d'utilisateur</th>
+                        <th>Email</th>
+                        <th>Rôles</th>
+                        <th>Date d'inscription</th>
+                        <th>Newsletter</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>
+                                {% if user.status.value == 0 %}
+                                    <span class="badge bg-danger">{{ user.status.name }}</span>
+                                {% elseif user.status.value == 1 %}
+                                    <span class="badge bg-success">{{ user.status.name }}</span>
+                                {% else %}
+                                    <span class="badge bg-warning">{{ user.status.name | replace({'_': ' '}) }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.nomUtilisateur }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% for role in user.roles %}
+                                    {% if role == 'ROLE_ADMIN' %}
+                                        <span class="badge bg-info">ADMIN</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">MEMBRE</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>{{ user.dateInscription | date('d/m/Y H:i') }}</td>
+                            <td>
+                                {% if user.isSubscribedNewsletter == 1 %}
+                                    <img src="{{ asset('images/check_ok.png') }}" alt="check" width="20px">
+                                {% else %}
+                                    <img src="{{ asset('images/check_not_ok.png') }}" alt="check" width="20px">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(users) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
