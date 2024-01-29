@@ -10,18 +10,18 @@
                 <p class="mb-0"><b>Succès ! </b>{{ message }}</p>
             </div>
         {% endfor %}
-        {% for message in app.flashes('danger') %}
-            <div class="alert alert-danger">
-                <p class="mb-0"><b>Erreur ! </b>{{ message }}</p>
-            </div>
-        {% endfor %}
         {% for message in app.flashes('warning') %}
             <div class="alert alert-warning">
                 <p class="mb-0"><b>Attention ! </b>{{ message }}</p>
             </div>
         {% endfor %}
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                <p class="mb-0"><b>Erreur ! </b>{{ message }}</p>
+            </div>
+        {% endfor %}
         {% if error %}
-        <div class="alert alert-danger mt-2 mb-2">
+        <div class="alert alert-warning mt-2 mb-2">
             <p class="mb-0"><b>Attention ! </b>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
         </div>
         {% endif %}

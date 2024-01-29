@@ -2,57 +2,81 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\User;
 use App\Form\InscriptionType;
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\TokenValidation;
 use App\Enums\StatusEnum as Status;
-use Symfony\Component\Security\Core\Security;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\{UserRepository, TokenValidationRepository};
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+// Importe Security de SecurityBundle
+use Symfony\Bundle\SecurityBundle\Security; 
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException;
 
 
-class SecurityController extends AbstractController
+class SecurityController extends AbstractController implements UserCheckerInterface
 {
-    #[Route('/connexion', name: 'app_home_login', methods: ['GET', 'POST'])]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    private TokenValidationRepository $tokenValidationRepository;
+
+    public function __construct(TokenValidationRepository $tokenValidationRepository)
     {
-        /*
-        if ($request->isMethod('POST')) {
-            $user = $userRepository->findOneBy([
-                'email' => $request->request->get('_username')
-            ]);
-            if($user !== null && $user->getStatus() === Status::EN_ATTENTE_DE_VALIDATION) {
-                $token = $tokenValidationRepository->findOneBy([
-                    'userId' => $user->getId()
-                ]);
-                if($token !== null) {
-                    $this->addFlash(
-                        "warning", 
-                        "Votre compte n'est pas encore activé. Veuillez valider votre compte avant le " . $token->dateAvantExpirationToken() . " (". $token->nombreDeJoursAvantExpirationToken() . " jours restants)."
-                    );
-                    return $this->redirectToRoute("app_home_login");
-                }
-            }
-        }
-        */
+        $this->tokenValidationRepository = $tokenValidationRepository;
+    }
+
+    #[Route('/connexion', name: 'app_home_login', methods: ['GET', 'POST'])]
+    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
+    {
         return $this->render('public/security/login.html.twig', [
             'last_username' => $authenticationUtils->getLastUsername(),
             'error' => $authenticationUtils->getLastAuthenticationError(),
         ]);
     }
 
-
-    #[Route('/deconnexion', name: 'app_home_logout', methods: ['GET'])]
-    public function logout(): Response
+    public function checkPreAuth(UserInterface $user): void
     {
-        return $this->render('public/security/login.html.twig', [
-            'controller_name' => 'SecurityController',
-        ]);
+        // On vérifie si l'utilisateur est bien une instance de User
+        if (!$user instanceof User) {
+            $this->addFlash(
+                "danger", 
+                "Une erreur interne est survenue. Veuillez vous reconnecter."
+            );
+            throw new \Exception("Une erreur interne est survenue. Veuillez vous reconnecter.");
+        }
+
+        // On vérifie si le compte est activé
+        if($user !== null && $user->getStatus() === Status::EN_ATTENTE_DE_VALIDATION) {
+            $token = $this->tokenValidationRepository->findOneBy([
+                'userId' => $user->getId()
+            ]);
+            if($token !== null) {
+                throw new CustomUserMessageAccountStatusException('Votre compte n\'est pas encore activé. Veuillez valider votre compte avant le ' . $token->dateAvantExpirationToken() . ' ('. $token->nombreDeJoursAvantExpirationToken() . ' jours restants). Consultez vos mails.');
+            }
+            throw new CustomUserMessageAccountStatusException('Votre compte n\'est pas encore activé. Veuillez valider votre compte. Consultez vos mails.');
+        }
+    }
+
+    public function checkPostAuth(UserInterface $user): void
+    {
+
+    }
+
+    #[Route('/connexion/check', name: 'app_home_login_check', methods: ['GET', 'POST'])]
+    public function loginCheckVerification(Request $request, UserRepository $userRepository, TokenValidationRepository $tokenValidationRepository): Response
+    {   
+        // Si le compte est activé, on redirige vers la page d'accueil
+        return $this->redirectToRoute("app_home_index");
+    }
+    
+    #[Route('/deconnexion', name: 'app_home_logout', methods: ['GET'])]
+    public function logout(Request $request): Response
+    {
+        return $this->render('public/security/login.html.twig');
     }
 
     #[Route('/inscription', name: 'app_home_register', methods: ['GET', 'POST'])]
