@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240128200514 extends AbstractMigration
+final class Version20240129023537 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,13 +24,15 @@ final class Version20240128200514 extends AbstractMigration
         $this->addSql('CREATE TABLE consommable (id VARCHAR(10) NOT NULL, libelle VARCHAR(50) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE dresseur (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, nom VARCHAR(25) NOT NULL, taille INT NOT NULL, sexe TINYINT(1) NOT NULL, message VARCHAR(120) DEFAULT NULL, UNIQUE INDEX UNIQ_77EA2FC66C6E55B5 (nom), INDEX IDX_77EA2FC6A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE generation (id VARCHAR(10) NOT NULL, numero VARCHAR(2) NOT NULL, annee VARCHAR(4) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE newsletter (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(255) NOT NULL, date_inscription DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_7E8585C8E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE pokemon (id INT AUTO_INCREMENT NOT NULL, generation_id VARCHAR(10) DEFAULT NULL, stats_id INT DEFAULT NULL, consommable_id VARCHAR(10) DEFAULT NULL, numero VARCHAR(4) NOT NULL, nom VARCHAR(30) NOT NULL, image VARCHAR(50) NOT NULL, mini_image VARCHAR(50) NOT NULL, UNIQUE INDEX UNIQ_62DC90F3F55AE19E (numero), UNIQUE INDEX UNIQ_62DC90F36C6E55B5 (nom), INDEX IDX_62DC90F3553A6EC4 (generation_id), UNIQUE INDEX UNIQ_62DC90F370AA3482 (stats_id), INDEX IDX_62DC90F3C9CEB381 (consommable_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE pokemon_dresseur (pokemon_id INT NOT NULL, dresseur_id INT NOT NULL, INDEX IDX_F08EE6682FE71C3E (pokemon_id), INDEX IDX_F08EE668A1A01CBE (dresseur_id), PRIMARY KEY(pokemon_id, dresseur_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE pokemon_type (pokemon_id INT NOT NULL, type_id VARCHAR(10) NOT NULL, INDEX IDX_B077296A2FE71C3E (pokemon_id), INDEX IDX_B077296AC54C8C93 (type_id), PRIMARY KEY(pokemon_id, type_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE pokemon_attaque (pokemon_id INT NOT NULL, attaque_id VARCHAR(10) NOT NULL, INDEX IDX_F91F67032FE71C3E (pokemon_id), INDEX IDX_F91F6703118FE712 (attaque_id), PRIMARY KEY(pokemon_id, attaque_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE stats (id INT AUTO_INCREMENT NOT NULL, pv INT NOT NULL, attaque INT NOT NULL, defense INT NOT NULL, vitesse INT NOT NULL, special INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE token_validation (id INT AUTO_INCREMENT NOT NULL, token VARCHAR(255) NOT NULL, date_heure_creation DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', date_heure_expiration DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', user_id INT NOT NULL, UNIQUE INDEX UNIQ_FE604AD05F37A13B (token), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE type (id VARCHAR(10) NOT NULL, libelle VARCHAR(25) NOT NULL, image VARCHAR(50) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, password VARCHAR(255) NOT NULL, nom_utilisateur VARCHAR(255) NOT NULL, email VARCHAR(150) NOT NULL, roles JSON NOT NULL, date_inscription DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', status INT NOT NULL, UNIQUE INDEX UNIQ_8D93D649D37CC8AC (nom_utilisateur), UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, nom_utilisateur VARCHAR(25) NOT NULL, password VARCHAR(255) NOT NULL, email VARCHAR(150) NOT NULL, roles JSON NOT NULL, date_inscription DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', status INT NOT NULL, is_subscribed_newsletter TINYINT(1) NOT NULL, UNIQUE INDEX UNIQ_8D93D649D37CC8AC (nom_utilisateur), UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE messenger_messages (id BIGINT AUTO_INCREMENT NOT NULL, body LONGTEXT NOT NULL, headers LONGTEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL, available_at DATETIME NOT NULL, delivered_at DATETIME DEFAULT NULL, INDEX IDX_75EA56E0FB7336F0 (queue_name), INDEX IDX_75EA56E0E3BD61CE (available_at), INDEX IDX_75EA56E016BA31DB (delivered_at), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE attaque ADD CONSTRAINT FK_95751B92C54C8C93 FOREIGN KEY (type_id) REFERENCES type (id)');
         $this->addSql('ALTER TABLE dresseur ADD CONSTRAINT FK_77EA2FC6A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
@@ -63,11 +65,13 @@ final class Version20240128200514 extends AbstractMigration
         $this->addSql('DROP TABLE consommable');
         $this->addSql('DROP TABLE dresseur');
         $this->addSql('DROP TABLE generation');
+        $this->addSql('DROP TABLE newsletter');
         $this->addSql('DROP TABLE pokemon');
         $this->addSql('DROP TABLE pokemon_dresseur');
         $this->addSql('DROP TABLE pokemon_type');
         $this->addSql('DROP TABLE pokemon_attaque');
         $this->addSql('DROP TABLE stats');
+        $this->addSql('DROP TABLE token_validation');
         $this->addSql('DROP TABLE type');
         $this->addSql('DROP TABLE user');
         $this->addSql('DROP TABLE messenger_messages');
