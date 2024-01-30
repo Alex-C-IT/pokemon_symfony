@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste de vos dresseurs - Pokémon Symfony{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 100px;">
+        <h1>Liste de vos dresseurs</h1>
+        {# Affichage du message flash #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        {# Affichage du message flash #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+        {# Ajout d'un bouton "Ajouter"#}
+        <a href="{{ path('app_user_dresseurs_new') }}" class="btn btn-success">Créer un nouveau dresseur</a>
+        {# Si aucun type n'a été trouvé #}
+        {% if dresseurs is empty %}
+            <p>Aucun dresseur n'a été trouvée.</p>
+        {% else %}
+            <table class="table table-hover mt-4 align-middle" >
+                <thead class="table-light text-center">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Taille</th>
+                        <th>Genre</th>
+                        <th>Message</th>
+                        <th>Pokémons</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for dresseur in dresseurs %}
+                        <tr>
+                            <td>{{ dresseur.nom }}</td>
+                            <td>{{ dresseur.taille }}cm</td>
+                            <td>
+                                {% if dresseur.sexe == 0 %}
+                                <img src="{{ asset('images/personnage/avatar_garcon.png') }}" alt="{{ dresseur.sexe }}" class="img-fluid" width="70px">
+                                {% else %}
+                                <img src="{{ asset('images/personnage/avatar_fille.png') }}" alt="{{ dresseur.sexe }}" class="img-fluid" width="70px">
+                                {% endif %}
+                            </td>
+                            <td>{{ dresseur.message }}</td>
+                            <td>
+                                {% if dresseur.pokemons is empty %}
+                                Aucun
+                                {% else %}
+                                {% for pokemon in dresseur.pokemons %}
+                                <img src="{{ asset('images/pokemons/miniatures/' ~ pokemon.numero ~ '_' ~ pokemon.nom|replace({'é': 'e', 'è': 'e', 'ê': 'e', 'à': 'a', 'ç': 'c', 'ô': 'o', 'î': 'i', 'ï': 'i', 'û': 'u', 'ù': 'u'}) ~ '_mini.png') }}" alt="{{ pokemon.nom }}" class="img-fluid" style="max-height: 60px;">
+                                {% endfor %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('app_user_mesdresseurs_edit', {'id': dresseur.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="{{ path('app_user_mesdresseurs_delete', {'id': dresseur.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce dresseur ?')">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(dresseurs) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

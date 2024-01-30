@@ -16,7 +16,7 @@ class Dresseur
     private ?int $id = null;
 
     // Le nom du dresseur est unique
-    #[ORM\Column(length: 25, unique: true)]
+    #[ORM\Column(length: 25)]
     private ?string $nom = null;
 
     #[ORM\Column]

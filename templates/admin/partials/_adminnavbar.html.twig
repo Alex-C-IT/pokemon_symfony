@@ -37,24 +37,16 @@
           <a class="nav-link" href="{{ path('app_home_logout') }}">{{ 'logout' | trans }}</a>
         </li>
       </ul>
+    {% if app.request.attributes.get('_route') == 'app_admin_index' %}
       <ul class="navbar-nav">
-        {# ajoute le paramètre id s'il existe dans la route 
-        {{ if app.request.attributes.get('_route_params') is defined }}
-        <li class="nav-item">
-          <a class="nav-link" href="{{ path(app.request.attributes.get('_route'), {'_locale': 'fr', 'id': app.request.attributes.get('_route_params').id}) }}"><img src="{{ asset('images/drapeaux/fr.png') }}" alt="FR" width="25px" style="border-radius: 10%;"></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ path(app.request.attributes.get('_route'), {'_locale': 'en', 'id': app.request.attributes.get('_route_params').id}) }}"><img src="{{ asset('images/drapeaux/en.png') }}" alt="EN" width="25px" style="border-radius: 10%;"></a>
-        </li>
-        {% else %}
           <li class="nav-item">
             <a class="nav-link" href="{{ path(app.request.attributes.get('_route'), {'_locale': 'fr'}) }}"><img src="{{ asset('images/drapeaux/fr.png') }}" alt="FR" width="25px" style="border-radius: 10%;"></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ path(app.request.attributes.get('_route'), {'_locale': 'en'}) }}"><img src="{{ asset('images/drapeaux/en.png') }}" alt="EN" width="25px" style="border-radius: 10%;"></a>
           </li>
-        {% endif %}#}
-    </ul>  
+      </ul> 
+    {% endif %} 
     </div>
   </div>
 </nav>
