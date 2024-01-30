@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Enums\StatusEnum as Status;
-use App\Form\UserType;
 use App\Form\ProfilType;
+use App\Form\UserType;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -128,7 +128,6 @@ class UserController extends AbstractController
         $form = $this->createForm(ProfilType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $repository->update($user);
 
             $this->addFlash(
