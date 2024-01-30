@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Dresseur;
-use App\Form\{DresseurType, MesDresseursType};
+use App\Form\DresseurType;
+use App\Form\MesDresseursType;
 use App\Repository\{DresseurRepository};
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,41 +33,43 @@ class DresseurController extends AbstractController
     public function new(Request $request, DresseurRepository $repository): Response
     {
         $dresseur = new Dresseur();
-        if($request->attributes->get('_route') == 'app_admin_dresseurs_new'){
+        if ('app_admin_dresseurs_new' == $request->attributes->get('_route')) {
             $form = $this->createForm(DresseurType::class, $dresseur);
         } else {
             $dresseur->setUser($this->getUser());
             $form = $this->createForm(MesDresseursType::class, $dresseur);
         }
-        
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $dresseur = $form->getData();
 
             // Contrôle si le dresseur n'a pas plus de 6 pokémons
-            if(count($dresseur->getPokemons()) > 6){
+            if (count($dresseur->getPokemons()) > 6) {
                 $this->addFlash('error', 'Un dresseur ne peut pas avoir plus de 6 pokémons !');
                 // Si l'utilisateur est passé par la route app_admin_dresseurs_new
-                if($request->attributes->get('_route') == 'app_admin_dresseurs_new')
+                if ('app_admin_dresseurs_new' == $request->attributes->get('_route')) {
                     return $this->redirectToRoute('app_admin_dresseurs_new');
-                else
+                } else {
                     return $this->redirectToRoute('app_user_mesdresseurs_new');
+                }
             }
 
             $repository->add($dresseur);
 
-            if($request->attributes->get('_route') == 'app_admin_dresseurs_new') {
+            if ('app_admin_dresseurs_new' == $request->attributes->get('_route')) {
                 $this->addFlash('success', 'Le dresseur a bien été ajouté !');
+
                 return $this->redirectToRoute('app_admin_dresseurs_index');
             } else {
-                $this->addFlash('success', 'Bienvenue à #'. $dresseur->getNom() .', votre nouveau dresseur !');
+                $this->addFlash('success', 'Bienvenue à #'.$dresseur->getNom().', votre nouveau dresseur !');
+
                 return $this->redirectToRoute('app_user_mesdresseurs_index');
             }
         }
 
-        if($request->attributes->get('_route') == 'app_admin_dresseurs_new'){
+        if ('app_admin_dresseurs_new' == $request->attributes->get('_route')) {
             return $this->render('admin/dresseur/new.html.twig', [
                 'form' => $form->createView(),
             ]);
@@ -83,7 +86,7 @@ class DresseurController extends AbstractController
     {
         $dresseur = $repository->find($request->get('id'));
 
-        if($request->attributes->get('_route') == 'app_admin_dresseurs_edit'){
+        if ('app_admin_dresseurs_edit' == $request->attributes->get('_route')) {
             $form = $this->createForm(DresseurType::class, $dresseur);
         } else {
             $dresseur->setUser($this->getUser());
@@ -95,27 +98,30 @@ class DresseurController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $dresseur = $form->getData();
 
-            if(count($dresseur->getPokemons()) > 6){
+            if (count($dresseur->getPokemons()) > 6) {
                 $this->addFlash('error', 'Un dresseur ne peut pas avoir plus de 6 pokémons !');
 
-                if($request->attributes->get('_route') == 'app_admin_dresseurs_edit')
+                if ('app_admin_dresseurs_edit' == $request->attributes->get('_route')) {
                     return $this->redirectToRoute('app_admin_dresseurs_edit', ['id' => $dresseur->getId()]);
-                else
+                } else {
                     return $this->redirectToRoute('app_user_mesdresseurs_edit', ['id' => $dresseur->getId()]);
+                }
             }
 
             $repository->update($dresseur);
 
-            if($request->attributes->get('_route') == 'app_admin_dresseurs_edit') {
+            if ('app_admin_dresseurs_edit' == $request->attributes->get('_route')) {
                 $this->addFlash('success', 'Le dresseur a bien été modifié !');
+
                 return $this->redirectToRoute('app_admin_dresseurs_index', ['id' => $dresseur->getId()]);
             } else {
-                $this->addFlash('success', 'Votre dresseur #'. $dresseur->getNom() .' a bien été modifié !');
+                $this->addFlash('success', 'Votre dresseur #'.$dresseur->getNom().' a bien été modifié !');
+
                 return $this->redirectToRoute('app_user_mesdresseurs_index', ['id' => $dresseur->getId()]);
             }
         }
 
-        if($request->attributes->get('_route') == 'app_admin_dresseurs_edit'){
+        if ('app_admin_dresseurs_edit' == $request->attributes->get('_route')) {
             return $this->render('admin/dresseur/edit.html.twig', [
                 'form' => $form->createView(),
             ]);
@@ -126,7 +132,6 @@ class DresseurController extends AbstractController
         }
     }
 
-
     #[Route('{_locale}/mesdresseurs/{id}/delete', name: 'app_user_mesdresseurs_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     #[Route('{_locale}/admin/dresseurs/{id}/delete', name: 'app_admin_dresseurs_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function delete(Request $request, DresseurRepository $repository): Response
@@ -135,14 +140,15 @@ class DresseurController extends AbstractController
         $oldId = $dresseur->getId();
         $repository->remove($dresseur);
 
-        if($request->attributes->get('_route') == 'app_admin_dresseurs_delete') {
+        if ('app_admin_dresseurs_delete' == $request->attributes->get('_route')) {
             $this->addFlash('success', 'Le dresseur #'.$oldId.' ('.$dresseur->getNom().') a bien été supprimé !');
+
             return $this->redirectToRoute('app_admin_dresseurs_index');
-        }else{
+        } else {
             $this->addFlash('success', 'Votre dresseur #'.$dresseur->getNom().' a bien pris sa retraite !');
+
             return $this->redirectToRoute('app_user_mesdresseurs_index');
         }
-        
     }
 
     // PARTIE PUBLIQUE
