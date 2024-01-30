@@ -48,7 +48,8 @@ class SecurityController extends AbstractController implements UserCheckerInterf
             );
             throw new \Exception("Une erreur interne est survenue. Veuillez vous reconnecter.");
         }
-        // Contrôle si le compte est activé
+        
+        // Contrôle si l'utilisateur est banni
         if($user !== null && $user->getStatus() === Status::BANNI) {
             throw new CustomUserMessageAccountStatusException('Votre compte a été banni. Veuillez contacter l\'administrateur.');
         }

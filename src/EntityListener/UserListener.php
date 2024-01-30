@@ -10,23 +10,28 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Enums\StatusEnum as Status;
 use App\Repository\TokenValidationRepository;
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Utils\TextUtils;
+use App\Service\MailService;
 
 
 class UserListener
 {
     private UserPasswordHasherInterface $hasher;
     private TokenValidationRepository $repositoryTokenValidation;
+    private UrlGeneratorInterface $urlGenerator;
+    private MailService $mailService;
 
-    public function __construct(UserPasswordHasherInterface $hasher, TokenValidationRepository $repositoryTokenValidation)
+    public function __construct(UserPasswordHasherInterface $hasher, TokenValidationRepository $repositoryTokenValidation, UrlGeneratorInterface $urlGenerator, MailService $mailService)
     {
         $this->hasher = $hasher;
         $this->repositoryTokenValidation = $repositoryTokenValidation;
+        $this->urlGenerator = $urlGenerator;
+        $this->mailService = $mailService;
     }
 
     public function prePersist(User $user): void
     {
-
         $this->hashPassword($user);
     }
 
@@ -41,15 +46,9 @@ class UserListener
             $tokenValidation->setToken(bin2hex(random_bytes(32)));
             // Enregistrer le token en base de données
             $this->repositoryTokenValidation->add($tokenValidation);
-            // Envoyer un email de confirmation d'inscription avec le token
-            // sendMail($tokenValidation);
+            //Envoyer un email de confirmation d'inscription avec le token
+            $this->sendMail($user, $tokenValidation);
         }
-
-    }
-
-    private function sendMail(TokenValidation $tokenValidation): void 
-    {
-        return;
     }
 
     public function preUpdate(User $user): void
@@ -75,5 +74,30 @@ class UserListener
             )
         );
         $user->setPlainPassword(null);
+    }
+
+    private function sendMail(
+        User $user, 
+        TokenValidation $tokenValidation
+        ): void 
+    {
+        // Créer le lien pour valider le compte 
+        $url = $this->urlGenerator->generate(
+            'app_home_validation', 
+            ['token' => $tokenValidation->getToken()], 
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+        // Envoyer un email de confirmation d'inscription avec le token
+        $this->mailService->sendEmail(
+            $user->getEmail(),
+            'verification@pokemonsymfony.fr',
+            'Confirmation d\'inscription sur Pokémons Symfony',
+            'public/emails/verification.html.twig',
+            [
+                'bonjourOuBonsoir' => TextUtils::bonjourOuBonsoir(),
+                'nomUtilisateur' => $user->getNomUtilisateur(),
+                'url' => $url
+            ],
+        );
     }
 }
