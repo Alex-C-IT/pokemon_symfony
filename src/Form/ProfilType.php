@@ -60,6 +60,9 @@ class ProfilType extends AbstractType
                         'style' => 'font-weight: bold',
                     ],
                     'constraints' => [
+                        new NotBlank([
+                            'message' => 'Veuillez confirmer le mot de passe.',
+                        ]),
                         new Length([
                             'min' => 8,
                             'max' => 255,
@@ -75,6 +78,9 @@ class ProfilType extends AbstractType
                         'style' => 'font-weight: bold',
                     ],
                     'constraints' => [
+                        new NotBlank([
+                            'message' => 'Veuillez confirmer le mot de passe.',
+                        ]),
                         new Length([
                             'min' => 8,
                             'max' => 255,
