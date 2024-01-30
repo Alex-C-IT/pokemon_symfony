@@ -35,9 +35,6 @@ class InscriptionType extends AbstractType
                         'max' => 25,
                         'minMessage' => 'Le nom d\'utilisateur doit contenir au moins {{ limit }} caractères.',
                         'maxMessage' => 'Le nom d\'utilisateur doit contenir au maximum {{ limit }} caractères.'
-                    ]),
-                    new NotCompromisedPassword([
-                        'message' => 'Ce nom d\'utilisateur est déjà utilisé.'
                     ])
                 ]
             ])

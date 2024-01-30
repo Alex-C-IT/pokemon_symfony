@@ -1,0 +1,25 @@
+home: Accueil
+pokemons: Pokémons
+pokemon: Pokémon
+types: Types
+attaks: Attaques
+objects: Objets
+consumables: Consommables
+generations: Générations
+myProfile: Mon profil
+trainers: Dresseurs
+users: Utilisateurs
+quitAdmin: Quitter l'administration
+myTrainers: Mes dresseurs
+adminisration: Administration
+signIn: Se connecter
+signUp: S'inscrire
+logout: Se déconnecter
+dashboard: Tableau de bord
+
+homePage: 
+  welcome: Bienvenue sur Pokémon Symfony
+  hello: Bonjour
+  description: Ce site est un site de gestion de pokémons. Vous pourrez voir toutes informations sur les pokémons existants, les attaques, les objets etc.
+  infoSignIn: Vous pouvez gérer vos pokémons en vous connectant.
+  infoSignUp: Vous n'avez pas de compte ?

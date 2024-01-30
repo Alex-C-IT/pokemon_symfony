@@ -20,10 +20,9 @@ security:
                 login_path: app_home_login
                 check_path: app_home_login
                 enable_csrf: true
-                default_target_path: app_home_login_check
             logout:
                 path: app_home_logout
-                target: app_home_login
+                target: app_home_index
             user_checker: App\Controller\SecurityController
 
             # activate different ways to authenticate

@@ -13,7 +13,7 @@ use App\Form\DresseurType;
 
 class DresseurController extends AbstractController
 {
-    #[Route('/admin/dresseurs', name:'app_admin_dresseurs_index')]
+    #[Route('{_locale}/admin/dresseurs', name:'app_admin_dresseurs_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function index(DresseurRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $dresseurs = $paginator->paginate(
@@ -27,7 +27,7 @@ class DresseurController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/dresseurs/new', name: 'app_admin_dresseurs_new')]
+    #[Route('{_locale}/admin/dresseurs/new', name: 'app_admin_dresseurs_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function new(Request $request, DresseurRepository $repository): Response
     {
         $dresseur = new Dresseur();
@@ -49,7 +49,7 @@ class DresseurController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/dresseurs/{id}/edit', name: 'app_admin_dresseurs_edit')]
+    #[Route('{_locale}/admin/dresseurs/{id}/edit', name: 'app_admin_dresseurs_edit', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function edit(Request $request, DresseurRepository $repository): Response
     {
         $dresseur = $repository->find($request->get('id'));
@@ -70,7 +70,7 @@ class DresseurController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/dresseurs/{id}/delete', name: 'app_admin_dresseurs_delete')]
+    #[Route('{_locale}/admin/dresseurs/{id}/delete', name: 'app_admin_dresseurs_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function delete(Request $request, DresseurRepository $repository): Response
     {
         $dresseur = $repository->find($request->get('id'));

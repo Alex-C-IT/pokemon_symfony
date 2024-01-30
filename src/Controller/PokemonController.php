@@ -15,7 +15,7 @@ class PokemonController extends AbstractController
 {
     // PARTIE ADMINISTRATION
 
-    #[Route('/admin/pokemons', name: 'app_admin_pokemons_index')]
+    #[Route('{_locale}/admin/pokemons', name: 'app_admin_pokemons_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function index(PokemonRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $pokemons = $paginator->paginate(
@@ -29,7 +29,7 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/pokemons/new', name: 'app_admin_pokemons_new')]
+    #[Route('{_locale}/admin/pokemons/new', name: 'app_admin_pokemons_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function new(Request $request, PokemonRepository $repository): Response
     {
         $pokemon = new Pokemon();
@@ -73,7 +73,7 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/pokemons/{id}/edit', name: 'app_admin_pokemons_edit')]
+    #[Route('{_locale}/admin/pokemons/{id}/edit', name: 'app_admin_pokemons_edit', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function edit(Request $request, PokemonRepository $repository): Response
     {
         $pokemon = $repository->find($request->get('id'));
@@ -123,7 +123,7 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/pokemons/{id}/delete', name: 'app_admin_pokemons_delete')]
+    #[Route('{_locale}/admin/pokemons/{id}/delete', name: 'app_admin_pokemons_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function delete(Request $request, PokemonRepository $repository): Response
     {
         $pokemon = $repository->find($request->get('id'));
@@ -144,7 +144,7 @@ class PokemonController extends AbstractController
 
     // PARTIE PUBLIQUE
 
-    #[Route('/pokemons', name: 'app_home_pokemons_index')]
+    #[Route('{_locale}/pokemons', name: 'app_home_pokemons_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function liste(PokemonRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $pokemons = $paginator->paginate(

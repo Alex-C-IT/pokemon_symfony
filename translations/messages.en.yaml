@@ -1,0 +1,25 @@
+home: Home
+pokemons: Pokemons
+pokemon: Pokemon
+types: Types
+attaks: Attacks
+objects: Objects
+consumables: Consumables
+generations: Generations
+myProfile: My profile
+trainers: Trainers
+users: Users
+quitAdmin: Quit admin
+myTrainers: My trainers
+adminisration: Administration
+signIn: Log In
+signUp: Sign Up
+logout: Logout
+dashboard: Dashboard
+
+homePage: 
+  welcome: Welcome to Pokemon Symfony
+  hello: Hello
+  description: This site is a site for managing pokemons. You will be able to see all information about existing pokémons, attacks, objects etc.
+  infoSignIn: You can manage your pokemons by logging in.
+  infoSignUp: You don't have an account?

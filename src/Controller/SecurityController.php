@@ -29,7 +29,7 @@ class SecurityController extends AbstractController implements UserCheckerInterf
         $this->tokenValidationRepository = $tokenValidationRepository;
     }
 
-    #[Route('/connexion', name: 'app_home_login', methods: ['GET', 'POST'])]
+    #[Route('{_locale}/connexion', name: 'app_home_login', methods: ['GET', 'POST'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
         return $this->render('public/security/login.html.twig', [
@@ -70,28 +70,32 @@ class SecurityController extends AbstractController implements UserCheckerInterf
     {
 
     }
-
-    #[Route('/connexion/check', name: 'app_home_login_check', methods: ['GET', 'POST'])]
-    public function loginCheckVerification(Request $request, UserRepository $userRepository, TokenValidationRepository $tokenValidationRepository): Response
-    {   
-        // Si le compte est activé, on redirige vers la page d'accueil
-        return $this->redirectToRoute("app_home_index");
-    }
     
-    #[Route('/deconnexion', name: 'app_home_logout', methods: ['GET'])]
+    #[Route('{_locale}/deconnexion', name: 'app_home_logout', methods: ['GET'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function logout(Request $request): Response
     {
-        return $this->render('public/security/login.html.twig');
+        return $this->redirectToRoute("app_home_index");
     }
 
-    #[Route('/inscription', name: 'app_home_register', methods: ['GET', 'POST'])]
+    #[Route('{_locale}/inscription', name: 'app_home_register', methods: ['GET', 'POST'])]
     public function register(Request $request, EntityManagerInterface $manager): Response
     {
         $user = new User();
         $form = $this->createForm(InscriptionType::class, $user);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            //dd($user);
+            // Contrôle si le nom d'utilisateur existe déjà et redirige vers la page d'inscription avec un message d'erreur
+            $userExist = $manager->getRepository(User::class)->findOneBy([
+                'nomUtilisateur' => $user->getNomutilisateur()
+            ]);
+            if($userExist !== null) {
+                $this->addFlash(
+                    "error", 
+                    "Le nom d'utilisateur existe déjà."
+                );
+                return $this->redirectToRoute("app_home_register");
+            }
+
             $user->addRole("ROLE_USER");
             $manager->persist($user);
             $manager->flush();
@@ -110,7 +114,7 @@ class SecurityController extends AbstractController implements UserCheckerInterf
         ]);
     }
 
-    #[Route('/validation/{token}', name: 'app_home_validation', methods: ['GET'])]
+    #[Route('{_locale}/validation/{token}', name: 'app_home_validation', methods: ['GET'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function validation(string $token, EntityManagerInterface $manager): Response
     {
         // Récupérer le token en base de données

@@ -12,7 +12,7 @@ use App\Form\ConsommableType;
 
 class ConsommableController extends AbstractController
 {
-    #[Route('/admin/consommables', name: 'app_admin_consommables_index')]
+    #[Route('{_locale}/admin/consommables', name: 'app_admin_consommables_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function index(ConsommableRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $consommables = $paginator->paginate(
@@ -26,7 +26,7 @@ class ConsommableController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/consommables/new', name: 'app_admin_consommables_new')]
+    #[Route('{_locale}/admin/consommables/new', name: 'app_admin_consommables_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function new(Request $request, ConsommableRepository $repository): Response
     {
         $consommable = new Consommable();
@@ -48,7 +48,7 @@ class ConsommableController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/consommables/{id}/edit', name: 'app_admin_consommables_edit')]
+    #[Route('{_locale}/admin/consommables/{id}/edit', name: 'app_admin_consommables_edit', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function edit(Request $request, ConsommableRepository $repository): Response
     {
         $consommable = $repository->find($request->get('id'));
@@ -70,7 +70,7 @@ class ConsommableController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/consommables/{id}/delete', name: 'app_admin_consommables_delete')]
+    #[Route('{_locale}/admin/consommables/{id}/delete', name: 'app_admin_consommables_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function delete(Request $request, ConsommableRepository $repository, PokemonRepository $pokemonRepository): Response
     {
         $consommable = $repository->find($request->get('id'));
@@ -89,7 +89,7 @@ class ConsommableController extends AbstractController
 
     // PARTIE PUBLIQUE
 
-    #[Route('/objets', name: 'app_home_consommables_index')]
+    #[Route('{_locale}/objets', name: 'app_home_consommables_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function liste(ConsommableRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $consommables = $paginator->paginate(

@@ -1,45 +1,54 @@
 <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ path('app_home_index') }}">Pokémon Symfony</a>
+    <a class="navbar-brand" href="{{ path('app_home_index') }}">{{ 'pokemon' | trans }} Symfony</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarColor03">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_index' %}active{% endif %}" href="{{ path('app_home_index') }}">Accueil</a>
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_index' %}active{% endif %}" href="{{ path('app_home_index') }}">{{ 'home' | trans }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_pokemons_index' %}active{% endif %}" href="{{ path('app_home_pokemons_index') }}">Pokémons</a>
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_pokemons_index' %}active{% endif %}" href="{{ path('app_home_pokemons_index') }}">{{ 'pokemons' | trans }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_types_index' %}active{% endif %}" href="{{ path('app_home_types_index') }}">Types</a>
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_types_index' %}active{% endif %}" href="{{ path('app_home_types_index') }}">{{ 'types' | trans }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_attaques_index' %}active{% endif %}" href="{{ path('app_home_attaques_index') }}">Attaques</a>
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_attaques_index' %}active{% endif %}" href="{{ path('app_home_attaques_index') }}">{{ 'attaks' | trans }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_consommables_index' %}active{% endif %}" href="{{ path('app_home_consommables_index') }}">Consommables</a>
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_consommables_index' %}active{% endif %}" href="{{ path('app_home_consommables_index') }}">{{ 'consumables' | trans }}</a>
         </li>
         {# Vérifie si l'utilisateur est connecté puis s'il a le role "ROLE_ADMIN" #}
         {% if is_granted('ROLE_USER') %}
         <li class="nav-item">
-          <a class="nav-link {#% if app.request.attributes.get('_route') == 'app_home_mypokemons_index' %}active{% endif %}#}" href="{#{ path('app_home_mypokemons_index') }#}">Mes pokémons</a>
+          <a class="nav-link {#% if app.request.attributes.get('_route') == 'app_home_mypokemons_index' %}active{% endif %}#}" href="{#{ path('app_home_mypokemons_index') }#}">{{ 'myTrainers' | trans }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {#% if app.request.attributes.get('_route') == 'app_home_params_index' %}active{% endif %}#}" href="{#{ path('app_home_params_index') }#}">Mes paramètres</a>
+          <a class="nav-link {#% if app.request.attributes.get('_route') == 'app_home_params_index' %}active{% endif %}#}" href="{#{ path('app_home_params_index') }#}">{{ 'myProfile' | trans }}</a>
         </li>
         {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_admin_index') }}">Administration</a>
+          <a class="nav-link" href="{{ path('app_admin_index') }}">{{ 'adminisration'| trans }}</a>
         </li>
         {% endif %}
         {% if is_granted('ROLE_USER') %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_home_logout') }}">Se déconnecter</a>
+          <a class="nav-link" href="{{ path('app_home_logout') }}">{{ 'logout'| trans }}</a>
         </li>
         {% endif %}
+    </ul>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path(app.request.attributes.get('_route'), {'_locale': 'fr'}) }}"><img src="{{ asset('images/drapeaux/fr.png') }}" alt="FR" width="25px" style="border-radius: 10%;"></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path(app.request.attributes.get('_route'), {'_locale': 'en'}) }}"><img src="{{ asset('images/drapeaux/en.png') }}" alt="EN" width="25px" style="border-radius: 10%;"></a>
+        </li>
+    </ul>  
     </div>
   </div>
 </nav>

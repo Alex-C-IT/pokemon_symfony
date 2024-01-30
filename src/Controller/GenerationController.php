@@ -12,7 +12,7 @@ use App\Form\GenerationType;
 
 class GenerationController extends AbstractController
 {
-    #[Route('/admin/generations', name: 'app_admin_generations_index')]
+    #[Route('{_locale}/admin/generations', name: 'app_admin_generations_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function index(GenerationRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $generations = $paginator->paginate(
@@ -26,7 +26,7 @@ class GenerationController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/generations/new', name: 'app_admin_generations_new')]
+    #[Route('{_locale}/admin/generations/new', name: 'app_admin_generations_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function new(Request $request, GenerationRepository $repository): Response
     {
         $generation = new Generation();
@@ -38,7 +38,7 @@ class GenerationController extends AbstractController
 
             $repository->add($generation);
 
-            $this->addFlash('success', 'La génération a bien été ajoutée.');
+            $this->addFlash('success', 'La génération a bien été ajoutée.', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr']);
 
             return $this->redirectToRoute('app_admin_generations_index');
         }
@@ -48,7 +48,7 @@ class GenerationController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/generations/{id}/edit', name: 'app_admin_generations_edit')]
+    #[Route('{_locale}/admin/generations/{id}/edit', name: 'app_admin_generations_edit', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function edit(Request $request, GenerationRepository $repository): Response
     {
         $generation = $repository->find($request->get('id'));
@@ -60,7 +60,7 @@ class GenerationController extends AbstractController
 
             $repository->update($generation);
 
-            $this->addFlash('success', 'La génération a bien été modifiée.');
+            $this->addFlash('success', 'La génération a bien été modifiée.', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr']);
 
             return $this->redirectToRoute('app_admin_generations_index');
         }
@@ -70,7 +70,7 @@ class GenerationController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/generations/{id}/delete', name: 'app_admin_generations_delete')]
+    #[Route('{_locale}/admin/generations/{id}/delete', name: 'app_admin_generations_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function delete(Request $request, GenerationRepository $repository, PokemonRepository $pokemonRepository): Response
     {
         $generation = $repository->find($request->get('id'));
@@ -83,7 +83,7 @@ class GenerationController extends AbstractController
 
         $repository->remove($generation);
 
-        $this->addFlash('success', 'La génération a bien été supprimée.');
+        $this->addFlash('success', 'La génération a bien été supprimée.', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr']);
         return $this->redirectToRoute('app_admin_generations_index');
     }
 }

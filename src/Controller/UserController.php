@@ -14,7 +14,7 @@ use App\Enums\StatusEnum as Status;
 
 class UserController extends AbstractController
 {
-    #[Route('/admin/utilisateurs', name: 'app_admin_utilisateurs_index')]
+    #[Route('{_locale}/admin/utilisateurs', name: 'app_admin_utilisateurs_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function index(UserRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $users = $paginator->paginate(
@@ -28,7 +28,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/utilisateurs/new', name: 'app_admin_utilisateurs_new')]
+    #[Route('{_locale}/admin/utilisateurs/new', name: 'app_admin_utilisateurs_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function new(Request $request, UserRepository $repository): Response
     {
         $user = new User();
@@ -55,7 +55,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/utilisateurs/{id}/edit', name: 'app_admin_utilisateurs_edit')]
+    #[Route('{_locale}/admin/utilisateurs/{id}/edit', name: 'app_admin_utilisateurs_edit', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function edit(Request $request, UserRepository $repository): Response
     {
         $user = $repository->find($request->get('id'));
@@ -85,7 +85,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/utilisateurs/{id}/delete', name: 'app_admin_utilisateurs_delete')]
+    #[Route('{_locale}/admin/utilisateurs/{id}/delete', name: 'app_admin_utilisateurs_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function delete(Request $request, UserRepository $repository): Response
     {
         $user = $repository->find($request->get('id'));
@@ -96,7 +96,7 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_admin_utilisateurs_index');
     }
 
-    #[Route('/admin/utilisateurs/{id}/ban', name: 'app_admin_utilisateurs_ban')]
+    #[Route('{_locale}/admin/utilisateurs/{id}/ban', name: 'app_admin_utilisateurs_ban', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function ban(Request $request, UserRepository $repository): Response
     {
         $user = $repository->find($request->get('id'));
@@ -108,7 +108,7 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_admin_utilisateurs_index');
     }
 
-    #[Route('/admin/utilisateurs/{id}/deban', name: 'app_admin_utilisateurs_unban')]
+    #[Route('{_locale}/admin/utilisateurs/{id}/deban', name: 'app_admin_utilisateurs_unban', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function unban(Request $request, UserRepository $repository): Response
     {
         $user = $repository->find($request->get('id'));

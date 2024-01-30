@@ -20,7 +20,7 @@ class TypeController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Route('/admin/types', name: 'app_admin_types_index')]
+    #[Route('{_locale}/admin/types', name: 'app_admin_types_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function index(TypeRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $types = $paginator->paginate(
@@ -43,7 +43,7 @@ class TypeController extends AbstractController
      * @param TypeRepository $repository
      * @return Response
      */
-    #[Route('/admin/types/new', name: 'app_admin_types_new')]
+    #[Route('{_locale}/admin/types/new', name: 'app_admin_types_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function nouveau(Request $request, TypeRepository $repository): Response
     {
         $type = new Type();
@@ -153,7 +153,7 @@ class TypeController extends AbstractController
      * @param TypeRepository $repository
      * @return Response
      */
-    #[Route('/admin/types/{id}/edit', name: 'app_admin_types_edit', methods: ['GET', 'POST'])]
+    #[Route('{_locale}/admin/types/{id}/edit', name: 'app_admin_types_edit', methods: ['GET', 'POST'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function edit(Request $request, TypeRepository $repository): Response
     {
         $type = $repository->findOneBy(['id' => $request->get('id')]);
@@ -235,7 +235,7 @@ class TypeController extends AbstractController
      * @param TypeRepository $repository
      * @return Response
      */
-    #[Route('/admin/types/{id}/delete', name: 'app_admin_types_delete', methods: ['GET', 'POST'])]
+    #[Route('{_locale}/admin/types/{id}/delete', name: 'app_admin_types_delete', methods: ['GET', 'POST'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function delete(Request $request, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, AttaqueRepository $attaqueRepository): Response
     {
         $type = $typeRepository->findOneBy(['id' => $request->get('id')]);
@@ -271,7 +271,7 @@ class TypeController extends AbstractController
 
     // PARTIE PUBIQUE
 
-    #[Route('/types', name: 'app_home_types_index')]
+    #[Route('{_locale}/types', name: 'app_home_types_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function liste(TypeRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $types = $paginator->paginate(
