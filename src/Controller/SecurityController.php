@@ -78,6 +78,10 @@ class SecurityController extends AbstractController implements UserCheckerInterf
     #[Route('{_locale}/inscription', name: 'app_home_register', methods: ['GET', 'POST'])]
     public function register(Request $request, EntityManagerInterface $manager): Response
     {
+        // Contrôle si un utilisateur est connecté
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_home_index');
+        }
         $user = new User();
         $form = $this->createForm(InscriptionType::class, $user);
         $form->handleRequest($request);
@@ -115,6 +119,11 @@ class SecurityController extends AbstractController implements UserCheckerInterf
     #[Route('{_locale}/validation/{token}', name: 'app_home_validation', methods: ['GET'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function validation(string $token, EntityManagerInterface $manager): Response
     {
+        // Contrôle si un utilisateur est connecté
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_home_index');
+        }
+
         // Récupérer le token en base de données
         $tokenValidation = $manager->getRepository(TokenValidation::class)->findOneBy([
             'token' => $token,

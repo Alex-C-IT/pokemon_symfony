@@ -14,7 +14,7 @@
             <div class="alert alert-danger">{{ message }}</div>
         {% endfor %}
         {# Ajout d'un bouton "Ajouter"#}
-        <a href="{{ path('app_user_dresseurs_new') }}" class="btn btn-success">Créer un nouveau dresseur</a>
+        <a href="{{ path('app_user_mesdresseurs_new') }}" class="btn btn-success">Créer un nouveau dresseur</a>
         {# Si aucun type n'a été trouvé #}
         {% if dresseurs is empty %}
             <p>Aucun dresseur n'a été trouvée.</p>

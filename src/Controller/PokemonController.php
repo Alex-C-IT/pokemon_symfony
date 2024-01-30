@@ -6,6 +6,7 @@ use App\Entity\Pokemon;
 use App\Form\PokemonType;
 use App\Repository\PokemonRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\{IsGranted};
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,7 @@ class PokemonController extends AbstractController
     // PARTIE ADMINISTRATION
 
     #[Route('{_locale}/admin/pokemons', name: 'app_admin_pokemons_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(PokemonRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $pokemons = $paginator->paginate(
@@ -30,6 +32,7 @@ class PokemonController extends AbstractController
     }
 
     #[Route('{_locale}/admin/pokemons/new', name: 'app_admin_pokemons_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, PokemonRepository $repository): Response
     {
         $pokemon = new Pokemon();
@@ -73,6 +76,7 @@ class PokemonController extends AbstractController
     }
 
     #[Route('{_locale}/admin/pokemons/{id}/edit', name: 'app_admin_pokemons_edit', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, PokemonRepository $repository): Response
     {
         $pokemon = $repository->find($request->get('id'));
@@ -122,6 +126,7 @@ class PokemonController extends AbstractController
     }
 
     #[Route('{_locale}/admin/pokemons/{id}/delete', name: 'app_admin_pokemons_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, PokemonRepository $repository): Response
     {
         $pokemon = $repository->find($request->get('id'));

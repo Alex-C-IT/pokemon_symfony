@@ -7,6 +7,7 @@ use App\Form\GenerationType;
 use App\Repository\GenerationRepository;
 use App\Repository\PokemonRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\{IsGranted};
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GenerationController extends AbstractController
 {
     #[Route('{_locale}/admin/generations', name: 'app_admin_generations_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(GenerationRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $generations = $paginator->paginate(
@@ -29,6 +31,7 @@ class GenerationController extends AbstractController
     }
 
     #[Route('{_locale}/admin/generations/new', name: 'app_admin_generations_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, GenerationRepository $repository): Response
     {
         $generation = new Generation();
@@ -51,6 +54,7 @@ class GenerationController extends AbstractController
     }
 
     #[Route('{_locale}/admin/generations/{id}/edit', name: 'app_admin_generations_edit', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, GenerationRepository $repository): Response
     {
         $generation = $repository->find($request->get('id'));
@@ -73,6 +77,7 @@ class GenerationController extends AbstractController
     }
 
     #[Route('{_locale}/admin/generations/{id}/delete', name: 'app_admin_generations_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, GenerationRepository $repository, PokemonRepository $pokemonRepository): Response
     {
         $generation = $repository->find($request->get('id'));

@@ -7,6 +7,7 @@ use App\Form\AttaqueType;
 use App\Repository\AttaqueRepository;
 use App\Repository\PokemonRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\{IsGranted};
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ class AttaqueController extends AbstractController
     // PARTIE ADMINISTRATION
 
     #[Route('{_locale}/admin/attaques', name: 'app_admin_attaques_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(AttaqueRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $attaques = $paginator->paginate(
@@ -31,6 +33,7 @@ class AttaqueController extends AbstractController
     }
 
     #[Route('{_locale}/admin/attaques/new', name: 'app_admin_attaques_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, AttaqueRepository $repository): Response
     {
         $attaque = new Attaque();
@@ -53,6 +56,7 @@ class AttaqueController extends AbstractController
     }
 
     #[Route('{_locale}/admin/attaques/{id}/edit', name: 'app_admin_attaques_edit', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, AttaqueRepository $repository): Response
     {
         $attaque = $repository->find($request->get('id'));
@@ -75,6 +79,7 @@ class AttaqueController extends AbstractController
     }
 
     #[Route('{_locale}/admin/attaques/{id}/delete', name: 'app_admin_attaques_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, AttaqueRepository $attaqueRepository, PokemonRepository $pokemonRepository): Response
     {
         $attaque = $attaqueRepository->find($request->get('id'));

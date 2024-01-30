@@ -8,6 +8,7 @@ use App\Repository\AttaqueRepository;
 use App\Repository\PokemonRepository;
 use App\Repository\TypeRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\{IsGranted};
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +21,7 @@ class TypeController extends AbstractController
      * Retourne la liste des types dans le template types/index.html.twig
      */
     #[Route('{_locale}/admin/types', name: 'app_admin_types_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(TypeRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $types = $paginator->paginate(
@@ -39,6 +41,7 @@ class TypeController extends AbstractController
      * Elle retourne également le formulaire de création d'un type dans le template types/new.html.twig.
      */
     #[Route('{_locale}/admin/types/new', name: 'app_admin_types_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function nouveau(Request $request, TypeRepository $repository): Response
     {
         $type = new Type();
@@ -154,6 +157,7 @@ class TypeController extends AbstractController
      * Elle retourne également le formulaire de modification d'un type dans le template types/edit.html.twig.
      */
     #[Route('{_locale}/admin/types/{id}/edit', name: 'app_admin_types_edit', methods: ['GET', 'POST'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, TypeRepository $repository): Response
     {
         $type = $repository->findOneBy(['id' => $request->get('id')]);
@@ -237,6 +241,7 @@ class TypeController extends AbstractController
      * Cette méthode permet de supprimer un type.
      */
     #[Route('{_locale}/admin/types/{id}/delete', name: 'app_admin_types_delete', methods: ['GET', 'POST'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, AttaqueRepository $attaqueRepository): Response
     {
         $type = $typeRepository->findOneBy(['id' => $request->get('id')]);

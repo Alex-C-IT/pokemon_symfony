@@ -7,6 +7,7 @@ use App\Form\ConsommableType;
 use App\Repository\ConsommableRepository;
 use App\Repository\PokemonRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\{IsGranted};
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ConsommableController extends AbstractController
 {
     #[Route('{_locale}/admin/consommables', name: 'app_admin_consommables_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(ConsommableRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $consommables = $paginator->paginate(
@@ -29,6 +31,7 @@ class ConsommableController extends AbstractController
     }
 
     #[Route('{_locale}/admin/consommables/new', name: 'app_admin_consommables_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, ConsommableRepository $repository): Response
     {
         $consommable = new Consommable();
@@ -51,6 +54,7 @@ class ConsommableController extends AbstractController
     }
 
     #[Route('{_locale}/admin/consommables/{id}/edit', name: 'app_admin_consommables_edit', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, ConsommableRepository $repository): Response
     {
         $consommable = $repository->find($request->get('id'));
@@ -73,6 +77,7 @@ class ConsommableController extends AbstractController
     }
 
     #[Route('{_locale}/admin/consommables/{id}/delete', name: 'app_admin_consommables_delete', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, ConsommableRepository $repository, PokemonRepository $pokemonRepository): Response
     {
         $consommable = $repository->find($request->get('id'));
