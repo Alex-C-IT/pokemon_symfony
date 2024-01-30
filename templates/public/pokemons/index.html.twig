@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des pokémons - Pokémon Symfony{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 100px;">
+        <h1>Liste des pokémons</h1>
+        {% if pokemons is empty %}
+            <p>Aucune attaque n'a été trouvée.</p>
+        {% else %}
+            <table class="table table-hover mt-4 align-middle" >
+                <thead class="table-light text-center">
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Types</th>
+                        <th>Génération</th>
+                        <th>Statistiques</th>
+                        <th>Attaques</th>
+                        <th>Objet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pokemon in pokemons %}
+                        <tr>
+                            <td>{{ pokemon.numero }}</td>
+                            {# Images miniatures qui se trouvent dans le dossier public/images/pokemons/miniatures sous le nom "numero_nom_mini.png" | Retire tous les accents dans le nom et le remplace par sa lettre de base #}
+                            {# Hauteur max des images : 50px #}
+                            <td><img src="{{ asset('images/pokemons/miniatures/' ~ pokemon.numero ~ '_' ~ pokemon.nom|replace({'é': 'e', 'è': 'e', 'ê': 'e', 'à': 'a', 'ç': 'c', 'ô': 'o', 'î': 'i', 'ï': 'i', 'û': 'u', 'ù': 'u'}) ~ '_mini.png') }}" alt="{{ pokemon.nom }}" class="img-fluid" style="max-height: 100px;"></td>
+                            <td>{{ pokemon.nom }}</td>
+                            <td>
+                                {% for type in pokemon.types %}
+                                    <img src="{{ asset('images/types/' ~ type.image) }}" alt="{{ type.libelle }}" class="img-fluid">
+                                {% endfor %}
+                            </td>
+                            <td>{{ pokemon.generation.numero }}{% if pokemon.generation.numero == 1 %}<sup>ère</sup>{% else %}<sup>ème</sup>{% endif %} génération
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><b>PV :</b> {{ pokemon.stats.pv }}</li>
+                                    <li><b>Attaque :</b> {{ pokemon.stats.attaque }}</li>
+                                    <li><b>Défense :</b> {{ pokemon.stats.defense }}</li>
+                                    <li><b>Vitesse :</b> {{ pokemon.stats.vitesse}}</li>
+                                    <li><b>Atk. Spé. :</b> {{ pokemon.stats.special }}</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for attaque in pokemon.attaques %}
+                                        <li>{{ attaque.nom }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>{{ pokemon.consommable.libelle }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(pokemons) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

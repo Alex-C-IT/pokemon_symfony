@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des types - Pokémon Symfony{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 100px;">
+        <h1>Liste des types</h1>
+        {# Si aucun type n'a été trouvé #}
+        {% if types is empty %}
+            <p>Aucun type n'a été trouvé.</p>
+        {% else %}
+            <table class="table table-hover mt-4 align-middle" >
+                <thead class="table-light text-center">
+                    <tr>
+                        <th>Image</th>
+                        <th style="width: 45%;">Libellé</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for type in types %}
+                        <tr>
+                            <td><img src="{{ asset('images/types/' ~ type.image) }}" alt="{{ type.libelle }}" class="img-fluid"></td>
+                            <td>{{ type.libelle }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(types) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

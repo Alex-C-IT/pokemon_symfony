@@ -86,4 +86,20 @@ class ConsommableController extends AbstractController
         $this->addFlash('success', 'La génération a bien été supprimée.');
         return $this->redirectToRoute('app_admin_consommables_index');
     }
+
+    // PARTIE PUBLIQUE
+
+    #[Route('/objets', name: 'app_home_consommables_index')]
+    public function liste(ConsommableRepository $repository, PaginatorInterface $paginator, Request $request): Response
+    {
+        $consommables = $paginator->paginate(
+            $repository->findAll(),
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('public/consommables/index.html.twig', [
+            'consommables' => $consommables
+        ]);
+    }
 }

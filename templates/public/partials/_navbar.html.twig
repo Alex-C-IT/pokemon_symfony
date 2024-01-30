@@ -7,26 +7,27 @@
     <div class="collapse navbar-collapse" id="navbarColor03">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="{{ path('app_home_index') }}">Accueil
-            <span class="visually-hidden">(current)</span>
-          </a>
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_index' %}active{% endif %}" href="{{ path('app_home_index') }}">Accueil</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{#{{ path('app_home_pokemon_index') }}#}">Pokémons</a>
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_pokemons_index' %}active{% endif %}" href="{{ path('app_home_pokemons_index') }}">Pokémons</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_home_attaques_index') }}">Attaques</a>
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_types_index' %}active{% endif %}" href="{{ path('app_home_types_index') }}">Types</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{#{{ path('app_home_pokemon_index') }}#}">Objets</a>
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_attaques_index' %}active{% endif %}" href="{{ path('app_home_attaques_index') }}">Attaques</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home_consommables_index' %}active{% endif %}" href="{{ path('app_home_consommables_index') }}">Consommables</a>
         </li>
         {# Vérifie si l'utilisateur est connecté puis s'il a le role "ROLE_ADMIN" #}
         {% if is_granted('ROLE_USER') %}
         <li class="nav-item">
-          <a class="nav-link" href="{#{{ path('app_home_pokemon_index') }}#}">Mes dresseurs</a>
+          <a class="nav-link {#% if app.request.attributes.get('_route') == 'app_home_mypokemons_index' %}active{% endif %}#}" href="{#{ path('app_home_mypokemons_index') }#}">Mes pokémons</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{#{{ path('app_home_pokemon_index') }}#}">Mes paramètres</a>
+          <a class="nav-link {#% if app.request.attributes.get('_route') == 'app_home_params_index' %}active{% endif %}#}" href="{#{ path('app_home_params_index') }#}">Mes paramètres</a>
         </li>
         {% endif %}
         {% if is_granted('ROLE_ADMIN') %}

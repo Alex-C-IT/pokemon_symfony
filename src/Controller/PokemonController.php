@@ -13,6 +13,8 @@ use App\Form\PokemonType;
 
 class PokemonController extends AbstractController
 {
+    // PARTIE ADMINISTRATION
+
     #[Route('/admin/pokemons', name: 'app_admin_pokemons_index')]
     public function index(PokemonRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -137,5 +139,22 @@ class PokemonController extends AbstractController
         $this->addFlash('success', 'Le pokemon #' . $oldNumero . ' (' . $oldNom . ') a bien été supprimé.');
 
         return $this->redirectToRoute('app_admin_pokemons_index');
+    }
+
+
+    // PARTIE PUBLIQUE
+
+    #[Route('/pokemons', name: 'app_home_pokemons_index')]
+    public function liste(PokemonRepository $repository, PaginatorInterface $paginator, Request $request): Response
+    {
+        $pokemons = $paginator->paginate(
+            $repository->findAll(),
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('public/pokemons/index.html.twig', [
+            'pokemons' => $pokemons
+        ]);
     }
 }

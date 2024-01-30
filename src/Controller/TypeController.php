@@ -269,5 +269,19 @@ class TypeController extends AbstractController
         return $this->redirectToRoute('app_admin_types_index');
     }
 
+    // PARTIE PUBIQUE
 
+    #[Route('/types', name: 'app_home_types_index')]
+    public function liste(TypeRepository $repository, PaginatorInterface $paginator, Request $request): Response
+    {
+        $types = $paginator->paginate(
+            $repository->findAll(),
+            $request->query->getInt('page', 1), 
+            5
+        );
+
+        return $this->render('public/types/index.html.twig', [
+            'types' => $types
+        ]);
+    }
 }
