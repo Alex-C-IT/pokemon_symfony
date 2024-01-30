@@ -116,7 +116,7 @@ class TypeController extends AbstractController
                     return $this->redirectToRoute('app_admin_types_new');
                 }
                 // Nécessaire pour éviter les problèmes d'encodage
-                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', strtolower($type->getLibelle()));
                 $newFilename = $safeFilename.'.'.$imageFile->guessExtension();
                 // Déplace l'image dans le répertoire public/images/types
                 $imageFile->move(
@@ -212,7 +212,10 @@ class TypeController extends AbstractController
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
                 // Nécessaire pour éviter les problèmes d'encodage
-                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                // Le nom de l'image est le libellé du type en minuscule
+
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', lowercase($type->getLibelle()));
+                dd($safeFilename);
                 $newFilename = $safeFilename.'.'.$imageFile->guessExtension();
                 // Déplace l'image dans le répertoire public/images/types
                 $imageFile->move(
