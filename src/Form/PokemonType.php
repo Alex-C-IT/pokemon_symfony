@@ -2,16 +2,23 @@
 
 namespace App\Form;
 
-use App\Entity\{Pokemon, Type, Generation, Attaque, Consommable, Stats};
-use Symfony\Component\Form\Extension\Core\Type\{TextType, FileType, ChoiceType, IntegerType, SubmitType};
+use App\Entity\Attaque;
+use App\Entity\Consommable;
+use App\Entity\Generation;
+use App\Entity\Pokemon;
+use App\Entity\Stats;
+use App\Entity\Type;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Validator\Constraints\{Length, NotBlank, File, Regex};
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PokemonType extends AbstractType
 {
@@ -33,12 +40,12 @@ class PokemonType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'minlength' => '4',
-                    'maxlength' => '4'
+                    'maxlength' => '4',
                 ],
                 'label' => 'Numéro',
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -53,11 +60,11 @@ class PokemonType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'minlength' => '3',
-                    'maxlength' => '50'
+                    'maxlength' => '50',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -73,25 +80,25 @@ class PokemonType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'accept' => 'image/png'
+                    'accept' => 'image/png',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-4',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new File([
                         'maxSize' => '150k',
                         'mimeTypes' => [
-                            'image/png'
+                            'image/png',
                         ],
                         'mimeTypesMessage' => 'Merci de choisir un fichier au format .png valide.',
                     ]),
                     new Length([
                         'max' => 150,
-                        'maxMessage' => 'L\'image ne doit pas dépasser {{ limit }} Ko.'
-                    ])
-                ]
+                        'maxMessage' => 'L\'image ne doit pas dépasser {{ limit }} Ko.',
+                    ]),
+                ],
             ])
             ->add('miniImage', FileType::class, [
                 'label' => 'Miniature (.png uniquement & 50 Ko max)',
@@ -99,39 +106,39 @@ class PokemonType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'accept' => 'image/png'
+                    'accept' => 'image/png',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-4',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new File([
                         'maxSize' => '50k',
                         'mimeTypes' => [
-                            'image/png'
+                            'image/png',
                         ],
                         'mimeTypesMessage' => 'Merci de choisir un fichier au format .png valide.',
                     ]),
                     new Length([
                         'max' => 50,
-                        'maxMessage' => 'L\'image ne doit pas dépasser {{ limit }} Ko.'
-                    ])
-                ]
+                        'maxMessage' => 'L\'image ne doit pas dépasser {{ limit }} Ko.',
+                    ]),
+                ],
             ])
             ->add('generation', EntityType::class, [
                 'label' => 'Génération',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'class' => Generation::class,
                 'choice_label' => 'id',
                 'choice_attr' => [
-                    'class' => 'form-select mt-2'
+                    'class' => 'form-select mt-2',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -140,16 +147,16 @@ class PokemonType extends AbstractType
             ->add('types', EntityType::class, [
                 'label' => 'Types',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'class' => Type::class,
                 'choice_label' => 'libelle',
                 'choice_attr' => [
-                    'class' => 'form-select mt-2'
+                    'class' => 'form-select mt-2',
                 ],
                 'multiple' => true,
                 'expanded' => true,
@@ -160,32 +167,32 @@ class PokemonType extends AbstractType
             ->add('consommable', EntityType::class, [
                 'label' => 'Consommable',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'class' => Consommable::class,
                 'choice_label' => 'libelle',
                 'choice_attr' => [
-                    'class' => 'form-select mt-2'
+                    'class' => 'form-select mt-2',
                 ],
                 'required' => false,
             ])
             ->add('attaques', EntityType::class, [
                 'label' => 'Attaques',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'class' => Attaque::class,
                 'choice_label' => 'nom',
                 'choice_attr' => [
-                    'class' => 'form-select mt-2'
+                    'class' => 'form-select mt-2',
                 ],
                 'multiple' => true,
                 'expanded' => true,
@@ -196,18 +203,18 @@ class PokemonType extends AbstractType
             ->add('stats', StatsType::class, [
                 'label' => 'Statistiques',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
-                ]
+                    'style' => 'font-weight: bold',
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',
                 'attr' => [
-                    'class' => 'btn btn-primary mt-3'
-                ]
+                    'class' => 'btn btn-primary mt-3',
+                ],
                 ])
         ;
     }

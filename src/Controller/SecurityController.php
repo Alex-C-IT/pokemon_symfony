@@ -2,23 +2,22 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Form\InscriptionType;
 use App\Entity\TokenValidation;
+use App\Entity\User;
 use App\Enums\StatusEnum as Status;
+use App\Form\InscriptionType;
+use App\Repository\TokenValidationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\{UserRepository, TokenValidationRepository};
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 // Importe Security de SecurityBundle
-use Symfony\Bundle\SecurityBundle\Security; 
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException;
-
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController implements UserCheckerInterface
 {
@@ -43,24 +42,24 @@ class SecurityController extends AbstractController implements UserCheckerInterf
         // Contrôle si l'utilisateur est bien une instance de User
         if (!$user instanceof User) {
             $this->addFlash(
-                "danger", 
-                "Une erreur interne est survenue. Veuillez vous reconnecter."
+                'danger',
+                'Une erreur interne est survenue. Veuillez vous reconnecter.'
             );
-            throw new \Exception("Une erreur interne est survenue. Veuillez vous reconnecter.");
+            throw new \Exception('Une erreur interne est survenue. Veuillez vous reconnecter.');
         }
-        
+
         // Contrôle si l'utilisateur est banni
-        if($user !== null && $user->getStatus() === Status::BANNI) {
+        if (null !== $user && Status::BANNI === $user->getStatus()) {
             throw new CustomUserMessageAccountStatusException('Votre compte a été banni. Veuillez contacter l\'administrateur.');
         }
 
         // Contrôle si le compte est activé
-        if($user !== null && $user->getStatus() === Status::EN_ATTENTE_DE_VALIDATION) {
+        if (null !== $user && Status::EN_ATTENTE_DE_VALIDATION === $user->getStatus()) {
             $token = $this->tokenValidationRepository->findOneBy([
-                'userId' => $user->getId()
+                'userId' => $user->getId(),
             ]);
-            if($token !== null) {
-                throw new CustomUserMessageAccountStatusException('Votre compte n\'est pas encore activé. Veuillez valider votre compte avant le ' . $token->dateAvantExpirationToken() . ' ('. $token->nombreDeJoursAvantExpirationToken() . ' jours restants). Consultez vos mails.');
+            if (null !== $token) {
+                throw new CustomUserMessageAccountStatusException('Votre compte n\'est pas encore activé. Veuillez valider votre compte avant le '.$token->dateAvantExpirationToken().' ('.$token->nombreDeJoursAvantExpirationToken().' jours restants). Consultez vos mails.');
             }
             throw new CustomUserMessageAccountStatusException('Votre compte n\'est pas encore activé. Veuillez valider votre compte. Consultez vos mails.');
         }
@@ -68,13 +67,12 @@ class SecurityController extends AbstractController implements UserCheckerInterf
 
     public function checkPostAuth(UserInterface $user): void
     {
-
     }
-    
+
     #[Route('{_locale}/deconnexion', name: 'app_home_logout', methods: ['GET'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function logout(Request $request): Response
     {
-        return $this->redirectToRoute("app_home_index");
+        return $this->redirectToRoute('app_home_index');
     }
 
     #[Route('{_locale}/inscription', name: 'app_home_register', methods: ['GET', 'POST'])]
@@ -83,34 +81,34 @@ class SecurityController extends AbstractController implements UserCheckerInterf
         $user = new User();
         $form = $this->createForm(InscriptionType::class, $user);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             // Contrôle si le nom d'utilisateur existe déjà et redirige vers la page d'inscription avec un message d'erreur
             $userExist = $manager->getRepository(User::class)->findOneBy([
-                'nomUtilisateur' => $user->getNomutilisateur()
+                'nomUtilisateur' => $user->getNomutilisateur(),
             ]);
-            if($userExist !== null) {
+            if (null !== $userExist) {
                 $this->addFlash(
-                    "error", 
+                    'error',
                     "Le nom d'utilisateur existe déjà."
                 );
-                return $this->redirectToRoute("app_home_register");
+
+                return $this->redirectToRoute('app_home_register');
             }
 
-            $user->addRole("ROLE_USER");
+            $user->addRole('ROLE_USER');
             $manager->persist($user);
             $manager->flush();
 
             $this->addFlash(
-                "success", 
-                "Votre compte a bien été créé. Veuillez valider votre compte via le mail que vous avez reçu."
+                'success',
+                'Votre compte a bien été créé. Veuillez valider votre compte via le mail que vous avez reçu.'
             );
 
-            return $this->redirectToRoute("app_home_login");
+            return $this->redirectToRoute('app_home_login');
         }
 
-
         return $this->render('public/security/register.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -119,25 +117,27 @@ class SecurityController extends AbstractController implements UserCheckerInterf
     {
         // Récupérer le token en base de données
         $tokenValidation = $manager->getRepository(TokenValidation::class)->findOneBy([
-            'token' => $token
+            'token' => $token,
         ]);
 
         // Si le token n'existe pas, on affiche une erreur
-        if($tokenValidation === null) {
+        if (null === $tokenValidation) {
             $this->addFlash(
-                "danger", 
+                'danger',
                 "Le token n'existe pas."
             );
-            return $this->redirectToRoute("app_home_login");
+
+            return $this->redirectToRoute('app_home_login');
         }
 
         // Si le token est expiré, on affiche une erreur
-        if($tokenValidation->getDateHeureExpiration() < new \DateTimeImmutable()) {
+        if ($tokenValidation->getDateHeureExpiration() < new \DateTimeImmutable()) {
             $this->addFlash(
-                "danger", 
-                "Le token est expiré. Veuillez vous réinscrire."
+                'danger',
+                'Le token est expiré. Veuillez vous réinscrire.'
             );
-            return $this->redirectToRoute("app_home_login");
+
+            return $this->redirectToRoute('app_home_login');
         }
 
         // Si le token est valide, on active le compte
@@ -153,11 +153,11 @@ class SecurityController extends AbstractController implements UserCheckerInterf
 
         // On affiche un message de succès
         $this->addFlash(
-            "success", 
-            "Votre compte a bien été activé. Vous pouvez vous connecter."
+            'success',
+            'Votre compte a bien été activé. Vous pouvez vous connecter.'
         );
 
         // On redirige vers la page de connexion
-        return $this->redirectToRoute("app_home_login");
+        return $this->redirectToRoute('app_home_login');
     }
 }

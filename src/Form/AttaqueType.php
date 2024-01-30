@@ -3,13 +3,17 @@
 namespace App\Form;
 
 use App\Entity\Attaque;
+use App\Entity\Type;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\{Length, NotBlank};
-use Symfony\Component\Form\Extension\Core\Type\{TextType, IntegerType, SubmitType, CheckboxType};
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Entity\Type;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AttaqueType extends AbstractType
 {
@@ -30,12 +34,12 @@ class AttaqueType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'minlength' => '4',
-                    'maxlength' => '10'
+                    'maxlength' => '10',
                 ],
                 'label' => 'ID',
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -50,11 +54,11 @@ class AttaqueType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'minlength' => '3',
-                    'maxlength' => '50'
+                    'maxlength' => '50',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -67,16 +71,16 @@ class AttaqueType extends AbstractType
             ->add('type', EntityType::class, [
                 'label' => 'Type',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'class' => Type::class,
                 'choice_label' => 'libelle',
                 'choice_attr' => [
-                    'class' => 'form-select mt-2'
+                    'class' => 'form-select mt-2',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -87,11 +91,11 @@ class AttaqueType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'minlength' => '10',
-                    'maxlength' => '255'
+                    'maxlength' => '255',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -106,11 +110,11 @@ class AttaqueType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'min' => '0',
-                    'max' => '400'
+                    'max' => '400',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -125,11 +129,11 @@ class AttaqueType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'min' => '0',
-                    'max' => '100'
+                    'max' => '100',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -144,11 +148,11 @@ class AttaqueType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'min' => '0',
-                    'max' => '50'
+                    'max' => '50',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank(),
@@ -162,18 +166,18 @@ class AttaqueType extends AbstractType
                 'label' => 'Capacité spéciale ?',
                 'label_attr' => [
                     'class' => 'form-check-label ml-2',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'attr' => [
-                    'class' => 'form-check-input'
+                    'class' => 'form-check-input',
                 ],
-                'required' => false
+                'required' => false,
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-success mt-4'
+                    'class' => 'btn btn-success mt-4',
                 ],
-                'label' => 'Valider'
+                'label' => 'Valider',
             ])
         ;
     }

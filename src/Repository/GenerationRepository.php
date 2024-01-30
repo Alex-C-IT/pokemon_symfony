@@ -38,8 +38,6 @@ class GenerationRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-
-
     //    /**
     //     * @return Generation[] Returns an array of Generation objects
     //     */

@@ -2,14 +2,14 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use App\Entity\Pokemon;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class PokemonFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const POKEMON_REFERENCE = 'pokemon'; //pokemon_nom
+    public const POKEMON_REFERENCE = 'pokemon'; // pokemon_nom
 
     public function getDependencies(): array
     {
@@ -38,7 +38,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setStats($this->getReference('stats_1'));
         $pokemon->setConsommable($this->getReference('consommable_1'));
         $pokemon->addAttaque($this->getReference('attaque_5'))->addAttaque($this->getReference('attaque_6'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Herbizarre
@@ -48,7 +48,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setStats($this->getReference('stats_2'));
         $pokemon->setConsommable($this->getReference('consommable_2'));
         $pokemon->addAttaque($this->getReference('attaque_5'))->addAttaque($this->getReference('attaque_6'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Florizarre
@@ -59,7 +59,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setConsommable($this->getReference('consommable_3'));
         $pokemon->addAttaque($this->getReference('attaque_5'))->addAttaque($this->getReference('attaque_6'));
         $pokemon->addDresseur($this->getReference('dresseur_Flora'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Salamèche
@@ -69,7 +69,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setStats($this->getReference('stats_4'));
         $pokemon->setConsommable($this->getReference('consommable_4'));
         $pokemon->addAttaque($this->getReference('attaque_3'))->addAttaque($this->getReference('attaque_4'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Reptincel
@@ -79,7 +79,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setStats($this->getReference('stats_5'));
         $pokemon->setConsommable($this->getReference('consommable_5'));
         $pokemon->addAttaque($this->getReference('attaque_3'))->addAttaque($this->getReference('attaque_4'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Dracaufeu
@@ -90,7 +90,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setConsommable($this->getReference('consommable_6'));
         $pokemon->addAttaque($this->getReference('attaque_3'))->addAttaque($this->getReference('attaque_10'));
         $pokemon->addDresseur($this->getReference('dresseur_Sacha'))->addDresseur($this->getReference('dresseur_Flora'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Carapuce
@@ -101,7 +101,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setConsommable($this->getReference('consommable_7'));
         $pokemon->addAttaque($this->getReference('attaque_1'))->addAttaque($this->getReference('attaque_2'));
         $pokemon->addDresseur($this->getReference('dresseur_Regis'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Carabaffe
@@ -111,7 +111,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setStats($this->getReference('stats_8'));
         $pokemon->setConsommable($this->getReference('consommable_8'));
         $pokemon->addAttaque($this->getReference('attaque_1'))->addAttaque($this->getReference('attaque_2'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Tortank
@@ -122,7 +122,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setConsommable($this->getReference('consommable_9'));
         $pokemon->addAttaque($this->getReference('attaque_1'))->addAttaque($this->getReference('attaque_2'));
         $pokemon->addDresseur($this->getReference('dresseur_Regis'))->addDresseur($this->getReference('dresseur_Flora'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Pikachu
@@ -133,7 +133,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setConsommable($this->getReference('consommable_10'));
         $pokemon->addAttaque($this->getReference('attaque_7'))->addAttaque($this->getReference('attaque_8'));
         $pokemon->addDresseur($this->getReference('dresseur_Sacha'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Raichu
@@ -144,7 +144,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setConsommable($this->getReference('consommable_11'));
         $pokemon->addAttaque($this->getReference('attaque_7'))->addAttaque($this->getReference('attaque_8'));
         $pokemon->addDresseur($this->getReference('dresseur_Regis'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Pokémon de la deuxième génération :
@@ -156,7 +156,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setConsommable($this->getReference('consommable_12'));
         $pokemon->addAttaque($this->getReference('attaque_10'))->addAttaque($this->getReference('attaque_12'));
         $pokemon->addDresseur($this->getReference('dresseur_Sacha'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         // Ho-Oh
@@ -167,7 +167,7 @@ class PokemonFixtures extends Fixture implements DependentFixtureInterface
         $pokemon->setConsommable($this->getReference('consommable_13'));
         $pokemon->addAttaque($this->getReference('attaque_3'))->addAttaque($this->getReference('attaque_10'));
         $pokemon->addDresseur($this->getReference('dresseur_Flora'));
-        $this->addReference(self::POKEMON_REFERENCE . '_' . $pokemon->getNom(), $pokemon);
+        $this->addReference(self::POKEMON_REFERENCE.'_'.$pokemon->getNom(), $pokemon);
         $manager->persist($pokemon);
 
         $manager->flush();

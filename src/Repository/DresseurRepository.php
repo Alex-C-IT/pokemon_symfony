@@ -29,12 +29,12 @@ class DresseurRepository extends ServiceEntityRepository
 
     public function remove(Dresseur $dresseur): void
     {
+        $this->_em->remove($dresseur);
         $this->_em->flush();
     }
 
     public function update(Dresseur $dresseur): void
     {
-        $this->_em->persist($dresseur);
         $this->_em->flush();
     }
     //    /**

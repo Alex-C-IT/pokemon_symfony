@@ -2,14 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Attaque;
+use App\Form\AttaqueType;
+use App\Repository\AttaqueRepository;
+use App\Repository\PokemonRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\{AttaqueRepository, PokemonRepository};
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request;
-use App\Entity\{Attaque, Pokemon};
-use App\Form\AttaqueType;
 
 class AttaqueController extends AbstractController
 {
@@ -25,7 +26,7 @@ class AttaqueController extends AbstractController
         );
 
         return $this->render('admin/attaque/index.html.twig', [
-            'attaques' => $attaques
+            'attaques' => $attaques,
         ]);
     }
 
@@ -37,7 +38,6 @@ class AttaqueController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $attaque = $form->getData();
 
             $repository->add($attaque);
@@ -48,7 +48,7 @@ class AttaqueController extends AbstractController
         }
 
         return $this->render('admin/attaque/new.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -64,13 +64,13 @@ class AttaqueController extends AbstractController
 
             $repository->update($attaque);
 
-            $this->addFlash('success', 'L\'attaque #' . $attaque->getId() . ' a bien été modifiée.');
+            $this->addFlash('success', 'L\'attaque #'.$attaque->getId().' a bien été modifiée.');
 
             return $this->redirectToRoute('app_admin_attaques_index');
         }
 
         return $this->render('admin/attaque/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -87,7 +87,7 @@ class AttaqueController extends AbstractController
 
         $attaqueRepository->remove($attaque);
 
-        $this->addFlash('success', 'L\'attaque #' . $attaque->getId() . ' a bien été supprimée.');
+        $this->addFlash('success', 'L\'attaque #'.$attaque->getId().' a bien été supprimée.');
 
         return $this->redirectToRoute('app_admin_attaques_index');
     }
@@ -104,7 +104,7 @@ class AttaqueController extends AbstractController
         );
 
         return $this->render('public/attaques/index.html.twig', [
-            'attaques' => $attaques
+            'attaques' => $attaques,
         ]);
     }
 }

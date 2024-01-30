@@ -2,18 +2,18 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Dresseur;
+use App\Form\DresseurType;
 use App\Repository\{DresseurRepository};
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\{Dresseur, Pokemon};
-use App\Form\DresseurType;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DresseurController extends AbstractController
 {
-    #[Route('{_locale}/admin/dresseurs', name:'app_admin_dresseurs_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
+    #[Route('{_locale}/admin/dresseurs', name: 'app_admin_dresseurs_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function index(DresseurRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $dresseurs = $paginator->paginate(
@@ -23,7 +23,7 @@ class DresseurController extends AbstractController
         );
 
         return $this->render('admin/dresseur/index.html.twig', [
-            'dresseurs' => $dresseurs
+            'dresseurs' => $dresseurs,
         ]);
     }
 
@@ -36,7 +36,7 @@ class DresseurController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dresseur = $form->getData();
-            //dd($dresseur);
+            // dd($dresseur);
             $repository->add($dresseur);
 
             $this->addFlash('success', 'Le dresseur a bien été ajouté !');
@@ -45,7 +45,7 @@ class DresseurController extends AbstractController
         }
 
         return $this->render('admin/dresseur/new.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -60,13 +60,13 @@ class DresseurController extends AbstractController
             $dresseur = $form->getData();
             $repository->update($dresseur);
 
-            $this->addFlash('success', 'Le dresseur #' . $dresseur->getId() . ' (' . $dresseur->getNom() . ') a bien été modifié !');
+            $this->addFlash('success', 'Le dresseur #'.$dresseur->getId().' ('.$dresseur->getNom().') a bien été modifié !');
 
             return $this->redirectToRoute('app_admin_dresseurs_index');
         }
 
         return $this->render('admin/dresseur/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -77,7 +77,7 @@ class DresseurController extends AbstractController
         $oldId = $dresseur->getId();
         $repository->remove($dresseur);
 
-        $this->addFlash('success', 'Le dresseur #' . $oldId . ' (' . $dresseur->getNom() . ') a bien été supprimé !');
+        $this->addFlash('success', 'Le dresseur #'.$oldId.' ('.$dresseur->getNom().') a bien été supprimé !');
 
         return $this->redirectToRoute('app_admin_dresseurs_index');
     }

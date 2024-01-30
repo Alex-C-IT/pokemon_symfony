@@ -2,23 +2,22 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{Response, Request};
-use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\{TypeRepository, PokemonRepository, AttaqueRepository};
-use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Type;
 use App\Form\TypeType;
+use App\Repository\AttaqueRepository;
+use App\Repository\PokemonRepository;
+use App\Repository\TypeRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class TypeController extends AbstractController
 {
     /**
      * @Route("/types", name="app_types_index")
      * Retourne la liste des types dans le template types/index.html.twig
-     * @param TypeRepository $repository
-     * @param PaginatorInterface $paginator
-     * @param Request $request
-     * @return Response
      */
     #[Route('{_locale}/admin/types', name: 'app_admin_types_index', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function index(TypeRepository $repository, PaginatorInterface $paginator, Request $request): Response
@@ -31,17 +30,13 @@ class TypeController extends AbstractController
 
         // Charge la liste des types et les affiche dans le template
         return $this->render('admin/type/index.html.twig', [
-            'types' => $types
+            'types' => $types,
         ]);
     }
 
     /**
      * Cette méthode permet d'ajouter un nouveau type et de l'enregistrer en base de données.
-     * Elle retourne également le formulaire de création d'un type dans le template types/new.html.twig
-     *
-     * @param Request $request
-     * @param TypeRepository $repository
-     * @return Response
+     * Elle retourne également le formulaire de création d'un type dans le template types/new.html.twig.
      */
     #[Route('{_locale}/admin/types/new', name: 'app_admin_types_new', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function nouveau(Request $request, TypeRepository $repository): Response
@@ -51,19 +46,21 @@ class TypeController extends AbstractController
         $form = $form->handleRequest($request);
 
         // Vérifie si le formulaire a été soumis et si les données sont valides
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             // Récupère l'id transmis dans le formulaire
             $id = $form->get('id')->getData();
 
             // Vérifie si l'id ne dépasse pas 10 caractères.
-            if(strlen($id) > 10) {
+            if (strlen($id) > 10) {
                 $this->addFlash('error', 'L\'id ne doit pas dépasser 10 caractères.');
+
                 return $this->redirectToRoute('app_admin_types_new');
             }
 
             // Vérifie si l'id existe déjà
-            if($repository->find($id)) {
+            if ($repository->find($id)) {
                 $this->addFlash('error', 'Cet id existe déjà. Veuillez en choisir un autre.');
+
                 return $this->redirectToRoute('app_admin_types_new');
             }
 
@@ -74,8 +71,9 @@ class TypeController extends AbstractController
             $libelle = $form->get('libelle')->getData();
 
             // Vérifie si le libellé ne dépasse pas 25 caractères.
-            if(strlen($libelle) > 25) {
+            if (strlen($libelle) > 25) {
                 $this->addFlash('error', 'Le libellé ne doit pas dépasser 25 caractères.');
+
                 return $this->redirectToRoute('app_admin_types_new');
             }
             $type->setLibelle($libelle);
@@ -84,31 +82,34 @@ class TypeController extends AbstractController
             $imageFile = $form->get('image')->getData();
 
             // Vérifie si le nom de l'image n'existe pas dans public/images/types
-            if($imageFile) {
-
+            if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
 
                 // Vérifie si le nom de l'image + l'extension (.png) ne dépasse pas 50 caractères.
-                if(strlen($originalFilename) > 45) {
+                if (strlen($originalFilename) > 45) {
                     $this->addFlash('error', 'Le nom de l\'image ne doit pas dépasser 45 caractères.');
+
                     return $this->redirectToRoute('app_admin_types_new');
                 }
 
                 // vérifie si le nom de l'image existe déjà
-                if(in_array($originalFilename, $this->recupereNomsImagesTypes())) {
+                if (in_array($originalFilename, $this->recupereNomsImagesTypes())) {
                     $this->addFlash('error', 'Ce nom d\'image existe déjà. Veuillez en choisir un autre.');
+
                     return $this->redirectToRoute('app_admin_types_new');
                 }
 
                 // Vérifie si l'image est bien au format .png.
-                if($imageFile->guessExtension() != 'png') {
+                if ('png' != $imageFile->guessExtension()) {
                     $this->addFlash('error', 'Le format de l\'image doit être .png.');
+
                     return $this->redirectToRoute('app_admin_types_new');
                 }
 
                 // Vérifie si l'image ne dépasse pas 50Ko.
-                if($imageFile->getSize() > 50000) {
+                if ($imageFile->getSize() > 50000) {
                     $this->addFlash('error', 'L\'image ne doit pas dépasser 50Ko.');
+
                     return $this->redirectToRoute('app_admin_types_new');
                 }
                 // Nécessaire pour éviter les problèmes d'encodage
@@ -126,12 +127,13 @@ class TypeController extends AbstractController
             // Sauvegarde le type en base de données et redirige vers la liste des types
             $repository->add($type);
             $this->addFlash('success', 'Le type a été ajouté.');
+
             return $this->redirectToRoute('app_admin_types_index');
         } else {
             return $this->render(
                 'admin/type/new.html.twig',
                 [
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
                 ]
             );
         }
@@ -143,15 +145,13 @@ class TypeController extends AbstractController
         $images = scandir($this->getParameter('types_images_directory'));
         // Supprime les 2 premiers éléments du tableau (. et ..)
         unset($images[0], $images[1]);
+
         return $images;
     }
 
     /**
      * Cette méthode permet de modifier un type et de l'enregistrer en base de données.
-     * Elle retourne également le formulaire de modification d'un type dans le template types/edit.html.twig
-     * @param Request $request
-     * @param TypeRepository $repository
-     * @return Response
+     * Elle retourne également le formulaire de modification d'un type dans le template types/edit.html.twig.
      */
     #[Route('{_locale}/admin/types/{id}/edit', name: 'app_admin_types_edit', methods: ['GET', 'POST'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function edit(Request $request, TypeRepository $repository): Response
@@ -161,14 +161,14 @@ class TypeController extends AbstractController
         $form = $form->handleRequest($request);
 
         // Vérifie si le formulaire a été soumis et si les données sont valides
-        if($form->isSubmitted() && $form->isValid()) {
-
+        if ($form->isSubmitted() && $form->isValid()) {
             // Récupère le libellé transmis dans le formulaire
             $libelle = $form->get('libelle')->getData();
 
             // Vérifie si le libellé ne dépasse pas 25 caractères.
-            if(strlen($libelle) > 25) {
+            if (strlen($libelle) > 25) {
                 $this->addFlash('error', 'Le libellé ne doit pas dépasser 25 caractères.');
+
                 return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
             }
             $type->setLibelle($libelle);
@@ -177,31 +177,34 @@ class TypeController extends AbstractController
             $imageFile = $form->get('image')->getData();
 
             // Vérifie si le nom de l'image n'existe pas dans public/images/types
-            if($imageFile) {
-
+            if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
 
                 // Vérifie si le nom de l'image + l'extension (.png) ne dépasse pas 50 caractères.
-                if(strlen($originalFilename) > 45) {
+                if (strlen($originalFilename) > 45) {
                     $this->addFlash('error', 'Le nom de l\'image ne doit pas dépasser 45 caractères.');
+
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
 
                 // vérifie si le nom de l'image existe déjà
-                if(in_array($originalFilename, $this->recupereNomsImagesTypes())) {
+                if (in_array($originalFilename, $this->recupereNomsImagesTypes())) {
                     $this->addFlash('error', 'Ce nom d\'image existe déjà. Veuillez en choisir un autre.');
+
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
 
                 // Vérifie si l'image est bien au format .png.
-                if($imageFile->guessExtension() != 'png') {
+                if ('png' != $imageFile->guessExtension()) {
                     $this->addFlash('error', 'Le format de l\'image doit être .png.');
+
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
 
                 // Vérifie si l'image ne dépasse pas 50Ko.
-                if($imageFile->getSize() > 50000) {
+                if ($imageFile->getSize() > 50000) {
                     $this->addFlash('error', 'L\'image ne doit pas dépasser 50Ko.');
+
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
                 // Nécessaire pour éviter les problèmes d'encodage
@@ -213,36 +216,34 @@ class TypeController extends AbstractController
                     $newFilename
                 );
                 // Supprime l'ancienne image
-                unlink($this->getParameter('types_images_directory') . '/' . $type->getImage());
+                unlink($this->getParameter('types_images_directory').'/'.$type->getImage());
                 // Met à jour la propriété image avec le nom de l'image
                 $type->setImage($newFilename);
             }
 
             // Sauvegarde le type en base de données et redirige vers la liste des types
             $repository->update($type);
-            $this->addFlash('success', 'Le type #' . $type->getId() . ' a été modifié avec succès !');
+            $this->addFlash('success', 'Le type #'.$type->getId().' a été modifié avec succès !');
+
             return $this->redirectToRoute('app_admin_types_index');
         } else {
             return $this->render('admin/type/edit.html.twig', [
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]);
         }
     }
 
     /**
-     * Cette méthode permet de supprimer un type
-     * @param Request $request
-     * @param TypeRepository $repository
-     * @return Response
+     * Cette méthode permet de supprimer un type.
      */
     #[Route('{_locale}/admin/types/{id}/delete', name: 'app_admin_types_delete', methods: ['GET', 'POST'], requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr'])]
     public function delete(Request $request, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, AttaqueRepository $attaqueRepository): Response
     {
         $type = $typeRepository->findOneBy(['id' => $request->get('id')]);
         // Récupère tous les pokémons associés au type et les insère dans types
-        foreach($type->getPokemons() as $pokemon) {
+        foreach ($type->getPokemons() as $pokemon) {
             // Si le pokémon possède un type secondaire alors on le supprime sinon on met à 'TYPE0'
-            if($pokemon->getTypes()->count() > 1) {
+            if ($pokemon->getTypes()->count() > 1) {
                 $pokemon->removeType($type);
             } else {
                 $pokemon->addType($typeRepository->findOneBy(['id' => 'TYPE0']));
@@ -253,19 +254,19 @@ class TypeController extends AbstractController
 
         // Change le type des attaques liése au type par 'TYPE0'
         $type0 = $typeRepository->findOneBy(['id' => 'TYPE0']);
-        foreach($type->getAttaques() as $attaque) {
+        foreach ($type->getAttaques() as $attaque) {
             $attaque->setType($type0);
             // Mettre à jour le type de l'attaque dans la table attaque
             $attaqueRepository->update($attaque);
         }
 
-
         // Supprime l'image du type
-        unlink($this->getParameter('types_images_directory') . '/' . $type->getImage());
+        unlink($this->getParameter('types_images_directory').'/'.$type->getImage());
 
         // Supprime le type en base de données et redirige vers la liste des types
         $typeRepository->remove($type);
-        $this->addFlash('success', 'Le type #' . $type->getId() . ' a été supprimé avec succès !');
+        $this->addFlash('success', 'Le type #'.$type->getId().' a été supprimé avec succès !');
+
         return $this->redirectToRoute('app_admin_types_index');
     }
 
@@ -276,12 +277,12 @@ class TypeController extends AbstractController
     {
         $types = $paginator->paginate(
             $repository->findAll(),
-            $request->query->getInt('page', 1), 
+            $request->query->getInt('page', 1),
             5
         );
 
         return $this->render('public/types/index.html.twig', [
-            'types' => $types
+            'types' => $types,
         ]);
     }
 }

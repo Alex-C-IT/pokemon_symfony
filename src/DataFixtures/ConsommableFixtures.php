@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Consommable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\Consommable;
 
 class ConsommableFixtures extends Fixture
 {
@@ -25,13 +25,13 @@ class ConsommableFixtures extends Fixture
             'Baie Pêcha',
             'Baie Willia',
             'Baie Mepo',
-            'Baie Nanone'
+            'Baie Nanone',
         ];
 
         foreach ($consommables as $key => $consommable) {
-            $consommable = new Consommable('CONS' . $key + 1, $consommable);
+            $consommable = new Consommable('CONS'.$key + 1, $consommable);
             $manager->persist($consommable);
-            $this->addReference(self::CONSOMMABLE_REFERENCE . '_' . $key + 1, $consommable);
+            $this->addReference(self::CONSOMMABLE_REFERENCE.'_'.$key + 1, $consommable);
         }
 
         $manager->flush();

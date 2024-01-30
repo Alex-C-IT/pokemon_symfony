@@ -3,11 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Stats;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\{Length, NotBlank};
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class StatsType extends AbstractType
 {
@@ -19,7 +20,7 @@ class StatsType extends AbstractType
             'attr' => [
                 'class' => 'form-control',
                 'min' => '1',
-                'max' => '999'
+                'max' => '999',
             ],
             'label_attr' => [
                 'class' => 'form-label mt-2',
@@ -38,7 +39,7 @@ class StatsType extends AbstractType
             'attr' => [
                 'class' => 'form-control',
                 'min' => '1',
-                'max' => '999'
+                'max' => '999',
             ],
             'label_attr' => [
                 'class' => 'form-label mt-2',
@@ -57,7 +58,7 @@ class StatsType extends AbstractType
             'attr' => [
                 'class' => 'form-control',
                 'min' => '1',
-                'max' => '999'
+                'max' => '999',
             ],
             'label_attr' => [
                 'class' => 'form-label mt-2',
@@ -76,7 +77,7 @@ class StatsType extends AbstractType
             'attr' => [
                 'class' => 'form-control',
                 'min' => '1',
-                'max' => '999'
+                'max' => '999',
             ],
             'label_attr' => [
                 'class' => 'form-label mt-2',
@@ -95,7 +96,7 @@ class StatsType extends AbstractType
             'attr' => [
                 'class' => 'form-control',
                 'min' => '1',
-                'max' => '999'
+                'max' => '999',
             ],
             'label_attr' => [
                 'class' => 'form-label mt-2',

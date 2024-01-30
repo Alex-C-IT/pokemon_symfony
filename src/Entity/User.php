@@ -2,16 +2,15 @@
 
 namespace App\Entity;
 
+use App\Enums\StatusEnum as Status;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Doctrine\Common\Collections\{Collection, ArrayCollection};
-use App\Entity\Dresseur;
-use App\Enums\StatusEnum as Status;
-use App\EventListener\UserListener;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueEntity('email')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -34,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank()]
     private ?string $password = 'password';
-    
+
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: 'string', length: 150, unique: true)]
@@ -62,9 +61,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->dateInscription = new \DateTimeImmutable();   
-        $this->status = Status::EN_ATTENTE_DE_VALIDATION;  
-        $this->roles = ['ROLE_USER'];   
+        $this->dateInscription = new \DateTimeImmutable();
+        $this->status = Status::EN_ATTENTE_DE_VALIDATION;
+        $this->roles = ['ROLE_USER'];
         $this->dresseurs = new ArrayCollection();
     }
 
@@ -74,20 +73,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $diff = $now->diff($this->dateInscription);
         $str = '';
 
-        if($diff->y > 0) {
-            $str .= $diff->y . ' an';
-            if($diff->y > 1) {
+        if ($diff->y > 0) {
+            $str .= $diff->y.' an';
+            if ($diff->y > 1) {
                 $str .= 's';
             }
         }
 
-        if($diff->m > 0) {
-            $str .= ' ' . $diff->m . ' mois';
+        if ($diff->m > 0) {
+            $str .= ' '.$diff->m.' mois';
         }
 
-        if($diff->d > 0) {
-            $str .= ' ' . $diff->d . ' jour';
-            if($diff->d > 1) {
+        if ($diff->d > 0) {
+            $str .= ' '.$diff->d.' jour';
+            if ($diff->d > 1) {
                 $str .= 's';
             }
         }
@@ -98,7 +97,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function dateInscriptionFormatee(): string
     {
         // "Inscrit depuis le jj/mm/aaaa (inscritDepuis())"
-        return 'Inscrit depuis le ' . $this->dateInscription->format('d/m/Y') . ' (' . $this->inscritDepuis() . ')';
+        return 'Inscrit depuis le '.$this->dateInscription->format('d/m/Y').' ('.$this->inscritDepuis().')';
     }
 
     public function dateHeureInscription(): string
@@ -139,18 +138,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Get the value of plainPassword
-     */ 
+     * Get the value of plainPassword.
+     */
     public function getPlainPassword()
     {
         return $this->plainPassword;
     }
 
     /**
-     * Set the value of plainPassword
+     * Set the value of plainPassword.
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
@@ -201,7 +200,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addRole(string $role): static
     {
-        if(!in_array($role, $this->roles)) {
+        if (!in_array($role, $this->roles)) {
             $this->roles[] = $role;
         }
 
@@ -253,7 +252,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addDresseur(Dresseur $dresseur): static
     {
-        if(!$this->dresseurs->contains($dresseur)) {
+        if (!$this->dresseurs->contains($dresseur)) {
             $this->dresseurs->add($dresseur);
             $dresseur->setUser($this);
         }
@@ -263,14 +262,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeDresseur(Dresseur $dresseur): static
     {
-        if($this->dresseurs->contains($dresseur)) {
+        if ($this->dresseurs->contains($dresseur)) {
             $this->dresseurs->removeElement($dresseur);
             $dresseur->setUser(null);
         }
 
         return $this;
     }
- 
+
     public function getIsSubscribedNewsletter(): ?bool
     {
         return $this->isSubscribedNewsletter;

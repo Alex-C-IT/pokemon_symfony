@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Pokemon;
+use App\Form\PokemonType;
+use App\Repository\PokemonRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\{PokemonRepository, TypeRepository, AttaqueRepository};
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request;
-use App\Entity\{Pokemon, Type, Generation};
-use App\Form\PokemonType;
 
 class PokemonController extends AbstractController
 {
@@ -25,7 +25,7 @@ class PokemonController extends AbstractController
         );
 
         return $this->render('admin/pokemon/index.html.twig', [
-            'pokemons' => $pokemons
+            'pokemons' => $pokemons,
         ]);
     }
 
@@ -37,13 +37,12 @@ class PokemonController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $pokemon = $form->getData();
 
             // Sauvgarde l'image et la miniImage dans le dossier public/images/pokemons et public/images/pokemons/miniatures
             $imageFile = $form->get('image')->getData();
             $miniImageFile = $form->get('miniImage')->getData();
-            if($imageFile && $miniImageFile) {
+            if ($imageFile && $miniImageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $originalMiniFilename = pathinfo($miniImageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // Format du nom de l'image : numero_nom.png (exemple : 0001_bulbizarre.png) - Supprime les espaces et les caractères spéciaux
@@ -69,7 +68,7 @@ class PokemonController extends AbstractController
         }
 
         return $this->render('admin/pokemon/new.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -81,19 +80,18 @@ class PokemonController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $pokemon = $form->getData();
             // Supprime l'ancienne image et l'ancienne miniature
             $oldImage = $this->getParameter('images_pokemons_directory').'/'.$pokemon->getImage();
             $oldMiniImage = $this->getParameter('images_mini_pokemons_directory').'/'.$pokemon->getMiniImage();
-            if(file_exists($oldImage) && file_exists($oldMiniImage)) {
+            if (file_exists($oldImage) && file_exists($oldMiniImage)) {
                 unlink($oldImage);
                 unlink($oldMiniImage);
             }
             // Sauvgarde l'image et la miniImage dans le dossier public/images/pokemons et public/images/pokemons/miniatures
             $imageFile = $form->get('image')->getData();
             $miniImageFile = $form->get('miniImage')->getData();
-            if($imageFile && $miniImageFile) {
+            if ($imageFile && $miniImageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $originalMiniFilename = pathinfo($miniImageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // Format du nom de l'image : numero_nom.png (exemple : 0001_bulbizarre.png) - Supprime les espaces et les caractères spéciaux
@@ -119,7 +117,7 @@ class PokemonController extends AbstractController
         }
 
         return $this->render('admin/pokemon/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -131,16 +129,15 @@ class PokemonController extends AbstractController
         $oldNom = $pokemon->getNom();
         $oldImage = $this->getParameter('images_pokemons_directory').'/'.$pokemon->getImage();
         $oldMiniImage = $this->getParameter('images_mini_pokemons_directory').'/'.$pokemon->getMiniImage();
-        if(file_exists($oldImage) && file_exists($oldMiniImage)) {
+        if (file_exists($oldImage) && file_exists($oldMiniImage)) {
             unlink($oldImage);
             unlink($oldMiniImage);
         }
         $repository->remove($pokemon);
-        $this->addFlash('success', 'Le pokemon #' . $oldNumero . ' (' . $oldNom . ') a bien été supprimé.');
+        $this->addFlash('success', 'Le pokemon #'.$oldNumero.' ('.$oldNom.') a bien été supprimé.');
 
         return $this->redirectToRoute('app_admin_pokemons_index');
     }
-
 
     // PARTIE PUBLIQUE
 
@@ -154,7 +151,7 @@ class PokemonController extends AbstractController
         );
 
         return $this->render('public/pokemons/index.html.twig', [
-            'pokemons' => $pokemons
+            'pokemons' => $pokemons,
         ]);
     }
 }

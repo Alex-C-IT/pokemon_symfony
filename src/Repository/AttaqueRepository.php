@@ -38,7 +38,6 @@ class AttaqueRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-
     //    /**
     //     * @return Attaque[] Returns an array of Attaque objects
     //     */

@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\User;
+use App\Enums\StatusEnum as Status;
+use App\Form\UserType;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\User;
-use App\Form\UserType;
-use App\Enums\StatusEnum as Status;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
@@ -24,7 +24,7 @@ class UserController extends AbstractController
         );
 
         return $this->render('admin/user/index.html.twig', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -36,11 +36,11 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $user = $form->getData();
             // Vérifie si le nom d'utilisateur n'est pas déjà utilisé
             if ($repository->findOneBy(['nomUtilisateur' => $user->getNomUtilisateur()])) {
                 $this->addFlash('error', 'Le nom d\'utilisateur est déjà utilisé.');
+
                 return $this->redirectToRoute('app_admin_utilisateurs_new');
             }
             $repository->add($user);
@@ -51,7 +51,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('admin/user/new.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -64,13 +64,13 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $user = $form->getData();
 
             // Vérifie si le nom d'utilisateur a été modifié et si oui, vérifie si le nouveau nom d'utilisateur n'est pas déjà utilisé
             if ($oldnomUtilisateur != $user->getNomUtilisateur()) {
                 $user->setNomUtilisateur($oldnomUtilisateur);
                 $this->addFlash('error', 'Le nom d\'utilisateur est déjà utilisé.');
+
                 return $this->redirectToRoute('app_admin_utilisateurs_edit', ['id' => $user->getId()]);
             }
             $repository->update($user);
@@ -81,7 +81,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('admin/user/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 

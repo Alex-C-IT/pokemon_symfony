@@ -4,10 +4,14 @@ namespace App\Form;
 
 use App\Entity\Type;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\{Length, NotBlank, File};
-use Symfony\Component\Form\Extension\Core\Type\{TextType, FileType, SubmitType};
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TypeType extends AbstractType
 {
@@ -18,48 +22,48 @@ class TypeType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'minlength' => '5',
-                    'maxlength' => '10'
+                    'maxlength' => '10',
                 ],
                 'label' => 'ID',
                 'label_attr' => [
                     'class' => 'form-label mt-4',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Veuillez saisir un ID.'
+                        'message' => 'Veuillez saisir un ID.',
                     ]),
                     new Length([
                         'min' => 5,
                         'max' => 10,
                         'minMessage' => 'L\'id doit contenir au moins {{ limit }} caractères.',
-                        'maxMessage' => 'L\'id doit contenir au maximum {{ limit }} caractères.'
-                    ])
-                ]
+                        'maxMessage' => 'L\'id doit contenir au maximum {{ limit }} caractères.',
+                    ]),
+                ],
             ])
 
             ->add('libelle', TextType::class, [
                 'attr' => [
                     'class' => 'form-control',
                     'minlength' => '3',
-                    'maxlength' => '25'
+                    'maxlength' => '25',
                 ],
                 'label' => 'Libellé',
                 'label_attr' => [
                     'class' => 'form-label mt-4',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Veuillez saisir un libellé.'
+                        'message' => 'Veuillez saisir un libellé.',
                     ]),
                     new Length([
                         'min' => 3,
                         'max' => 25,
                         'minMessage' => 'Le libellé doit contenir au moins {{ limit }} caractères.',
-                        'maxMessage' => 'Le libellé doit contenir au maximum {{ limit }} caractères.'
-                    ])
-                ]
+                        'maxMessage' => 'Le libellé doit contenir au maximum {{ limit }} caractères.',
+                    ]),
+                ],
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image (.png uniquement & 50 Ko max)',
@@ -67,31 +71,31 @@ class TypeType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'accept' => 'image/png'
+                    'accept' => 'image/png',
                 ],
                 'label_attr' => [
                     'class' => 'form-label mt-4',
-                    'style' => 'font-weight: bold'
+                    'style' => 'font-weight: bold',
                 ],
                 'constraints' => [
                     new File([
                         'maxSize' => '50k',
                         'mimeTypes' => [
-                            'image/png'
+                            'image/png',
                         ],
                         'mimeTypesMessage' => 'Merci de choisir un fichier au format .png valide.',
                     ]),
                     new Length([
                         'max' => 50,
-                        'maxMessage' => 'L\'image ne doit pas dépasser {{ limit }} Ko.'
-                    ])
-                ]
+                        'maxMessage' => 'L\'image ne doit pas dépasser {{ limit }} Ko.',
+                    ]),
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-success mt-4'
+                    'class' => 'btn btn-success mt-4',
                 ],
-                'label' => 'Valider'
+                'label' => 'Valider',
             ])
         ;
     }

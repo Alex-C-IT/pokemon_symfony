@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{Response, Request};
-use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\{GenerationRepository, PokemonRepository};
-use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Generation;
 use App\Form\GenerationType;
+use App\Repository\GenerationRepository;
+use App\Repository\PokemonRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GenerationController extends AbstractController
 {
@@ -22,7 +24,7 @@ class GenerationController extends AbstractController
         );
 
         return $this->render('admin/generation/index.html.twig', [
-            'generations' => $generations
+            'generations' => $generations,
         ]);
     }
 
@@ -38,13 +40,13 @@ class GenerationController extends AbstractController
 
             $repository->add($generation);
 
-            $this->addFlash('success', 'La génération a bien été ajoutée.', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr']);
+            $this->addFlash('success', 'La génération a bien été ajoutée.');
 
             return $this->redirectToRoute('app_admin_generations_index');
         }
 
         return $this->render('admin/generation/new.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -60,13 +62,13 @@ class GenerationController extends AbstractController
 
             $repository->update($generation);
 
-            $this->addFlash('success', 'La génération a bien été modifiée.', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr']);
+            $this->addFlash('success', 'La génération a bien été modifiée.');
 
             return $this->redirectToRoute('app_admin_generations_index');
         }
 
         return $this->render('admin/generation/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -83,7 +85,8 @@ class GenerationController extends AbstractController
 
         $repository->remove($generation);
 
-        $this->addFlash('success', 'La génération a bien été supprimée.', requirements: ['_locale' => 'en|fr'], defaults: ['_locale' => 'fr']);
+        $this->addFlash('success', 'La génération a bien été supprimée.');
+
         return $this->redirectToRoute('app_admin_generations_index');
     }
 }

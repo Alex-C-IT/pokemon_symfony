@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{Response, Request};
-use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\{ConsommableRepository, PokemonRepository};
-use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Consommable;
 use App\Form\ConsommableType;
+use App\Repository\ConsommableRepository;
+use App\Repository\PokemonRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ConsommableController extends AbstractController
 {
@@ -22,7 +24,7 @@ class ConsommableController extends AbstractController
         );
 
         return $this->render('admin/consommable/index.html.twig', [
-            'consommables' => $consommables
+            'consommables' => $consommables,
         ]);
     }
 
@@ -30,7 +32,7 @@ class ConsommableController extends AbstractController
     public function new(Request $request, ConsommableRepository $repository): Response
     {
         $consommable = new Consommable();
-        $form = $this->createForm(consommableType::class, $consommable);
+        $form = $this->createForm(ConsommableType::class, $consommable);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -44,7 +46,7 @@ class ConsommableController extends AbstractController
         }
 
         return $this->render('admin/consommable/new.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -66,7 +68,7 @@ class ConsommableController extends AbstractController
         }
 
         return $this->render('admin/consommable/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -84,6 +86,7 @@ class ConsommableController extends AbstractController
         $repository->remove($consommable);
 
         $this->addFlash('success', 'La génération a bien été supprimée.');
+
         return $this->redirectToRoute('app_admin_consommables_index');
     }
 
@@ -99,7 +102,7 @@ class ConsommableController extends AbstractController
         );
 
         return $this->render('public/consommables/index.html.twig', [
-            'consommables' => $consommables
+            'consommables' => $consommables,
         ]);
     }
 }

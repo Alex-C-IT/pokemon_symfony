@@ -7,9 +7,6 @@ use Symfony\Component\Mailer\MailerInterface;
 
 class MailService
 {
-    /**
-     * @var MailerInterface
-     */
     private MailerInterface $mailer;
 
     public function __construct(MailerInterface $mailer)
@@ -23,15 +20,14 @@ class MailService
         string $subject,
         string $htmlTemplate,
         array $context
-    ): void 
-    {
+    ): void {
         $email = (new TemplatedEmail())
             ->from($from)
             ->to($to)
             ->subject($subject)
             ->htmlTemplate($htmlTemplate)
             ->context($context);
-            
+
         $this->mailer->send($email);
     }
 }

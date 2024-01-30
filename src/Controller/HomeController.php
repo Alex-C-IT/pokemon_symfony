@@ -19,7 +19,6 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home_index_default_locale')]
     public function indexDefaultLocale(): Response
     {
-        return $this->redirectToRoute('app_home_index',);
+        return $this->redirectToRoute('app_home_index');
     }
-
 }

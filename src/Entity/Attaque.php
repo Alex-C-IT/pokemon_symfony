@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AttaqueRepository;
-use Doctrine\Common\Collections\{ArrayCollection, Collection};
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AttaqueRepository::class)]
@@ -38,7 +39,7 @@ class Attaque
     #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'attaques')]
     private Collection $pokemons;
 
-    public function __construct(string $id = null, string $nom = null, string $description = null, int $puissance = null, int $prec = null, int $pp = null, bool $cs = null, ?Type $type = null)
+    public function __construct(string $id = null, string $nom = null, string $description = null, int $puissance = null, int $prec = null, int $pp = null, bool $cs = null, Type $type = null)
     {
         $this->id = $id;
         $this->nom = $nom;
@@ -47,7 +48,7 @@ class Attaque
         $this->prec = $prec;
         $this->pp = $pp;
         $this->cs = $cs;
-        if($type != null) {
+        if (null != $type) {
             $this->type = $type;
         }
         $this->pokemons = new ArrayCollection();

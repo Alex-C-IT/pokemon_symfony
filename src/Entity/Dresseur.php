@@ -34,7 +34,7 @@ class Dresseur
     #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'dresseurs')]
     private Collection $pokemons;
 
-    public function __construct(string $nom = null, int $taille = null, bool $sexe = null, ?string $message = null)
+    public function __construct(string $nom = null, int $taille = null, bool $sexe = null, string $message = null)
     {
         $this->nom = $nom;
         $this->taille = $taille;
@@ -135,10 +135,10 @@ class Dresseur
 
     public function removePokemon(Pokemon $pokemon): static
     {
-        if($this->pokemons->removeElement($pokemon)) {
+        if ($this->pokemons->removeElement($pokemon)) {
             $pokemon->removeDresseur($this);
         }
-        
+
         return $this;
     }
 }

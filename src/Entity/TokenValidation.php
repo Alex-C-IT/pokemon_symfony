@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TokenValidationRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TokenValidationRepository::class)]
@@ -37,15 +36,17 @@ class TokenValidation
         $dateHeureExpiration = $this->getDateHeureExpiration();
         $dateHeureActuelle = new \DateTimeImmutable();
         $diff = $dateHeureExpiration->diff($dateHeureActuelle);
+
         return $diff->days;
     }
 
     public function dateAvantExpirationToken(): string
     {
         $dateHeureExpiration = $this->getDateHeureExpiration();
+
         return $dateHeureExpiration->format('d/m/Y');
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
