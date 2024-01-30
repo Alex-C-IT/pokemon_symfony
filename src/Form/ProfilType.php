@@ -53,7 +53,6 @@ class ProfilType extends AbstractType
                         'maxlength' => '255',
                     ],
                 ],
-                'required' => true,
                 'first_options' => [
                     'label' => 'Mot de passe',
                     'label_attr' => [
@@ -61,9 +60,6 @@ class ProfilType extends AbstractType
                         'style' => 'font-weight: bold',
                     ],
                     'constraints' => [
-                        new NotBlank([
-                            'message' => 'Veuillez saisir un mot de passe.',
-                        ]),
                         new Length([
                             'min' => 8,
                             'max' => 255,
@@ -79,9 +75,6 @@ class ProfilType extends AbstractType
                         'style' => 'font-weight: bold',
                     ],
                     'constraints' => [
-                        new NotBlank([
-                            'message' => 'Veuillez confirmer le mot de passe.',
-                        ]),
                         new Length([
                             'min' => 8,
                             'max' => 255,
@@ -125,7 +118,7 @@ class ProfilType extends AbstractType
                 'required' => false,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'S\'inscrire',
+                'label' => 'Confirmer les modifications',
                 'attr' => [
                     'class' => 'btn btn-primary',
                 ],
