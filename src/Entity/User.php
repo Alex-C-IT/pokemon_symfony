@@ -63,7 +63,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->dateInscription = new \DateTimeImmutable();   
-        $this->status = Status::EN_ATTENTE_DE_VALIDATION;     
+        $this->status = Status::EN_ATTENTE_DE_VALIDATION;  
+        $this->roles = ['ROLE_USER'];   
         $this->dresseurs = new ArrayCollection();
     }
 
