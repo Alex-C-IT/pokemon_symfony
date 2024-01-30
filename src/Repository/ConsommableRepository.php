@@ -29,7 +29,6 @@ class ConsommableRepository extends ServiceEntityRepository
 
     public function update(Consommable $consommable): void
     {
-        $this->_em->persist($consommable);
         $this->_em->flush();
     }
 

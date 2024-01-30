@@ -29,7 +29,6 @@ class PokemonRepository extends ServiceEntityRepository
 
     public function update(Pokemon $pokemon): void
     {
-        $this->_em->persist($pokemon);
         $this->_em->flush();
     }
 

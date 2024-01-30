@@ -54,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?Status $status = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Dresseur::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Dresseur::class, cascade: ['persist', 'remove'])]
     private Collection $dresseurs;
 
     #[ORM\Column(type: 'boolean')]

@@ -204,7 +204,7 @@ class PokemonType extends AbstractType
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Ajouter',
+                'label' => 'Valider',
                 'attr' => [
                     'class' => 'btn btn-primary mt-3'
                 ]

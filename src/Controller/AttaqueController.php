@@ -13,6 +13,8 @@ use App\Form\AttaqueType;
 
 class AttaqueController extends AbstractController
 {
+    // PARTIE ADMINISTRATION
+
     #[Route('/admin/attaques', name: 'app_admin_attaques_index')]
     public function index(AttaqueRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -88,5 +90,21 @@ class AttaqueController extends AbstractController
         $this->addFlash('success', 'L\'attaque #' . $attaque->getId() . ' a bien été supprimée.');
 
         return $this->redirectToRoute('app_admin_attaques_index');
+    }
+
+    // PARTIE PUBLIQUE
+
+    #[Route('/attaques', name: 'app_home_attaques_index')]
+    public function liste(AttaqueRepository $repository, PaginatorInterface $paginator, Request $request): Response
+    {
+        $attaques = $paginator->paginate(
+            $repository->findAll(),
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('public/attaques/index.html.twig', [
+            'attaques' => $attaques
+        ]);
     }
 }

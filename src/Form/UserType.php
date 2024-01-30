@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\{Length, NotBlank, Email, NotNull, IsTrue, IsFalse, IsNull, IsNullValidator, IsTrueValidator, IsFalseValidator, NotNullValidator, NotBlankValidator, EmailValidator, LengthValidator, NotCompromisedPassword};
-use Symfony\Component\Form\Extension\Core\Type\{TextType, PasswordType, SubmitType, EmailType, CheckboxType, RepeatedType, ChoiceType};
+use Symfony\Component\Form\Extension\Core\Type\{TextType, PasswordType, SubmitType, EmailType, CheckboxType, RepeatedType, ChoiceType, HiddenType}; 
 
 class UserType extends AbstractType
 {
@@ -34,7 +34,8 @@ class UserType extends AbstractType
                         'max' => 25,
                         'minMessage' => 'Le nom d\'utilisateur doit contenir au moins {{ limit }} caractères.',
                         'maxMessage' => 'Le nom d\'utilisateur doit contenir au maximum {{ limit }} caractères.'
-                    ])
+                    ]),
+                    // L'utilisateur ne doit pas utiliser un nom d'utilisateur déjà existant.
                 ]
             ])
             ->add('plainPassword', RepeatedType::class, [
@@ -144,7 +145,7 @@ class UserType extends AbstractType
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'S\'inscrire',
+                'label' => 'Valider',
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ]

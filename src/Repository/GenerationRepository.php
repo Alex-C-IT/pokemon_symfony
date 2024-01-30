@@ -29,7 +29,6 @@ class GenerationRepository extends ServiceEntityRepository
 
     public function update(Generation $generation): void
     {
-        $this->_em->persist($generation);
         $this->_em->flush();
     }
 

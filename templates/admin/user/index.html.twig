@@ -63,8 +63,15 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="" class="btn btn-primary btn-sm">Modifier</a>
-                                <a href="" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">Supprimer</a>
+                                <a href="{{ path('app_admin_utilisateurs_edit', {'id': user.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                {% if user.status.value == 0 %}
+                                    <a href="{{ path('app_admin_utilisateurs_unban', {'id': user.id}) }}" class="btn btn-success btn-sm">Débannir</a>
+                                {% elseif user.status.value == 1 %}
+                                    <a href="{{ path('app_admin_utilisateurs_ban', {'id': user.id}) }}" class="btn btn-warning btn-sm">Bannir</a>
+                                {% else %}
+                                    <a href="{{ path('app_admin_utilisateurs_ban', {'id': user.id}) }}" class="btn btn-warning btn-sm">Bannir</a>
+                                {% endif %}
+                                <a href="{{ path('app_admin_utilisateurs_delete', {'id': user.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
                             </td>
                         </tr>
                     {% endfor %}

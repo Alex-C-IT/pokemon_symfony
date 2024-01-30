@@ -29,7 +29,6 @@ class AttaqueRepository extends ServiceEntityRepository
 
     public function update(Attaque $attaque): void
     {
-        $this->_em->persist($attaque);
         $this->_em->flush();
     }
 

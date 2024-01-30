@@ -51,7 +51,7 @@ class UserListener
         }
     }
 
-    public function preUpdate(User $user): void
+    public function preFlush(User $user): void
     {
         $this->hashPassword($user);
     }

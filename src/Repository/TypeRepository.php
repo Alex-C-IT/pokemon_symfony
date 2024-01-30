@@ -29,7 +29,6 @@ class TypeRepository extends ServiceEntityRepository
 
     public function update(Type $type): void
     {
-        $this->_em->persist($type);
         $this->_em->flush();
     }
 
