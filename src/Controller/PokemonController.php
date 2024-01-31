@@ -86,7 +86,7 @@ class PokemonController extends AbstractController
             $pokemon = $form->getData();
             $oldNom = $pokemon->getNom();
             // Vérifie si des images ont été envoyées dans la requête
-            if ($request->files->get('pokemon')['image'] != null && $request->files->get('pokemon')['miniImage'] != null) {
+            if (null != $request->files->get('pokemon')['image'] && null != $request->files->get('pokemon')['miniImage']) {
                 // Supprime l'ancienne image et l'ancienne miniature
                 $oldImage = $this->getParameter('images_pokemons_directory').'/'.$pokemon->getImage();
                 $oldMiniImage = $this->getParameter('images_mini_pokemons_directory').'/'.$pokemon->getMiniImage();

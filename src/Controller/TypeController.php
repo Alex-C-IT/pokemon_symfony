@@ -142,7 +142,7 @@ class TypeController extends AbstractController
     {
         $type = $repository->findOneBy(['id' => $request->get('id')]);
         // Si c'est le type "Incconu" alors on ne peut pas le modifier
-        if ($type->getLibelle() == 'Inconnu') {
+        if ('Inconnu' == $type->getLibelle()) {
             $this->addFlash('error', 'Le type "Inconnu" ne peut pas être modifié.');
 
             return $this->redirectToRoute('app_admin_types_index');
@@ -150,7 +150,7 @@ class TypeController extends AbstractController
         $form = $this->createForm(TypeType::class, $type);
         $form = $form->handleRequest($request);
         $oldImage = $type->getImage();
-        
+
         // Vérifie si le formulaire a été soumis et si les données sont valides
         if ($form->isSubmitted() && $form->isValid()) {
             // Récupère le libellé transmis dans le formulaire
@@ -232,13 +232,13 @@ class TypeController extends AbstractController
     public function delete(Request $request, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, AttaqueRepository $attaqueRepository): Response
     {
         $type = $typeRepository->findOneBy(['id' => $request->get('id')]);
-        if(!$type) {
+        if (!$type) {
             $this->addFlash('error', 'Le type n\'existe pas.');
 
             return $this->redirectToRoute('app_admin_types_index');
         }
         // Si c'est le type "Incconu" alors on ne peut pas le supprimer
-        if ($type->getLibelle() == 'Inconnu') {
+        if ('Inconnu' == $type->getLibelle()) {
             $this->addFlash('error', 'Le type "Inconnu" ne peut pas être supprimé.');
 
             return $this->redirectToRoute('app_admin_types_index');
