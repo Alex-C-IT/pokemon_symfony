@@ -89,10 +89,10 @@ class AttaqueController extends AbstractController
             $pokemon->removeAttaque($attaque);
             $pokemonRepository->update($pokemon);
         }
-
+        $oldId = $attaque->getId();
         $attaqueRepository->remove($attaque);
 
-        $this->addFlash('success', 'L\'attaque #'.$attaque->getId().' a bien été supprimée.');
+        $this->addFlash('success', 'L\'attaque #'.$oldId.' a bien été supprimée.');
 
         return $this->redirectToRoute('app_admin_attaques_index');
     }

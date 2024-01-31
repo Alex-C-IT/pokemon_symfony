@@ -29,7 +29,7 @@ class ConsommableFixtures extends Fixture
         ];
 
         foreach ($consommables as $key => $consommable) {
-            $consommable = new Consommable('CONS'.$key + 1, $consommable);
+            $consommable = new Consommable($consommable);
             $manager->persist($consommable);
             $this->addReference(self::CONSOMMABLE_REFERENCE.'_'.$key + 1, $consommable);
         }

@@ -18,30 +18,6 @@ class TypeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('id', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control',
-                    'minlength' => '5',
-                    'maxlength' => '10',
-                ],
-                'label' => 'ID',
-                'label_attr' => [
-                    'class' => 'form-label mt-4',
-                    'style' => 'font-weight: bold',
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez saisir un ID.',
-                    ]),
-                    new Length([
-                        'min' => 5,
-                        'max' => 10,
-                        'minMessage' => 'L\'id doit contenir au moins {{ limit }} caractères.',
-                        'maxMessage' => 'L\'id doit contenir au maximum {{ limit }} caractères.',
-                    ]),
-                ],
-            ])
-
             ->add('libelle', TextType::class, [
                 'attr' => [
                     'class' => 'form-control',

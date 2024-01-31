@@ -50,26 +50,6 @@ class TypeController extends AbstractController
 
         // Vérifie si le formulaire a été soumis et si les données sont valides
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupère l'id transmis dans le formulaire
-            $id = $form->get('id')->getData();
-
-            // Vérifie si l'id ne dépasse pas 10 caractères.
-            if (strlen($id) > 10) {
-                $this->addFlash('error', 'L\'id ne doit pas dépasser 10 caractères.');
-
-                return $this->redirectToRoute('app_admin_types_new');
-            }
-
-            // Vérifie si l'id existe déjà
-            if ($repository->find($id)) {
-                $this->addFlash('error', 'Cet id existe déjà. Veuillez en choisir un autre.');
-
-                return $this->redirectToRoute('app_admin_types_new');
-            }
-
-            // Met à jour la propriété id avec l'id
-            $type->setId($id);
-
             // Récupère le libellé transmis dans le formulaire
             $libelle = $form->get('libelle')->getData();
 
@@ -161,9 +141,16 @@ class TypeController extends AbstractController
     public function edit(Request $request, TypeRepository $repository): Response
     {
         $type = $repository->findOneBy(['id' => $request->get('id')]);
+        // Si c'est le type "Incconu" alors on ne peut pas le modifier
+        if ($type->getLibelle() == 'Inconnu') {
+            $this->addFlash('error', 'Le type "Inconnu" ne peut pas être modifié.');
+
+            return $this->redirectToRoute('app_admin_types_index');
+        }
         $form = $this->createForm(TypeType::class, $type);
         $form = $form->handleRequest($request);
-
+        $oldImage = $type->getImage();
+        
         // Vérifie si le formulaire a été soumis et si les données sont valides
         if ($form->isSubmitted() && $form->isValid()) {
             // Récupère le libellé transmis dans le formulaire
@@ -179,9 +166,8 @@ class TypeController extends AbstractController
 
             // Récupère l'image transmise dans le formulaire
             $imageFile = $form->get('image')->getData();
-
             // Vérifie si le nom de l'image n'existe pas dans public/images/types
-            if ($imageFile) {
+            if ($oldImage != $imageFile->getClientOriginalName()) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
 
                 // Vérifie si le nom de l'image + l'extension (.png) ne dépasse pas 50 caractères.
@@ -211,19 +197,17 @@ class TypeController extends AbstractController
 
                     return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                 }
+                // Supprime l'ancienne image
+                unlink($this->getParameter('types_images_directory').'/'.$oldImage);
                 // Nécessaire pour éviter les problèmes d'encodage
                 // Le nom de l'image est le libellé du type en minuscule
-
-                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', lowercase($type->getLibelle()));
-                dd($safeFilename);
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $type->getLibelle());
                 $newFilename = $safeFilename.'.'.$imageFile->guessExtension();
                 // Déplace l'image dans le répertoire public/images/types
                 $imageFile->move(
                     $this->getParameter('types_images_directory'),
                     $newFilename
                 );
-                // Supprime l'ancienne image
-                unlink($this->getParameter('types_images_directory').'/'.$type->getImage());
                 // Met à jour la propriété image avec le nom de l'image
                 $type->setImage($newFilename);
             }
@@ -248,22 +232,34 @@ class TypeController extends AbstractController
     public function delete(Request $request, TypeRepository $typeRepository, PokemonRepository $pokemonRepository, AttaqueRepository $attaqueRepository): Response
     {
         $type = $typeRepository->findOneBy(['id' => $request->get('id')]);
+        if(!$type) {
+            $this->addFlash('error', 'Le type n\'existe pas.');
+
+            return $this->redirectToRoute('app_admin_types_index');
+        }
+        // Si c'est le type "Incconu" alors on ne peut pas le supprimer
+        if ($type->getLibelle() == 'Inconnu') {
+            $this->addFlash('error', 'Le type "Inconnu" ne peut pas être supprimé.');
+
+            return $this->redirectToRoute('app_admin_types_index');
+        }
+
         // Récupère tous les pokémons associés au type et les insère dans types
         foreach ($type->getPokemons() as $pokemon) {
             // Si le pokémon possède un type secondaire alors on le supprime sinon on met à 'TYPE0'
             if ($pokemon->getTypes()->count() > 1) {
                 $pokemon->removeType($type);
             } else {
-                $pokemon->addType($typeRepository->findOneBy(['id' => 'TYPE0']));
+                $pokemon->addType($typeRepository->findOneBy(['libelle' => 'Inconnu']));
                 // Mettre à jour le type du pokémon dans la table pokemon
                 $pokemonRepository->update($pokemon);
             }
         }
 
-        // Change le type des attaques liése au type par 'TYPE0'
-        $type0 = $typeRepository->findOneBy(['id' => 'TYPE0']);
+        // Change le type des attaques liése au type par 'Inconnu'
+        $inconnu = $typeRepository->findOneBy(['libelle' => 'Inconnu']);
         foreach ($type->getAttaques() as $attaque) {
-            $attaque->setType($type0);
+            $attaque->setType($inconnu);
             // Mettre à jour le type de l'attaque dans la table attaque
             $attaqueRepository->update($attaque);
         }
@@ -272,8 +268,9 @@ class TypeController extends AbstractController
         unlink($this->getParameter('types_images_directory').'/'.$type->getImage());
 
         // Supprime le type en base de données et redirige vers la liste des types
+        $oldId = $type->getId();
         $typeRepository->remove($type);
-        $this->addFlash('success', 'Le type #'.$type->getId().' a été supprimé avec succès !');
+        $this->addFlash('success', 'Le type #'.$oldId.' a été supprimé avec succès !');
 
         return $this->redirectToRoute('app_admin_types_index');
     }

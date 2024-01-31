@@ -11,6 +11,12 @@
                 <p class="mb-0"><b>Succès ! </b>{{ message }}</p>
             </div>
         {% endfor %}
+        {# Affichage d'un message flash #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-dismissible alert-danger mt-4">
+                <p class="mb-0"><b>Erreur ! </b>{{ message }}</p>
+            </div>
+        {% endfor %}
         {# Ajout d'un bouton "Ajouter"#}
         <a href="{{ path('app_admin_types_new') }}" class="btn btn-success">Ajouter un type</a>
         {# Si aucun type n'a été trouvé #}
@@ -33,8 +39,10 @@
                             <td><img src="{{ asset('images/types/' ~ type.image) }}" alt="{{ type.libelle }}" class="img-fluid"></td>
                             <td>{{ type.libelle }}</td>
                             <td>
-                                <a href="{{ path('app_admin_types_edit', {id: type.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
-                                <a href="{{ path('app_admin_types_delete', {id: type.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer ce type ?')">Supprimer</a>
+                                {% if type.libelle != 'Inconnu' %}
+                                    <a href="{{ path('app_admin_types_edit', {id: type.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                    <a href="{{ path('app_admin_types_delete', {id: type.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer ce type ?')">Supprimer</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

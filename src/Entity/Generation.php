@@ -11,8 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Generation
 {
     #[ORM\Id]
-    #[ORM\Column(length: 10)]
-    private ?string $id = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\Column(length: 2)]
     private ?string $numero = null;
@@ -23,9 +24,8 @@ class Generation
     #[ORM\OneToMany(mappedBy: 'generation', targetEntity: Pokemon::class)]
     private Collection $pokemons;
 
-    public function __construct(string $id = null, string $numero = null, string $annee = null)
+    public function __construct(string $numero = null, string $annee = null)
     {
-        $this->id = $id;
         $this->numero = $numero;
         $this->annee = $annee;
         $this->pokemon = new ArrayCollection();

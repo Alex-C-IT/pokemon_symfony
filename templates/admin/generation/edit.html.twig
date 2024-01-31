@@ -12,9 +12,6 @@
             </div>
         {% endfor %}
 		{{ form_start(form) }}
-    
-		{# Le champ ID n'est pas modifiable #}
-		{{ form_row(form.id, {'attr': {'readonly': 'readonly'}}) }}
 
 		<div class="form-group">
 			{{ form_label(form.numero) }}

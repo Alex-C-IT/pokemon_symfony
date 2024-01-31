@@ -64,17 +64,22 @@ class UserController extends AbstractController
     public function edit(Request $request, UserRepository $repository): Response
     {
         $user = $repository->find($request->get('id'));
-        $oldnomUtilisateur = $user->getNomUtilisateur();
+        $oldUsername = $user->getNomUtilisateur();
+        $oldEmail = $user->getEmail();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-
-            // Vérifie si le nom d'utilisateur a été modifié et si oui, vérifie si le nouveau nom d'utilisateur n'est pas déjà utilisé
-            if ($oldnomUtilisateur != $user->getNomUtilisateur()) {
-                $user->setNomUtilisateur($oldnomUtilisateur);
+            // Vérifie si le nom d'utilisateur a été modifié et si oui, vérifie si le nouveau nom d'utilisateur n'est pas déjà utilisé par un autre utilisateur
+            if ($repository->findOneBy(['nomUtilisateur' => $user->getNomUtilisateur()]) && $user->getNomUtilisateur() !== $oldUsername) {
                 $this->addFlash('error', 'Le nom d\'utilisateur est déjà utilisé.');
+
+                return $this->redirectToRoute('app_admin_utilisateurs_edit', ['id' => $user->getId()]);
+            }
+            // Vérifie si le email a été modifié et si oui, vérifie si le nouveau email n'est pas déjà utilisé par un autre utilisateur
+            if ($repository->findOneBy(['email' => $user->getEmail()]) && $user->getEmail() !== $oldEmail) {
+                $this->addFlash('error', 'L\'email est déjà utilisé.');
 
                 return $this->redirectToRoute('app_admin_utilisateurs_edit', ['id' => $user->getId()]);
             }

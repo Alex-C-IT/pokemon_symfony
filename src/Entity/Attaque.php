@@ -11,8 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Attaque
 {
     #[ORM\Id]
-    #[ORM\Column(length: 10)]
-    private ?string $id = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
@@ -39,9 +40,8 @@ class Attaque
     #[ORM\ManyToMany(targetEntity: Pokemon::class, mappedBy: 'attaques')]
     private Collection $pokemons;
 
-    public function __construct(string $id = null, string $nom = null, string $description = null, int $puissance = null, int $prec = null, int $pp = null, bool $cs = null, Type $type = null)
+    public function __construct(string $nom = null, string $description = null, int $puissance = null, int $prec = null, int $pp = null, bool $cs = null, Type $type = null)
     {
-        $this->id = $id;
         $this->nom = $nom;
         $this->description = $description;
         $this->puissance = $puissance;
@@ -54,12 +54,12 @@ class Attaque
         $this->pokemons = new ArrayCollection();
     }
 
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(string $id): static
+    public function setId(int $id): static
     {
         $this->id = $id;
 

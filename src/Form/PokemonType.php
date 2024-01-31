@@ -136,7 +136,7 @@ class PokemonType extends AbstractType
                     'style' => 'font-weight: bold',
                 ],
                 'class' => Generation::class,
-                'choice_label' => 'id',
+                'choice_label' => 'numero',
                 'choice_attr' => [
                     'class' => 'form-select mt-2',
                 ],

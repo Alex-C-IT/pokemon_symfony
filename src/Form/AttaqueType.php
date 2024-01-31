@@ -30,25 +30,6 @@ class AttaqueType extends AbstractType
         *  Le champ CS, de type checkbox, est obligatoire.
         */
         $builder
-            ->add('id', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control',
-                    'minlength' => '4',
-                    'maxlength' => '10',
-                ],
-                'label' => 'ID',
-                'label_attr' => [
-                    'class' => 'form-label mt-2',
-                    'style' => 'font-weight: bold',
-                ],
-                'constraints' => [
-                    new NotBlank(),
-                    new Length([
-                        'min' => 4,
-                        'max' => 10,
-                    ]),
-                ],
-            ])
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
                 'attr' => [
