@@ -76,6 +76,12 @@ Si tout s'est bien passé, vous devriez accéder à cette page :
 
 Si c'est le cas, **l'initialisation du projet est terminée !**
 
+## Accès aux différents comptes 
+1. `admin@pokemonsymfony.fr` & MDP `admin` (Status : `ACTIF`)
+2. `user@pokemonsymfony.fr` & MDP `user` (Status : `EN_ATTENTE_DE_VERIFICATION`<br>
+    Voir boite Mailtrap pour confirmer le compte (ou dans l'espace admin - utilisateur : bannir puis débannir)
+4. `user@pokemonsymfony.fr` & MDP `user2` (Status : `BANNI`)
+
 ## Accessibilité aux pages du site
 
 ### Utilisateur annonyme
@@ -219,6 +225,7 @@ Le status de l'utilisateur est principalement utilisé :
 - Dans cette même partie, pour bannir ou débannir l'utilisateur.
 - Lors de la connexion. L'utilisateur pourra se connecter que s'il a le status `ACTIF`. Un refus et un message différent est notifié à l'utilisateur en fonction des autres status.
 - Lors de la vérification de compte. Après avoir cliqué sur le lien, le status passera de `EN_ATTENTE_DE_VALIDATION` à `ACTIF`.
+- Pour contrôler l'envoi d'un mail avec le token de vérification lors de la création d'un compte.
 
 ## BILAN
 
