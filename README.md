@@ -34,8 +34,9 @@ Suivez simplement ces étapes pour que tout se passe bien :
 4. Allez dans l'onglet `SMPT Settings`.
 5. Séléctionnez dans `Integrations` : `Symfony 5+`
 6. Copiez le texte qui vous est founi (`MAILER_DSN=smtp://**********:************@sandbox.smtp.mailtrap.io:2525`).
-7. Collez cette nouvelle variable d'environnement dans le dans le fichier `.env.local`. Sauvegardez.
-8. **C'est fini !**
+7. Créez le fichier `.env.local` à la racine du projet.
+8. Collez la variable d'environnement dans le fichier. Sauvegardez.
+9. **C'est fini !**
    
 > [!NOTE]
 > Vous recevrez dans votre "My Inbox" tous les emails envoyés par le site.<br>
@@ -43,9 +44,7 @@ Suivez simplement ces étapes pour que tout se passe bien :
 
 ### Préparation de la base de données
 
-A la racine du projet, créez un fichier `.env.local`.
-
-Ajoutez au sein du fichier cette variable d'environnement : <br>
+Ajoutez dans le fichier `.env.local` (créé dans la partie précédente) cette variable d'environnement : <br>
 `DATABASE_URL=mysql://[USER]:[PASSWORD]@127.0.0.1:[PORT]/pokemon_symfony_db` <br>
 Sauvegardez.
 > [!NOTE]
