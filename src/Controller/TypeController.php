@@ -167,8 +167,7 @@ class TypeController extends AbstractController
             // Récupère l'image transmise dans le formulaire
             $imageFile = $form->get('image')->getData();
             // Vérifie si le nom de l'image n'existe pas dans public/images/types
-            if($imageFile != null)
-            {
+            if (null != $imageFile) {
                 if ($oldImage != $imageFile->getClientOriginalName()) {
                     $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
 
