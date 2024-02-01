@@ -167,51 +167,53 @@ class TypeController extends AbstractController
             // Récupère l'image transmise dans le formulaire
             $imageFile = $form->get('image')->getData();
             // Vérifie si le nom de l'image n'existe pas dans public/images/types
-            if ($oldImage != $imageFile->getClientOriginalName()) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+            if($imageFile != null)
+            {
+                if ($oldImage != $imageFile->getClientOriginalName()) {
+                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
 
-                // Vérifie si le nom de l'image + l'extension (.png) ne dépasse pas 50 caractères.
-                if (strlen($originalFilename) > 45) {
-                    $this->addFlash('error', 'Le nom de l\'image ne doit pas dépasser 45 caractères.');
+                    // Vérifie si le nom de l'image + l'extension (.png) ne dépasse pas 50 caractères.
+                    if (strlen($originalFilename) > 45) {
+                        $this->addFlash('error', 'Le nom de l\'image ne doit pas dépasser 45 caractères.');
 
-                    return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+                        return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+                    }
+
+                    // vérifie si le nom de l'image existe déjà
+                    if (in_array($originalFilename, $this->recupereNomsImagesTypes())) {
+                        $this->addFlash('error', 'Ce nom d\'image existe déjà. Veuillez en choisir un autre.');
+
+                        return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+                    }
+
+                    // Vérifie si l'image est bien au format .png.
+                    if ('png' != $imageFile->guessExtension()) {
+                        $this->addFlash('error', 'Le format de l\'image doit être .png.');
+
+                        return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+                    }
+
+                    // Vérifie si l'image ne dépasse pas 50Ko.
+                    if ($imageFile->getSize() > 50000) {
+                        $this->addFlash('error', 'L\'image ne doit pas dépasser 50Ko.');
+
+                        return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
+                    }
+                    // Supprime l'ancienne image
+                    unlink($this->getParameter('types_images_directory').'/'.$oldImage);
+                    // Nécessaire pour éviter les problèmes d'encodage
+                    // Le nom de l'image est le libellé du type en minuscule
+                    $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $type->getLibelle());
+                    $newFilename = $safeFilename.'.'.$imageFile->guessExtension();
+                    // Déplace l'image dans le répertoire public/images/types
+                    $imageFile->move(
+                        $this->getParameter('types_images_directory'),
+                        $newFilename
+                    );
+                    // Met à jour la propriété image avec le nom de l'image
+                    $type->setImage($newFilename);
                 }
-
-                // vérifie si le nom de l'image existe déjà
-                if (in_array($originalFilename, $this->recupereNomsImagesTypes())) {
-                    $this->addFlash('error', 'Ce nom d\'image existe déjà. Veuillez en choisir un autre.');
-
-                    return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
-                }
-
-                // Vérifie si l'image est bien au format .png.
-                if ('png' != $imageFile->guessExtension()) {
-                    $this->addFlash('error', 'Le format de l\'image doit être .png.');
-
-                    return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
-                }
-
-                // Vérifie si l'image ne dépasse pas 50Ko.
-                if ($imageFile->getSize() > 50000) {
-                    $this->addFlash('error', 'L\'image ne doit pas dépasser 50Ko.');
-
-                    return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
-                }
-                // Supprime l'ancienne image
-                unlink($this->getParameter('types_images_directory').'/'.$oldImage);
-                // Nécessaire pour éviter les problèmes d'encodage
-                // Le nom de l'image est le libellé du type en minuscule
-                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $type->getLibelle());
-                $newFilename = $safeFilename.'.'.$imageFile->guessExtension();
-                // Déplace l'image dans le répertoire public/images/types
-                $imageFile->move(
-                    $this->getParameter('types_images_directory'),
-                    $newFilename
-                );
-                // Met à jour la propriété image avec le nom de l'image
-                $type->setImage($newFilename);
             }
-
             // Sauvegarde le type en base de données et redirige vers la liste des types
             $repository->update($type);
             $this->addFlash('success', 'Le type #'.$type->getId().' a été modifié avec succès !');
