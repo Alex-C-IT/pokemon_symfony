@@ -22,6 +22,25 @@ Récupérer le projet via cette commande :<br>
 Ouvrez le projet avec l'éditeur de votre choix et à partir du terminal, faites :<br>
 `composer install`
 
+### Configuration du service de test d'email.
+> [!IMPORTANT]
+> Le site utilise un service de mail pour envoyer un lien de vérification de compte avec token lors de l'inscription d'un nouvel utilisateur. Il est donc fortement recommandé de suivre cette partie.
+
+Suivez simplement ces étapes pour que tout se passe bien :
+
+1. Rendez-vous sur [Mailtrap](https://mailtrap.io/) et créez vous un compte.
+2. Connectez-vous.
+3. Accèdez à votre boite mail de test "My inbox" (`Email Testing > Inboxes > My Inbox`).
+4. Allez dans l'onglet `SMPT Settings`.
+5. Séléctionnez dans `Integrations` : `Symfony 5+`
+6. Copiez le texte qui vous est founi (`MAILER_DSN=smtp://**********:************@sandbox.smtp.mailtrap.io:2525`).
+7. Collez cette nouvelle variable d'environnement dans le dans le fichier `.env.local`. Sauvegardez.
+8. **C'est fini !**
+   
+> [!NOTE]
+> Vous recevrez dans votre "My Inbox" tous les emails envoyés par le site.<br>
+> **Si vous souhaitez utiliser votre propre serveur SMTP, alors changer la variable d'environnement en fonction de votre configuration**.
+
 ### Préparation de la base de données
 
 A la racine du projet, créez un fichier `.env.local`.
@@ -42,25 +61,6 @@ Via le terminal de votre IDE, faites :
 <br>
 
 **La base de données est maintenant opérationnelle**
-
-### Configuration du service de test d'email.
-> [!IMPORTANT]
-> Le site utilise un service de mail pour envoyer un lien de vérification de compte avec token lors de l'inscription d'un nouvel utilisateur. Il est donc fortement recommandé de suivre cette partie.
-
-Suivez simplement ces étapes pour que tout se passe bien :
-
-1. Rendez-vous sur [Mailtrap](https://mailtrap.io/) et créez vous un compte.
-2. Connectez-vous.
-3. Accèdez à votre boite mail de test "My inbox" (`Email Testing > Inboxes > My Inbox`).
-4. Allez dans l'onglet `SMPT Settings`.
-5. Séléctionnez dans `Integrations` : `Symfony 5+`
-6. Copiez le texte qui vous est founi (`MAILER_DSN=smtp://**********:************@sandbox.smtp.mailtrap.io:2525`).
-7. Collez cette nouvelle variable d'environnement dans le dans le fichier `.env.local`. Sauvegardez.
-8. **C'est fini !**
-   
-> [!NOTE]
-> Vous recevez dans votre "My Inbox" tous les mails envoyés par le site.<br>
-> **Si vous souhaitez utiliser votre propre serveur SMTP, alors changer la variable d'environnement en fonction de votre configuration**.
 
 ### Lancement du serveur
 
@@ -111,13 +111,13 @@ Un utilisateur inscrit et connecté avec un **rôle administrateur** a accès au
 - Pages de gestion des dresseurs : liste des dresseurs, ajout/modification/suppression d'un dresseurs;
 - Pages de gestion des utilisateurs : liste des utilisateurs, ajout/modification/suppression d'un utilisateurs.
 
-## Barême de notation
+## Barème de notation
 
 [![Image](https://i.goopics.net/y9s1n6.png)](https://goopics.net/i/y9s1n6)
 
 ### Les entités
 
-Le projet implémente **10 entités** : 
+Le projet implémente **9 entités** : 
 - 1 entité principale : `POKEMON`
 - 7 entités enfants : `USER`,`DRESSEURS`, `TYPE`, `ATTAQUE`, `CONSOMMABLE`, `GENERATION`, `STATS`
 - 1 entités isolée : `TOKENVALIDATION`
