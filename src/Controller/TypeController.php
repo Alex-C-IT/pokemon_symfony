@@ -198,8 +198,11 @@ class TypeController extends AbstractController
 
                         return $this->redirectToRoute('app_admin_types_edit', ['id' => $type->getId()]);
                     }
-                    // Supprime l'ancienne image
-                    unlink($this->getParameter('types_images_directory').'/'.$oldImage);
+                    // Vérifie si l'image existe dans le répertoire public/images/types
+                    if (file_exists($this->getParameter('types_images_directory').'/'.$oldImage)) {
+                        // Supprime l'ancienne image
+                        unlink($this->getParameter('types_images_directory').'/'.$oldImage);
+                    }
                     // Nécessaire pour éviter les problèmes d'encodage
                     // Le nom de l'image est le libellé du type en minuscule
                     $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $type->getLibelle());
@@ -213,6 +216,14 @@ class TypeController extends AbstractController
                     $type->setImage($newFilename);
                 }
             }
+            // Si le nom du type a été modifié alors on modifie le nom de l'image dans le répertoire public/images/types
+            $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $type->getLibelle());
+            $newFilename = $safeFilename.'.png';
+            if ($oldImage != $newFilename) {
+                $type->setImage($newFilename);
+                rename($this->getParameter('types_images_directory').'/'.$oldImage, $this->getParameter('types_images_directory').'/'.$type->getImage());
+            }
+
             // Sauvegarde le type en base de données et redirige vers la liste des types
             $repository->update($type);
             $this->addFlash('success', 'Le type #'.$type->getId().' a été modifié avec succès !');
@@ -265,8 +276,12 @@ class TypeController extends AbstractController
             $attaqueRepository->update($attaque);
         }
 
-        // Supprime l'image du type
-        unlink($this->getParameter('types_images_directory').'/'.$type->getImage());
+        // Vérifie si l'image existe dans le répertoire public/images/types
+        $oldImage = $type->getImage();
+        if (file_exists($this->getParameter('types_images_directory').'/'.$oldImage)) {
+            // Supprime l'ancienne image
+            unlink($this->getParameter('types_images_directory').'/'.$oldImage);
+        }
 
         // Supprime le type en base de données et redirige vers la liste des types
         $oldId = $type->getId();
